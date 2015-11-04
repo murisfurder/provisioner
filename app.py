@@ -1,6 +1,4 @@
-import os
 import ansible_helper
-from pprint import pprint
 from time import sleep
 
 
@@ -78,10 +76,12 @@ def ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
 
     while not vm_is_online and attempts < max_attempts:
         # We run Ansible's 'ping' module and look for the 'pong' response.
-        if 'pong' in str(run_ping()):
+        ping = run_ping()
+        if 'pong' in str(ping):
             vm_is_online = True
             print 'VM is online...'
         else:
+            print ping
             print 'Waiting for VM to come online...'
             attempts += 1
             sleep(10)
