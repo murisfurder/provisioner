@@ -1,17 +1,17 @@
-import ansible.runner
-from ansible.playbook import PlayBook
 import os
+import ansible_helper
 from pprint import pprint
 from time import sleep
 
 
-PLAYBOOK_PATH='/Users/mvip/tmp/playbooks'
+PLAYBOOK_PATH = '/Users/mvip/Documents/Business/Viktopia_UK/Clients/OnApp/CloudCompose'
 
 def get_root_password(uuid=False):
     """
     Get the root password for a given machine.
     :param uuid: string
     """
+    # @TODO Fetch from upstream
     root_password = 'x+#*Ds,HV7.,'
     return root_password
 
@@ -21,14 +21,9 @@ def get_public_ip(uuid=False):
     Get the public IP of a given machine.
     :param uuid: string
     """
+    # @TODO Fetch from upstream
     public_ip = '85.118.238.144'
     return public_ip
-
-
-def generate_inventory(uuid=False):
-    public_ip = get_public_ip()
-    inventory = ansible.inventory.Inventory([public_ip])
-    return inventory
 
 
 def wait_for_vm(uuid=False, max_attempt=10):
@@ -46,43 +41,6 @@ def wait_for_vm(uuid=False, max_attempt=10):
             break
         else:
             sleep(30)
-
-
-def run_module(
-    remote_user='root',
-    remote_pass=None,
-    inventory=None,
-    module_name=None,
-    module_args='',
-):
-    return ansible.runner.Runner(
-        remote_user=remote_user,
-        remote_pass=remote_pass,
-        module_name=module_name,
-        module_args=module_args,
-        inventory=inventory
-    ).run()
-
-
-def run_playbook(
-    remote_user='root',
-    remote_pass=None,
-    inventory=None,
-    playbook_name=None,
-    playbook_args='',
-):
-
-    playbook_uri = os.path.join(PLAYBOOK_PATH, '{}.yml'.format(playbook_name))
-
-    if not os.path.isfile(playbook_uri):
-        return PlayBook(
-            playbook=playbook_uri,
-            remote_user=remote_user,
-            remote_pass=remote_pass,
-            inventory=inventory,
-        ).run()
-    else:
-        print '{} is an invalid playbook'.format(playbook_uri)
 
 
 def wait_for_ip(uuid=False, max_attempt=10):
@@ -106,7 +64,7 @@ def ping_vm(remote_user, remote_pass, inventory):
     vm_is_online = False
 
     def run_ping():
-        return run_module(
+        return ansible_helper.run_module(
             remote_user=remote_user,
             remote_pass=remote_pass,
             module_name='ping',
@@ -114,6 +72,7 @@ def ping_vm(remote_user, remote_pass, inventory):
         )
 
     while not vm_is_online:
+        # We run Ansible's 'ping' module and look for the 'pong' response.
         if 'pong' in str(run_ping()):
             vm_is_online = True
             print 'VM is online...'
@@ -128,20 +87,18 @@ def main():
 
     remote_pass = get_root_password()
     remote_user = 'root'
-    inventory = generate_inventory()
+    inventory = ansible_helper.generate_inventory(public_ip=get_public_ip())
 
     ping_vm(remote_user, remote_pass, inventory)
 
-    bootstrap = run_module(
-        remote_user=remote_user,
+    install_cloudcompose = ansible_helper.run_playbook(
         remote_pass=remote_pass,
         inventory=inventory,
-        module_name='apt',
-        module_args='name=python-pip state=present update_cache=True cache_valid_time=3600',
+        playbook_name='site',
+        playbook_path=PLAYBOOK_PATH
     )
 
-    pprint(bootstrap)
-
+    print install_cloudcompose
 
 if __name__ == '__main__':
     main()
