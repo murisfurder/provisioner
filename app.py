@@ -2,8 +2,6 @@ import ansible_helper
 from time import sleep
 
 
-PLAYBOOK_PATH = '/Users/mvip/Documents/Business/Viktopia_UK/Clients/OnApp/CloudCompose'
-
 def get_root_password(uuid=False):
     """
     Get the root password for a given machine.
@@ -98,14 +96,10 @@ def main():
 
     ping_vm(remote_user, remote_pass, inventory)
 
-    install_cloudcompose = ansible_helper.run_playbook(
+    ansible_helper.provision_cloudcompose(
         remote_pass=remote_pass,
         inventory=inventory,
-        playbook_name='site',
-        playbook_path=PLAYBOOK_PATH
     )
-
-    print install_cloudcompose
 
 if __name__ == '__main__':
     main()

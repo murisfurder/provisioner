@@ -30,15 +30,12 @@ def run_playbook(
     remote_user='root',
     remote_pass=None,
     inventory=None,
-    playbook_path=None,
-    playbook_name=None,
+    playbook_uri=None,
     playbook_args='',
 ):
     stats = callbacks.AggregateStats()
     playbook_cb = callbacks.PlaybookCallbacks(verbose=utils.VERBOSITY)
     runner_cb = callbacks.PlaybookRunnerCallbacks(stats, verbose=utils.VERBOSITY)
-
-    playbook_uri = os.path.join(playbook_path, '{}.yml'.format(playbook_name))
 
     if os.path.isfile(playbook_uri):
         return PlayBook(
@@ -52,3 +49,18 @@ def run_playbook(
         ).run()
     else:
         print '"{}" is an invalid file.'.format(playbook_uri)
+
+
+def provision_cloudcompose(
+        remote_pass=None,
+        inventory=None,
+):
+
+    playbook_uri = 'provision_profiles/cloudcompose/site.yml'
+    print playbook_uri
+
+    return run_playbook(
+        remote_pass=remote_pass,
+        inventory=inventory,
+        playbook_uri=playbook_uri,
+    )
