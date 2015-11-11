@@ -22,16 +22,16 @@ def get_public_ip(uuid=False):
     return public_ip
 
 
-def wait_for_vm(uuid=False, max_attempt=10):
+def wait_for_vm(uuid=False, max_attempts=10):
     """
     Waits for the VM with `UUID` to become available.
     We use the public IP of a node to determine if it is available or not.
     :param uuid: string
     :param max_attempts: int
     """
-    attempt = 0
-    while attempt < max_attempt:
-        attempt += 1
+    attempts = 0
+    while attempts < max_attempts:
+        attempts += 1
         public_ip = get_public_ip(uuid)
         if public_ip:
             break
