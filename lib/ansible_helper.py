@@ -2,11 +2,12 @@ import ansible.runner
 from ansible import utils
 from ansible.playbook import PlayBook
 from ansible import callbacks
+from time import sleep
 import os
 
 
-def generate_inventory(uuid=False, public_ip=None):
-    inventory = ansible.inventory.Inventory([public_ip])
+def generate_inventory(uuid=False, target_ips=None):
+    inventory = ansible.inventory.Inventory(target_ips)
     return inventory
 
 
@@ -52,15 +53,44 @@ def run_playbook(
 
 
 def provision_cloudcompose(
+        remote_user=None,
         remote_pass=None,
         inventory=None,
 ):
 
     playbook_uri = 'provision_profiles/cloudcompose/site.yml'
-    print playbook_uri
 
     return run_playbook(
         remote_pass=remote_pass,
         inventory=inventory,
         playbook_uri=playbook_uri,
     )
+
+
+def ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
+    """
+    Run Ansible's 'ping' module against the VM.
+    Listen for 'pong' in the response from the VM.
+    """
+    vm_is_online = False
+    attempts = 0
+
+    def run_ping():
+        return run_module(
+            remote_user=remote_user,
+            remote_pass=remote_pass,
+            module_name='ping',
+            inventory=inventory,
+        )
+
+    while not vm_is_online and attempts < max_attempts:
+        # We run Ansible's 'ping' module and look for the 'pong' response.
+        ping = run_ping()
+        if 'pong' in str(ping):
+            vm_is_online = True
+            print 'VM is online...'
+        else:
+            print ping
+            print 'Waiting for VM to come online...'
+            attempts += 1
+            sleep(10)

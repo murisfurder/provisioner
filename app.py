@@ -1,105 +1,94 @@
-import ansible_helper
+import json
+import requests
+from lib import ansible_helper
+from lib import redis_helper
 from time import sleep
 
 
-def get_root_password(uuid=False):
+def get_etcd_key(size=3):
     """
-    Get the root password for a given machine.
-    :param uuid: string
+    Get a key discover key for `etcd`.
+    This is used for creating a CoreOS cluster.
+    :param size: int
     """
-    # @TODO Fetch from upstream
-    root_password = 'x+#*Ds,HV7.,'
-    return root_password
+    endpoint = 'https://discovery.etcd.io/new?size={}'.format(size)
+    get_key = requests.get(endpoint)
+    if not get_key.status_code == 200:
+        return False
+
+    return get_key.content
 
 
-def get_public_ip(uuid=False):
+def task_router(task):
     """
-    Get the public IP of a given machine.
-    :param uuid: string
+     Task router for Redis tasks, with sanity check
     """
-    # @TODO Fetch from upstream
-    public_ip = '85.118.238.144'
-    return public_ip
 
+    def data_sanitizer(data, key, expected_type):
+        """
+        Sanity check the data against expected data type.
+        Returns the value or False.
+        """
 
-def wait_for_vm(uuid=False, max_attempts=10):
-    """
-    Waits for the VM with `UUID` to become available.
-    We use the public IP of a node to determine if it is available or not.
-    :param uuid: string
-    :param max_attempts: int
-    """
-    attempts = 0
-    while attempts < max_attempts:
-        attempts += 1
-        public_ip = get_public_ip(uuid)
-        if public_ip:
-            break
-        else:
-            sleep(30)
+        if key not in data:
+            return False
 
+        # @TODO fix me.
+        # if not type(data[key]) is expected_type:
+        #    return False
 
-def wait_for_ip(uuid=False, max_attempts=10):
-    """
-    Waits for the VM with `UUID` to become available.
-    We use the public IP of a node to determine if it is available or not.
-    :param uuid: string
-    :param max_attempts: int
-    """
-    attempts = 0
-    while attempts < max_attempts:
-        attempts += 1
-        public_ip = get_public_ip(uuid)
-        if public_ip:
-            break
-        else:
-            sleep(30)
+        return data[key]
 
+    role = data_sanitizer(task, 'role', type(''))
+    username = data_sanitizer(task, 'username', type(''))
+    password = data_sanitizer(task, 'password', type(''))
+    target_ips = data_sanitizer(task, 'target_ips', type([]))
 
-def ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
-    """
-    Run Ansible's 'ping' module against the VM.
-    Listen for 'pong' in the response from the VM.
-    """
-    vm_is_online = False
-    attempts = 0
+    print 'Got task {} for {}.format(role, target_ips)'
 
-    def run_ping():
-        return ansible_helper.run_module(
-            remote_user=remote_user,
-            remote_pass=remote_pass,
-            module_name='ping',
+    print 'role: {}'.format(role)
+    print 'username: {}'.format(username)
+    print 'password: {}'.format(password)
+    print 'target_ips: {}'.format(target_ips)
+
+    # Check for mandatory fields for all roles
+    if not (username and password and target_ips and role):
+        return False
+
+    inventory = ansible_helper.generate_inventory(
+        target_ips=target_ips
+    )
+
+    if role == 'ping':
+        return ansible_helper.ping_vm(
+            remote_user=username,
+            remote_pass=password,
+            inventory=inventory
+        )
+
+    if role == 'cloudcompose':
+        return ansible_helper.provision_cloudcompose(
+            remote_user=username,
+            remote_pass=password,
             inventory=inventory,
         )
 
-    while not vm_is_online and attempts < max_attempts:
-        # We run Ansible's 'ping' module and look for the 'pong' response.
-        ping = run_ping()
-        if 'pong' in str(ping):
-            vm_is_online = True
-            print 'VM is online...'
-        else:
-            print ping
-            print 'Waiting for VM to come online...'
-            attempts += 1
-            sleep(10)
-
 
 def main():
-    # Wait for the VM to come online
-    wait_for_ip()
+    q = redis_helper.pubsub()
 
-    # Define Ansible parameters
-    remote_user = 'root'
-    remote_pass = get_root_password()
-    inventory = ansible_helper.generate_inventory(public_ip=get_public_ip())
+    while True:
+        task = q.get_message()
 
-    ping_vm(remote_user, remote_pass, inventory)
-
-    ansible_helper.provision_cloudcompose(
-        remote_pass=remote_pass,
-        inventory=inventory,
-    )
+        # Filter out initial message by looking for 'name' key
+        if task:
+            # try:
+            json_payload = json.loads(task['data'])
+            task_router(json_payload)
+            # except:
+            #    print 'Unrecognized message:\n{}'.format(task)
+        else:
+            sleep(1)
 
 if __name__ == '__main__':
     main()

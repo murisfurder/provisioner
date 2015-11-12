@@ -1,0 +1,10 @@
+provisioner:
+  build: .
+  volumes:
+       - .:/code
+  links:
+   - redis
+  container_name: provisioner
+redis:
+  container_name: redis
+  image: redis
