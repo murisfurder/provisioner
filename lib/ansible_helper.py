@@ -70,6 +70,21 @@ def provision_cloudcompose(
     )
 
 
+def provision_docker(
+        remote_user=None,
+        remote_pass=None,
+        inventory=None,
+):
+
+    playbook_uri = 'provision_profiles/docker/site.yml'
+
+    return run_playbook(
+        remote_pass=remote_pass,
+        inventory=inventory,
+        playbook_uri=playbook_uri,
+    )
+
+
 def ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
     """
     Run Ansible's 'ping' module against the VM.

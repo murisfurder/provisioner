@@ -8,7 +8,7 @@ r = redis_helper.connect()
 
 test_task_1 = {
     'timestamp': str(time.mktime(time.gmtime())),
-    'role': 'ping',
+    'role': 'docker',
     'ip': '192.168.33.10',
     'password': 'foobar123',
     'username': 'root',
@@ -17,7 +17,7 @@ test_task_1 = {
 
 test_task_2 = {
     'timestamp': str(time.mktime(time.gmtime())),
-    'role': 'ping',
+    'role': 'docker',
     'ip': '192.168.33.11',
     'password': 'foobar12',
     'username': 'root',

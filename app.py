@@ -70,6 +70,12 @@ def task_router(task):
             else:
                 # @TODO add back to queue.
                 pass
+        elif role == 'docker':
+            return ansible_helper.provision_docker(
+                remote_user=username,
+                remote_pass=password,
+                inventory=inventory,
+            )
         elif role == 'cloudcompose':
             return ansible_helper.provision_cloudcompose(
                 remote_user=username,
