@@ -33,7 +33,7 @@ prov1 | 192.168.33.11 is running
 
 ### Detailed use case for CoreOS
 
-(U=User, O=OnApp/Colud.net, P=Provisioner)
+(U=User, O=OnApp/Cloud.net, P=Provisioner)
 
  * [U] User creates a CoreOS cluster in the user interface
  * [O] One Redis task is created for each server in the cluster to the 'prov' channel (three in this case). This task will include:
