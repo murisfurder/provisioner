@@ -1,27 +1,12 @@
 import json
-import requests
 from lib import ansible_helper
 from lib import redis_helper
 from time import sleep
 
 
-def get_etcd_key(size=3):
-    """
-    Get a key discover key for `etcd`.
-    This is used for creating a CoreOS cluster.
-    :param size: int
-    """
-    endpoint = 'https://discovery.etcd.io/new?size={}'.format(size)
-    get_key = requests.get(endpoint)
-    if not get_key.status_code == 200:
-        return False
-
-    return get_key.content
-
-
 def task_router(task):
     """
-     Task router for Redis tasks, with sanity check
+    Task router for Redis tasks, with sanity check
     """
 
     def data_sanitizer(data, key, expected_type):
@@ -39,39 +24,58 @@ def task_router(task):
 
         return data[key]
 
-    role = data_sanitizer(task, 'role', type(''))
-    username = data_sanitizer(task, 'username', type(''))
-    password = data_sanitizer(task, 'password', type(''))
-    target_ips = data_sanitizer(task, 'target_ips', type([]))
+    def push_status(status=None, ip=None):
+        redis_helper.push_status({
+            'status': status,
+            'ip': ip,
+        })
 
-    print 'Got task {} for {}.format(role, target_ips)'
+    # Ensure that data is proper JSON
+    try:
+        json_payload = json.loads(task['data'])
+    except:
+        print 'Unrecognized message:\n{}'.format(task)
+        return
 
-    print 'role: {}'.format(role)
-    print 'username: {}'.format(username)
-    print 'password: {}'.format(password)
-    print 'target_ips: {}'.format(target_ips)
+    # Define and lookup the required variables
+    role = data_sanitizer(json_payload, 'role', type(''))
+    uuid = data_sanitizer(json_payload, 'uuid', type(''))
+    username = data_sanitizer(json_payload, 'username', type(''))
+    password = data_sanitizer(json_payload, 'password', type(''))
+    target_ip = data_sanitizer(json_payload, 'ip', type(''))
 
-    # Check for mandatory fields for all roles
-    if not (username and password and target_ips and role):
+    # Make sure we received all required fields
+    if not (username and password and target_ip and role):
+        print 'Missing required value'
         return False
 
-    inventory = ansible_helper.generate_inventory(
-        target_ips=target_ips
-    )
+    lock = redis_helper.get_lock(uuid)
+    if lock.acquire(blocking=False):
+        print 'Got task {} for {}@{}'.format(role, username, target_ip)
+        push_status(ip=target_ip, status='provisioning')
 
-    if role == 'ping':
-        return ansible_helper.ping_vm(
-            remote_user=username,
-            remote_pass=password,
-            inventory=inventory
+        inventory = ansible_helper.generate_inventory(
+            target_ip=target_ip
         )
 
-    if role == 'cloudcompose':
-        return ansible_helper.provision_cloudcompose(
-            remote_user=username,
-            remote_pass=password,
-            inventory=inventory,
-        )
+        if role == 'ping':
+            run_ping = ansible_helper.ping_vm(
+                remote_user=username,
+                remote_pass=password,
+                inventory=inventory
+            )
+            if run_ping:
+                print '{} is running'.format(target_ip)
+                push_status(ip=target_ip, status='done')
+            else:
+                # @TODO add back to queue.
+                pass
+        elif role == 'cloudcompose':
+            return ansible_helper.provision_cloudcompose(
+                remote_user=username,
+                remote_pass=password,
+                inventory=inventory,
+            )
 
 
 def main():
@@ -82,11 +86,7 @@ def main():
 
         # Filter out initial message by looking for 'name' key
         if task:
-            # try:
-            json_payload = json.loads(task['data'])
-            task_router(json_payload)
-            # except:
-            #    print 'Unrecognized message:\n{}'.format(task)
+            task_router(task)
         else:
             sleep(1)
 

@@ -6,8 +6,8 @@ from time import sleep
 import os
 
 
-def generate_inventory(uuid=False, target_ips=None):
-    inventory = ansible.inventory.Inventory(target_ips)
+def generate_inventory(uuid=False, target_ip=None):
+    inventory = ansible.inventory.Inventory([target_ip])
     return inventory
 
 
@@ -36,7 +36,10 @@ def run_playbook(
 ):
     stats = callbacks.AggregateStats()
     playbook_cb = callbacks.PlaybookCallbacks(verbose=utils.VERBOSITY)
-    runner_cb = callbacks.PlaybookRunnerCallbacks(stats, verbose=utils.VERBOSITY)
+    runner_cb = callbacks.PlaybookRunnerCallbacks(
+        stats,
+        verbose=utils.VERBOSITY
+    )
 
     if os.path.isfile(playbook_uri):
         return PlayBook(
@@ -88,9 +91,10 @@ def ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
         ping = run_ping()
         if 'pong' in str(ping):
             vm_is_online = True
-            print 'VM is online...'
+            return True
         else:
             print ping
             print 'Waiting for VM to come online...'
             attempts += 1
             sleep(10)
+    return False
