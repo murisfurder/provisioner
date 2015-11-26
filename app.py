@@ -83,6 +83,12 @@ def task_router(task):
                 inventory=inventory,
             )
 
+        print 'Done provisioning {} for {}@{}'.format(
+            role,
+            username,
+            target_ip
+        )
+
 
 def main():
     q = redis_helper.pubsub()
