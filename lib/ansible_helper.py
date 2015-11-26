@@ -61,6 +61,9 @@ def provision_cloudcompose(
         inventory=None,
 ):
 
+    if not ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
+        return False
+
     playbook_uri = 'provision_profiles/cloudcompose/site.yml'
 
     return run_playbook(
@@ -75,6 +78,9 @@ def provision_docker(
         remote_pass=None,
         inventory=None,
 ):
+
+    if not ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
+        return False
 
     playbook_uri = 'provision_profiles/docker/site.yml'
 

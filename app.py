@@ -71,17 +71,41 @@ def task_router(task):
                 # @TODO add back to queue.
                 pass
         elif role == 'docker':
-            return ansible_helper.provision_docker(
+            run_playbook = ansible_helper.provision_docker(
                 remote_user=username,
                 remote_pass=password,
                 inventory=inventory,
             )
+            if (
+                run_playbook[target_ip]['unreachable'] == 0 and
+                run_playbook[target_ip]['failures'] == 0
+            ):
+                push_status(ip=target_ip, status='done')
+            else:
+                # @TODO add back to queue.
+                return 'Failed provisioning {} for {}@{}'.format(
+                    role,
+                    username,
+                    target_ip
+                )
         elif role == 'cloudcompose':
-            return ansible_helper.provision_cloudcompose(
+            run_playbook = ansible_helper.provision_cloudcompose(
                 remote_user=username,
                 remote_pass=password,
                 inventory=inventory,
             )
+            if (
+                run_playbook[target_ip]['unreachable'] == 0 and
+                run_playbook[target_ip]['failures'] == 0
+            ):
+                push_status(ip=target_ip, status='done')
+            else:
+                # @TODO add back to queue.
+                return 'Failed provisioning {} for {}@{}'.format(
+                    role,
+                    username,
+                    target_ip
+                )
 
         print 'Done provisioning {} for {}@{}'.format(
             role,

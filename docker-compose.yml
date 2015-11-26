@@ -12,6 +12,13 @@ prov1:
   links:
    - redis
   container_name: prov1
+prov2:
+  build: .
+  volumes:
+       - .:/code
+  links:
+   - redis
+  container_name: prov2
 redis:
   container_name: redis
   image: redis
