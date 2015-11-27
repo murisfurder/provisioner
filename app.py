@@ -1,4 +1,3 @@
-import json
 from lib import ansible_helper
 from lib import redis_helper
 from time import sleep
@@ -30,82 +29,87 @@ def task_router(task):
             'ip': ip,
         })
 
-    # Ensure that data is proper JSON
-    try:
-        json_payload = json.loads(task['data'])
-    except:
-        print 'Unrecognized message:\n{}'.format(task)
-        return
-
     # Define and lookup the required variables
-    role = data_sanitizer(json_payload, 'role', type(''))
-    uuid = data_sanitizer(json_payload, 'uuid', type(''))
-    username = data_sanitizer(json_payload, 'username', type(''))
-    password = data_sanitizer(json_payload, 'password', type(''))
-    target_ip = data_sanitizer(json_payload, 'ip', type(''))
+    role = data_sanitizer(task, 'role', type(''))
+    username = data_sanitizer(task, 'username', type(''))
+    password = data_sanitizer(task, 'password', type(''))
+    target_ip = data_sanitizer(task, 'ip', type(''))
 
     # Make sure we received all required fields
     if not (username and password and target_ip and role):
         print 'Missing required value'
         return False
 
-    lock = redis_helper.get_lock(uuid)
-    if lock.acquire(blocking=False):
-        print 'Got task {} for {}@{}'.format(role, username, target_ip)
-        push_status(ip=target_ip, status='provisioning')
+    # Give it maximum three attempts
+    if 'attempts' in task:
+        if task['attempts'] > 2:
+            return 'Too many attempts for {}@{}'.format(username, target_ip)
+        task['attempts'] += 1
+    else:
+        task['attempts'] = 1
+    attempts = task['attempts']
 
-        inventory = ansible_helper.generate_inventory(
-            target_ip=target_ip
+    print 'Got task {} for {}@{} (attempt {})'.format(
+        role,
+        username,
+        target_ip,
+        attempts
+    )
+
+    push_status(ip=target_ip, status='provisioning')
+
+    inventory = ansible_helper.generate_inventory(
+        target_ip=target_ip
+    )
+
+    if role == 'ping':
+        run_ping = ansible_helper.ping_vm(
+            remote_user=username,
+            remote_pass=password,
+            inventory=inventory
         )
-
-        if role == 'ping':
-            run_ping = ansible_helper.ping_vm(
-                remote_user=username,
-                remote_pass=password,
-                inventory=inventory
+        if run_ping:
+            print '{} is running'.format(target_ip)
+            push_status(ip=target_ip, status='done')
+        else:
+            # @TODO add back to queue.
+            pass
+    elif role == 'docker':
+        run_playbook = ansible_helper.provision_docker(
+            remote_user=username,
+            remote_pass=password,
+            inventory=inventory,
+        )
+        if (
+            run_playbook[target_ip]['unreachable'] == 0 and
+            run_playbook[target_ip]['failures'] == 0
+        ):
+            push_status(ip=target_ip, status='done')
+        else:
+            redis_helper.add_to_queue(task)
+            return 'Failed provisioning {} for {}@{}'.format(
+                role,
+                username,
+                target_ip
             )
-            if run_ping:
-                print '{} is running'.format(target_ip)
-                push_status(ip=target_ip, status='done')
-            else:
-                # @TODO add back to queue.
-                pass
-        elif role == 'docker':
-            run_playbook = ansible_helper.provision_docker(
-                remote_user=username,
-                remote_pass=password,
-                inventory=inventory,
+    elif role == 'cloudcompose':
+        run_playbook = ansible_helper.provision_cloudcompose(
+            remote_user=username,
+            remote_pass=password,
+            inventory=inventory,
+        )
+        if (
+            run_playbook[target_ip]['unreachable'] == 0 and
+            run_playbook[target_ip]['failures'] == 0
+        ):
+            push_status(ip=target_ip, status='done')
+        else:
+            redis_helper.add_to_queue(task)
+            return 'Failed provisioning {} for {}@{}'.format(
+                role,
+                username,
+                target_ip
             )
-            if (
-                run_playbook[target_ip]['unreachable'] == 0 and
-                run_playbook[target_ip]['failures'] == 0
-            ):
-                push_status(ip=target_ip, status='done')
-            else:
-                # @TODO add back to queue.
-                return 'Failed provisioning {} for {}@{}'.format(
-                    role,
-                    username,
-                    target_ip
-                )
-        elif role == 'cloudcompose':
-            run_playbook = ansible_helper.provision_cloudcompose(
-                remote_user=username,
-                remote_pass=password,
-                inventory=inventory,
-            )
-            if (
-                run_playbook[target_ip]['unreachable'] == 0 and
-                run_playbook[target_ip]['failures'] == 0
-            ):
-                push_status(ip=target_ip, status='done')
-            else:
-                # @TODO add back to queue.
-                return 'Failed provisioning {} for {}@{}'.format(
-                    role,
-                    username,
-                    target_ip
-                )
 
         print 'Done provisioning {} for {}@{}'.format(
             role,
@@ -115,12 +119,9 @@ def task_router(task):
 
 
 def main():
-    q = redis_helper.pubsub()
-
     while True:
-        task = q.get_message()
+        task = redis_helper.pop_from_queue()
 
-        # Filter out initial message by looking for 'name' key
         if task:
             task_router(task)
         else:

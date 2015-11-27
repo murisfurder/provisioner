@@ -36,7 +36,7 @@ prov1 | 192.168.33.11 is running
 (U=User, O=OnApp/Cloud.net, P=Provisioner)
 
  * [U] User creates a CoreOS cluster in the user interface
- * [O] One Redis task is created for each server in the cluster to the 'prov' channel (three in this case). This task will include:
+ * [O] One Redis task is created for each server in the cluster to the 'prov' list (three in this case). This task will include:
    * The username for the server ('username')
    * The password for the server ('password')
    * The public IP of the server ('ip')

@@ -1,7 +1,6 @@
+import json
 import redis
 import settings
-import socket
-import redis_lock
 
 
 def connect():
@@ -13,20 +12,25 @@ def connect():
     return r
 
 
-def pubsub():
+def add_to_queue(msg):
     r = connect()
-    p = r.pubsub(ignore_subscribe_messages=True)
-    p.subscribe(settings.REDIS_CHANNEL)
-    return p
+    return r.rpush(settings.REDIS_LIST, json.dumps(msg))
 
 
-def get_lock(uuid):
-    return redis_lock.Lock(
-        connect(),
-        uuid,
-        id=socket.gethostname(),
-        expire=3600,
-    )
+def pop_from_queue():
+    """
+    Pull the oldest message from the queue.
+    """
+    r = connect()
+    msg = r.lpop(settings.REDIS_LIST)
+    if msg:
+        try:
+            return json.loads(msg)
+        except:
+            print 'Unable to load message:\n{}'.format(msg)
+            return False
+    else:
+        return False
 
 
 def get_status(uuid):
