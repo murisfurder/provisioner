@@ -10,7 +10,7 @@ def task_router(task):
 
     def data_sanitizer(data, key, expected_type):
         """
-        Sanity check the data against expected data type.
+        Sanity check the data against expected data type
         Returns the value or False.
         """
 
@@ -61,6 +61,14 @@ def task_router(task):
     inventory = ansible_helper.generate_inventory(
         target_ip=target_ip
     )
+
+    # @TODO add:
+    # * Wordpress
+    # * Registry
+    # * Redis
+    # * MongoDB
+    # * MySQL
+    # * PostgreSQL
 
     if role == 'ping':
         run_ping = ansible_helper.ping_vm(
