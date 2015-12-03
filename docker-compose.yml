@@ -1,24 +1,24 @@
-prov0:
-  build: .
+worker0:
+  image: cloudnet/worker
   volumes:
        - .:/code
   links:
    - redis
-  container_name: prov0
-prov1:
-  build: .
+  container_name: worker0
+worker1:
+  image: cloudnet/worker
   volumes:
        - .:/code
   links:
    - redis
-  container_name: prov1
-prov2:
-  build: .
+  container_name: worker1
+worker2:
+  image: cloudnet/worker
   volumes:
        - .:/code
   links:
    - redis
-  container_name: prov2
+  container_name: worker2
 redis:
   container_name: redis
   image: redis
