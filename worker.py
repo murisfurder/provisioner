@@ -1,6 +1,6 @@
 from lib import ansible_helper
 from lib import redis_helper
-from time import sleep
+import time
 
 
 def task_router(task):
@@ -23,14 +23,12 @@ def task_router(task):
 
         return data[key]
 
-    def push_status(status=None, ip=None):
-        redis_helper.push_status({
-            'status': status,
-            'ip': ip,
-        })
+    task['attempts'] += 1
 
     # Define and lookup the required variables
+    attempts = task['attempts']
     role = data_sanitizer(task, 'role', type(''))
+    uuid = data_sanitizer(task, 'uuid', type(''))
     username = data_sanitizer(task, 'username', type(''))
     password = data_sanitizer(task, 'password', type(''))
     target_ip = data_sanitizer(task, 'ip', type(''))
@@ -41,22 +39,36 @@ def task_router(task):
         return False
 
     # Give it maximum three attempts
-    if 'attempts' in task:
-        if task['attempts'] > 2:
-            return 'Too many attempts for {}@{}'.format(username, target_ip)
-        task['attempts'] += 1
-    else:
-        task['attempts'] = 1
-    attempts = task['attempts']
+    if task['attempts'] > 3:
+        print 'Too many attempts for {}@{} (uuid: {})'.format(
+            username,
+            target_ip,
+            uuid
+        )
+        redis_helper.push_status(
+            role=role,
+            uuid=uuid,
+            ip=target_ip,
+            attempts=attempts,
+            status='Failed'
+        )
+        return False
 
-    print 'Got task {} for {}@{} (attempt {})'.format(
+    print 'Got task \'{}\' for {}@{} (attempt: {}, uuid: {})'.format(
         role,
         username,
         target_ip,
-        attempts
+        attempts,
+        uuid,
     )
 
-    push_status(ip=target_ip, status='provisioning')
+    redis_helper.push_status(
+        role=role,
+        uuid=uuid,
+        ip=target_ip,
+        attempts=attempts,
+        status='Provisioning'
+    )
 
     inventory = ansible_helper.generate_inventory(
         target_ip=target_ip
@@ -76,54 +88,67 @@ def task_router(task):
             remote_pass=password,
             inventory=inventory
         )
-        if run_ping:
-            print '{} is running'.format(target_ip)
-            push_status(ip=target_ip, status='done')
-        else:
-            # @TODO add back to queue.
-            pass
+        if not run_ping:
+            print '{} is *not* running'.format(target_ip)
+            redis_helper.add_to_queue(task)
+            print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
+                role,
+                username,
+                target_ip,
+                uuid,
+            )
+            return
     elif role == 'docker':
         run_playbook = ansible_helper.provision_docker(
             remote_user=username,
             remote_pass=password,
             inventory=inventory,
         )
-        if (
+        if not (
             run_playbook[target_ip]['unreachable'] == 0 and
             run_playbook[target_ip]['failures'] == 0
         ):
-            push_status(ip=target_ip, status='done')
-        else:
             redis_helper.add_to_queue(task)
-            return 'Failed provisioning {} for {}@{}'.format(
+            print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
                 role,
                 username,
-                target_ip
+                target_ip,
+                uuid,
             )
+            return
     elif role == 'cloudcompose':
         run_playbook = ansible_helper.provision_cloudcompose(
             remote_user=username,
             remote_pass=password,
             inventory=inventory,
         )
-        if (
+        if not (
             run_playbook[target_ip]['unreachable'] == 0 and
             run_playbook[target_ip]['failures'] == 0
         ):
-            push_status(ip=target_ip, status='done')
-        else:
             redis_helper.add_to_queue(task)
-            return 'Failed provisioning {} for {}@{}'.format(
+            print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
                 role,
                 username,
-                target_ip
+                target_ip,
+                uuid,
             )
+            return
 
-        print 'Done provisioning {} for {}@{}'.format(
-            role,
-            username,
-            target_ip
-        )
+    redis_helper.push_status(
+        role=role,
+        uuid=uuid,
+        ip=target_ip,
+        attempts=attempts,
+        status='Done'
+    )
+
+    print 'Done provisioning {} for {}@{} (uuid: {})'.format(
+        role,
+        username,
+        target_ip,
+        uuid,
+    )
 
 
 def main():
@@ -133,7 +158,7 @@ def main():
         if task:
             task_router(task)
         else:
-            sleep(1)
+            time.sleep(1)
 
 if __name__ == '__main__':
     main()

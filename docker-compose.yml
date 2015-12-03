@@ -1,24 +1,27 @@
+api:
+  image: cloudnet/prov-api
+  ports:
+    - "8080:80"
+  links:
+   - redis
+  container_name: api
 worker0:
-  image: cloudnet/worker
+  image: cloudnet/prov-worker
   volumes:
        - .:/code
   links:
    - redis
   container_name: worker0
 worker1:
-  image: cloudnet/worker
-  volumes:
-       - .:/code
+  image: cloudnet/prov-worker
   links:
    - redis
   container_name: worker1
 worker2:
-  image: cloudnet/worker
-  volumes:
-       - .:/code
+  image: cloudnet/prov-worker
   links:
    - redis
   container_name: worker2
 redis:
-  container_name: redis
+  container_name: prov-redis
   image: redis

@@ -2,7 +2,6 @@ import ansible.runner
 from ansible import utils
 from ansible.playbook import PlayBook
 from ansible import callbacks
-from time import sleep
 import os
 
 
@@ -79,9 +78,6 @@ def provision_docker(
         inventory=None,
 ):
 
-    if not ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
-        return False
-
     playbook_uri = 'provision_profiles/docker/site.yml'
 
     return run_playbook(
@@ -91,31 +87,21 @@ def provision_docker(
     )
 
 
-def ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
+def ping_vm(remote_user, remote_pass, inventory):
     """
     Run Ansible's 'ping' module against the VM.
     Listen for 'pong' in the response from the VM.
     """
-    vm_is_online = False
-    attempts = 0
 
-    def run_ping():
-        return run_module(
-            remote_user=remote_user,
-            remote_pass=remote_pass,
-            module_name='ping',
-            inventory=inventory,
-        )
+    ping = run_module(
+        remote_user=remote_user,
+        remote_pass=remote_pass,
+        module_name='ping',
+        inventory=inventory,
+    )
 
-    while not vm_is_online and attempts < max_attempts:
-        # We run Ansible's 'ping' module and look for the 'pong' response.
-        ping = run_ping()
-        if 'pong' in str(ping):
-            vm_is_online = True
-            return True
-        else:
-            print ping
-            print 'Waiting for VM to come online...'
-            attempts += 1
-            sleep(10)
-    return False
+    # We run Ansible's 'ping' module and look for the 'pong' response.
+    if 'pong' in str(ping):
+        return True
+    else:
+        return False

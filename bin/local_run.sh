@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Build Worker
-docker build -t cloudnet/worker -f Dockerfile.worker .
+# Build Docker Containers
+docker build -t cloudnet/prov-worker -f Dockerfile.worker .
+docker build -t cloudnet/prov-api -f Dockerfile.api .
 
+# Fire up Docker Compose
 docker-compose up
-

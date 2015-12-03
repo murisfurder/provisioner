@@ -1,6 +1,7 @@
 import json
 import redis
 import settings
+import time
 
 
 def connect():
@@ -14,6 +15,12 @@ def connect():
 
 def add_to_queue(msg):
     r = connect()
+    push_status(
+        uuid=msg['uuid'],
+        ip=msg['ip'],
+        status='Queued',
+        attempts=msg['attempts']
+    )
     return r.rpush(settings.REDIS_LIST, json.dumps(msg))
 
 
@@ -35,9 +42,29 @@ def pop_from_queue():
 
 def get_status(uuid):
     r = connect()
-    return r.get(uuid)
+    payload = r.get(uuid)
+    try:
+        return json.loads(payload)
+    except:
+        print 'Unable to load message:\n{}'.format(payload)
+        return False
 
 
-def push_status(ip=None, status=None, ttl=3600):
+def push_status(
+    role=None,
+    uuid=None,
+    ip=None,
+    status=None,
+    attempts=None,
+    ttl=3600
+):
     r = connect()
-    return r.setex(ip, ttl, status)
+    timestamp = str(time.mktime(time.gmtime()))
+    payload = {
+        'role': role,
+        'status': status,
+        'ip': ip,
+        'timestamp': timestamp,
+        'attempts': attempts,
+    }
+    return r.setex(uuid, ttl, json.dumps(payload))
