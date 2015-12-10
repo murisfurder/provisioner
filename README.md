@@ -45,3 +45,9 @@ The `ping` profile simply pings the server using Ansible's built-in ping module.
 *Requirement*: Ubuntu 12.04 or later
 
 The `docker` profile provisions the latest version of Docker on the target machine.
+
+#### wordpress
+
+*Requirement*: Ubuntu 12.04 or later
+
+The WordPress profile first provisions Docker. Once Docker is provisioned, it provisions MariaDB, and then the official WordPress container.

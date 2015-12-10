@@ -1,0 +1,22 @@
+---
+- name: MariaDB
+  docker:
+    name: mysql
+    image: mariadb
+    state: started
+    restart_policy: always
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+    volumes:
+    - "/var/lib/mysql:/var/lib/mysql"
+
+- name: WordPress
+  docker:
+    name: wordpress
+    image: wordpress
+    state: started
+    restart_policy: always
+    links:
+      - "mysql:mysql"
+    ports:
+    - "80:80"

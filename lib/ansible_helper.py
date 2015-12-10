@@ -3,11 +3,17 @@ from ansible import utils
 from ansible.playbook import PlayBook
 from ansible import callbacks
 import os
+import random
+import string
 
 
 def generate_inventory(uuid=False, target_ip=None):
     inventory = ansible.inventory.Inventory([target_ip])
     return inventory
+
+
+def generate_password(lenght=20):
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(lenght))
 
 
 def run_module(
@@ -31,6 +37,7 @@ def run_playbook(
     remote_pass=None,
     inventory=None,
     playbook_uri=None,
+    extra_vars=None,
     playbook_args='',
 ):
     stats = callbacks.AggregateStats()
@@ -49,6 +56,7 @@ def run_playbook(
             remote_user=remote_user,
             remote_pass=remote_pass,
             inventory=inventory,
+            extra_vars=extra_vars,
         ).run()
     else:
         print '"{}" is an invalid file.'.format(playbook_uri)
@@ -84,6 +92,24 @@ def provision_docker(
         remote_pass=remote_pass,
         inventory=inventory,
         playbook_uri=playbook_uri,
+    )
+
+
+def provision_wordpress(
+        remote_user=None,
+        remote_pass=None,
+        inventory=None,
+):
+
+    playbook_uri = 'provision_profiles/wordpress/site.yml'
+
+    return run_playbook(
+        remote_pass=remote_pass,
+        inventory=inventory,
+        playbook_uri=playbook_uri,
+        extra_vars={
+            'mysql_root_password': generate_password(),
+        }
     )
 
 
