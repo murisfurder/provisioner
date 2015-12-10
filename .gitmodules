@@ -1,3 +1,6 @@
 [submodule "provision_profiles/cloudcompose"]
 	path = provision_profiles/cloudcompose
 	url = git@github.com:vpetersson/cloudcompose.git
+[submodule "provision_profiles/docker/roles/docker.ubuntu"]
+	path = provision_profiles/docker/roles/docker.ubuntu
+	url = git@github.com:angstwad/docker.ubuntu.git
