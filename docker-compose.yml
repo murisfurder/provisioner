@@ -1,5 +1,6 @@
 api:
   image: cloudnet/prov-api
+  restart: always
   ports:
     - "8080:80"
   links:
@@ -7,6 +8,7 @@ api:
   container_name: api
 worker0:
   image: cloudnet/prov-worker
+  restart: always
   volumes:
        - .:/code
   links:
@@ -14,14 +16,17 @@ worker0:
   container_name: worker0
 worker1:
   image: cloudnet/prov-worker
+  restart: always
   links:
    - redis
   container_name: worker1
 worker2:
   image: cloudnet/prov-worker
+  restart: always
   links:
    - redis
   container_name: worker2
 redis:
+  restart: always
   container_name: prov-redis
   image: redis
