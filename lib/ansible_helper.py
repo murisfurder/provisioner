@@ -66,13 +66,13 @@ def provision(
         remote_user=None,
         remote_pass=None,
         inventory=None,
-        profile=None
+        role=None
 ):
 
     extra_vars = {}
-    playbook_uri = 'provision_profiles/{}/site.yml'.format(profile)
+    playbook_uri = 'provision_profiles/{}/site.yml'.format(role)
 
-    if profile in ['wordpress', 'mysql']:
+    if role in ['wordpress', 'mysql']:
         extra_vars = {
             'mysql_root_password': generate_password(),
         }

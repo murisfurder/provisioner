@@ -17,7 +17,7 @@ def create_task(ip=None, role=None, username=None, password=None):
     if (ip and role and username and password):
         redis_helper.add_to_queue({
             'created_at': timestamp,
-            'last_update': timestamp,
+            'last_update': None,
             'role': role,
             'ip': ip,
             'username': username,

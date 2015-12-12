@@ -22,10 +22,11 @@ def task_router(task):
 
     # Make sure there is at least 30 seconds between retries.
     # If not, pop it back into the queue
-    last_update = float(task['last_update'])
-    if last_update + 30 >= time.mktime(time.gmtime()):
-        redis_helper.add_to_queue(task)
-        return
+    if task['last_update']:
+        last_update = float(task['last_update'])
+        if last_update + 30 >= time.mktime(time.gmtime()):
+            redis_helper.add_to_queue(task)
+            return
 
     task['attempts'] += 1
 
