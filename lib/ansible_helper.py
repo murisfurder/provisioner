@@ -70,18 +70,12 @@ def provision(
 ):
 
     extra_vars = {}
-    if profile == 'cloudcompose':
-        playbook_uri = 'provision_profiles/cloudcompose/site.yml'
-    elif profile == 'docker':
-        playbook_uri = 'provision_profiles/docker/site.yml'
-    elif profile == 'wordpress':
-        playbook_uri = 'provision_profiles/wordpress/site.yml'
+    playbook_uri = 'provision_profiles/{}/site.yml'.format(profile)
+
+    if profile == 'wordpress':
         extra_vars = {
             'mysql_root_password': generate_password(),
         }
-    else:
-        print 'Invalid provisioning profile: {}'.format(profile)
-        return False
 
     if remote_user and remote_pass and inventory:
         return run_playbook(
