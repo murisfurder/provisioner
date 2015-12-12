@@ -149,8 +149,7 @@ def main():
 
         if task:
             task_router(task)
-        else:
-            time.sleep(1)
+        time.sleep(1)
 
 if __name__ == '__main__':
     main()
