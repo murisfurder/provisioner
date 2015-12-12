@@ -1,0 +1,9 @@
+---
+- name: MongoDB
+  docker:
+    name: mongodb
+    image: mongodb
+    state: started
+    restart_policy: always
+    volumes:
+    - "/var/lib/mongodb:/data/db"

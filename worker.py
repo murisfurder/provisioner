@@ -76,9 +76,6 @@ def task_router(task):
 
     # @TODO add:
     # * Registry
-    # * Redis
-    # * MongoDB
-    # * MySQL
     # * PostgreSQL
 
     if role == 'ping':
@@ -97,7 +94,14 @@ def task_router(task):
                 uuid,
             )
             return
-    elif role in ['docker', 'wordpress', 'cloudcompose']:
+    elif role in [
+        'cloudcompose',
+        'docker',
+        'mongodb'
+        'mysql',
+        'redis'
+        'wordpress',
+    ]:
         run_playbook = ansible_helper.provision(
             remote_user=username,
             remote_pass=password,

@@ -72,7 +72,7 @@ def provision(
     extra_vars = {}
     playbook_uri = 'provision_profiles/{}/site.yml'.format(profile)
 
-    if profile == 'wordpress':
+    if profile in ['wordpress', 'mysql']:
         extra_vars = {
             'mysql_root_password': generate_password(),
         }

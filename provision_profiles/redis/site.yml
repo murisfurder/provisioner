@@ -1,0 +1,7 @@
+- name: Provisions Redis (running inside Docker)
+  remote_user: root
+  hosts: all
+
+  roles:
+    - docker.ubuntu
+    - redis
