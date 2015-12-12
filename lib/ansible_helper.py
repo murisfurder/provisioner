@@ -62,55 +62,36 @@ def run_playbook(
         print '"{}" is an invalid file.'.format(playbook_uri)
 
 
-def provision_cloudcompose(
+def provision(
         remote_user=None,
         remote_pass=None,
         inventory=None,
+        profile=None
 ):
 
-    if not ping_vm(remote_user, remote_pass, inventory, max_attempts=10):
-        return False
-
-    playbook_uri = 'provision_profiles/cloudcompose/site.yml'
-
-    return run_playbook(
-        remote_pass=remote_pass,
-        inventory=inventory,
-        playbook_uri=playbook_uri,
-    )
-
-
-def provision_docker(
-        remote_user=None,
-        remote_pass=None,
-        inventory=None,
-):
-
-    playbook_uri = 'provision_profiles/docker/site.yml'
-
-    return run_playbook(
-        remote_pass=remote_pass,
-        inventory=inventory,
-        playbook_uri=playbook_uri,
-    )
-
-
-def provision_wordpress(
-        remote_user=None,
-        remote_pass=None,
-        inventory=None,
-):
-
-    playbook_uri = 'provision_profiles/wordpress/site.yml'
-
-    return run_playbook(
-        remote_pass=remote_pass,
-        inventory=inventory,
-        playbook_uri=playbook_uri,
-        extra_vars={
+    extra_vars = {}
+    if profile == 'cloudcompose':
+        playbook_uri = 'provision_profiles/cloudcompose/site.yml'
+    elif profile == 'docker':
+        playbook_uri = 'provision_profiles/docker/site.yml'
+    elif profile == 'wordpress':
+        playbook_uri = 'provision_profiles/wordpress/site.yml'
+        extra_vars = {
             'mysql_root_password': generate_password(),
         }
-    )
+    else:
+        print 'Invalid provisioning profile: {}'.format(profile)
+        return False
+
+    if remote_user and remote_pass and inventory:
+        return run_playbook(
+            remote_pass=remote_pass,
+            inventory=inventory,
+            playbook_uri=playbook_uri,
+            extra_vars=extra_vars
+        )
+    else:
+        return False
 
 
 def ping_vm(remote_user, remote_pass, inventory):

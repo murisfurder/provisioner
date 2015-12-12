@@ -75,7 +75,6 @@ def task_router(task):
     )
 
     # @TODO add:
-    # * Wordpress
     # * Registry
     # * Redis
     # * MongoDB
@@ -98,47 +97,12 @@ def task_router(task):
                 uuid,
             )
             return
-    elif role == 'docker':
-        run_playbook = ansible_helper.provision_docker(
+    elif role in ['docker', 'wordpress', 'cloudcompose']:
+        run_playbook = ansible_helper.provision(
             remote_user=username,
             remote_pass=password,
             inventory=inventory,
-        )
-        if not (
-            run_playbook[target_ip]['unreachable'] == 0 and
-            run_playbook[target_ip]['failures'] == 0
-        ):
-            redis_helper.add_to_queue(task)
-            print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
-                role,
-                username,
-                target_ip,
-                uuid,
-            )
-            return
-    elif role == 'wordpress':
-        run_playbook = ansible_helper.provision_wordpress(
-            remote_user=username,
-            remote_pass=password,
-            inventory=inventory,
-        )
-        if not (
-            run_playbook[target_ip]['unreachable'] == 0 and
-            run_playbook[target_ip]['failures'] == 0
-        ):
-            redis_helper.add_to_queue(task)
-            print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
-                role,
-                username,
-                target_ip,
-                uuid,
-            )
-            return
-    elif role == 'cloudcompose':
-        run_playbook = ansible_helper.provision_cloudcompose(
-            remote_user=username,
-            remote_pass=password,
-            inventory=inventory,
+            role=role
         )
         if not (
             run_playbook[target_ip]['unreachable'] == 0 and
