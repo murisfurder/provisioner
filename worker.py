@@ -3,39 +3,42 @@ from lib import redis_helper
 import time
 
 
+def key_lookup(data, key):
+    """
+    Returns the value as string or False.
+    """
+
+    if key not in data:
+        print 'Key {} is missing.'.format(key)
+        return False
+
+    return str(data[key])
+
+
 def task_router(task):
     """
-    Task router for Redis tasks, with sanity check
+    Task router, with sanity check
     """
 
-    def data_sanitizer(data, key, expected_type):
-        """
-        Sanity check the data against expected data type
-        Returns the value or False.
-        """
-
-        if key not in data:
-            return False
-
-        # @TODO fix me.
-        # if not type(data[key]) is expected_type:
-        #    return False
-
-        return data[key]
+    # Make sure there is at least 30 seconds between retries.
+    # If not, pop it back into the queue
+    last_update = float(task['last_update'])
+    if last_update + 30 >= time.mktime(time.gmtime()):
+        redis_helper.add_to_queue(task)
+        return
 
     task['attempts'] += 1
 
     # Define and lookup the required variables
     attempts = task['attempts']
-    role = data_sanitizer(task, 'role', type(''))
-    uuid = data_sanitizer(task, 'uuid', type(''))
-    username = data_sanitizer(task, 'username', type(''))
-    password = data_sanitizer(task, 'password', type(''))
-    target_ip = data_sanitizer(task, 'ip', type(''))
+    role = key_lookup(task, 'role')
+    uuid = key_lookup(task, 'uuid')
+    username = key_lookup(task, 'username')
+    password = key_lookup(task, 'password')
+    target_ip = key_lookup(task, 'ip')
 
     # Make sure we received all required fields
     if not (username and password and target_ip and role):
-        print 'Missing required value'
         return False
 
     # Give it maximum three attempts
@@ -86,6 +89,7 @@ def task_router(task):
         )
         if not run_ping:
             print '{} is *not* running'.format(target_ip)
+            task['last_update'] = str(time.mktime(time.gmtime()))
             redis_helper.add_to_queue(task)
             print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
                 role,
@@ -112,6 +116,7 @@ def task_router(task):
             run_playbook[target_ip]['unreachable'] == 0 and
             run_playbook[target_ip]['failures'] == 0
         ):
+            task['last_update'] = str(time.mktime(time.gmtime()))
             redis_helper.add_to_queue(task)
             print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
                 role,
