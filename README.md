@@ -30,6 +30,12 @@ $ curl http://192.168.56.132:8080/status/d7417be8-aab3-435b-8d15-ce71489ca5cd
 {"status": "Done", "ip": "192.168.33.10", "attempts": 1, "role": "ping", "timestamp": "1449166675.0"}
 ```
 
+The possible statuses for a job are:
+
+* Queued
+* Provisioning
+* Done
+
 ### Provisioning Profiles
 
 The provisioning profile (or role) is set using the `role` key inside the JSON payload.
