@@ -17,7 +17,7 @@ $ docker-compose up
 Once the containers are up and running, you can start creating jobs using something like `curl`:
 
 ```
-curl -H "Content-Type: application/json" \
+$ curl -H "Content-Type: application/json" \
     -X POST -d '{"role": "ping", "ip": "192.168.33.10", "password": "foobar123", "username": "root"}' \
     http://192.168.56.132:8080/submit
 d7417be8-aab3-435b-8d15-ce71489ca5cd
@@ -34,20 +34,21 @@ $ curl http://192.168.56.132:8080/status/d7417be8-aab3-435b-8d15-ce71489ca5cd
 
 The provisioning profile (or role) is set using the `role` key inside the JSON payload.
 
-#### ping
+#### Ping
 
+*Name*: ping
 *Requirement*: None
 
 The `ping` profile simply pings the server using Ansible's built-in ping module. Despite the name, this doesn't actually ping (i.e. send an ICMP package), but rather connects to the server over SSH.
 
-#### docker
+#### Docker
 
+*Name*: docker
 *Requirement*: Ubuntu 12.04 or later
 
-The `docker` profile provisions the latest version of Docker on the target machine.
+##### Docker-based profiles
 
-#### wordpress
-
-*Requirement*: Ubuntu 12.04 or later
-
-The WordPress profile first provisions Docker. Once Docker is provisioned, it provisions MariaDB, and then the official WordPress container.
+* `mongodb`
+* `mysql` (or MariaDB)
+* `redis`
+* `wordpress`
