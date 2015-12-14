@@ -32,7 +32,11 @@ def create_task(ip=None, role=None, username=None, password=None):
 
 @app.route('/submit', method='POST')
 def do_submit():
-    payload = json.load(request.body)
+    try:
+        payload = json.load(request.body)
+    except:
+        print 'Unable to decode JSON from payload.'
+        return False
 
     return create_task(
         ip=payload['ip'],
