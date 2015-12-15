@@ -82,6 +82,15 @@ def task_router(task):
     # * Registry
     # * PostgreSQL
 
+    playbooks = [
+        'cloudcompose',
+        'docker',
+        'mongodb',
+        'mysql',
+        'redis',
+        'wordpress',
+    ]
+
     if role == 'ping':
         run_ping = ansible_helper.ping_vm(
             remote_user=username,
@@ -99,14 +108,7 @@ def task_router(task):
                 uuid,
             )
             return
-    elif role in [
-        'cloudcompose',
-        'docker',
-        'mongodb'
-        'mysql',
-        'redis'
-        'wordpress',
-    ]:
+    elif role in playbooks:
         run_playbook = ansible_helper.provision(
             remote_user=username,
             remote_pass=password,
@@ -126,6 +128,9 @@ def task_router(task):
                 uuid,
             )
             return
+    else:
+        print 'Unknown role/playbook: {}'.format(role)
+        return
 
     redis_helper.push_status(
         role=role,
