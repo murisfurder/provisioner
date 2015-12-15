@@ -1,4 +1,4 @@
-- name: Provisions MariaDB/MySQL (running inside Docker)
+- name: Provisions MySQL (running inside Docker)
   remote_user: root
   hosts: all
 
@@ -7,4 +7,4 @@
 
   roles:
     - docker.ubuntu
-    - redis
+    - mysql
