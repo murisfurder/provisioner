@@ -6,26 +6,11 @@ api:
   links:
    - redis
   container_name: api
-worker0:
-  image: cloudnet/prov-worker
-  restart: always
-  volumes:
-       - .:/code
-  links:
-   - redis
-  container_name: worker0
-worker1:
+worker:
   image: cloudnet/prov-worker
   restart: always
   links:
    - redis
-  container_name: worker1
-worker2:
-  image: cloudnet/prov-worker
-  restart: always
-  links:
-   - redis
-  container_name: worker2
 redis:
   restart: always
   container_name: redis
