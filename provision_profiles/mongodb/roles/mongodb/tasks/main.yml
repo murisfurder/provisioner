@@ -7,3 +7,5 @@
     restart_policy: always
     volumes:
     - "/var/lib/mongodb:/data/db"
+    ports:
+    - "127.0.0.1:27017:27017"
