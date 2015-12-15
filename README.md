@@ -50,7 +50,7 @@ The `ping` profile simply pings the server using Ansible's built-in ping module.
 #### Docker
 
 * *Name*: docker
-* ** Requirement*: Ubuntu 12.04 or later
+* *Requirement*: Ubuntu 12.04 or later
 
 ##### Docker-based profiles
 
