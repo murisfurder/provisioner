@@ -2,7 +2,7 @@
 - name: MongoDB
   docker:
     name: mongodb
-    image: mongodb
+    image: mongo
     state: started
     restart_policy: always
     volumes:
