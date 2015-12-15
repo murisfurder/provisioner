@@ -9,6 +9,8 @@
       MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
     volumes:
     - "/var/lib/mysql:/var/lib/mysql"
+    ports:
+    - "127.0.0.1:3306:3306"
 
 - name: WordPress
   docker:
