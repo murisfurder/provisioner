@@ -42,15 +42,15 @@ The provisioning profile (or role) is set using the `role` key inside the JSON p
 
 #### Ping
 
-*Name*: ping
-*Requirement*: None
+* *Name*: ping
+* *Requirement*: None
 
 The `ping` profile simply pings the server using Ansible's built-in ping module. Despite the name, this doesn't actually ping (i.e. send an ICMP package), but rather connects to the server over SSH.
 
 #### Docker
 
-*Name*: docker
-*Requirement*: Ubuntu 12.04 or later
+* *Name*: docker
+* ** Requirement*: Ubuntu 12.04 or later
 
 ##### Docker-based profiles
 
