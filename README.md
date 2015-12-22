@@ -9,8 +9,6 @@ Simple Ansible based provisioning system for Cloud.net.
 Spin up the container(s):
 
 ```
-$ docker build -t cloudnet/prov-worker -f Dockerfile.worker .
-$ docker build -t cloudnet/prov-api -f Dockerfile.api .
 $ docker-compose up
 ```
 
@@ -35,6 +33,14 @@ The possible statuses for a job are:
 * Queued
 * Provisioning
 * Done
+
+### Scaling
+
+To scale the number of workers to four, simply run:
+
+```
+docker-composes cale worker=4
+```
 
 ### Provisioning Profiles
 
