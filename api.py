@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-from bottle import request
-from bottle import Bottle, run, abort
+from bottle import request, response, Bottle, run, abort
 from lib import redis_helper
 from uuid import uuid4
 import time
@@ -11,39 +10,40 @@ import json
 app = Bottle()
 
 
-def create_task(ip=None, role=None, username=None, password=None):
-    uuid = str(uuid4())
-    timestamp = str(time.mktime(time.gmtime()))
-    if (ip and role and username and password):
-        redis_helper.add_to_queue({
-            'created_at': timestamp,
-            'last_update': None,
-            'role': role,
-            'ip': ip,
-            'username': username,
-            'password': password,
-            'uuid': uuid,
-            'attempts': 0,
-        })
-        return uuid
-    else:
-        abort(500, 'Unable to process request')
-
-
 @app.post('/job')
 def create_job():
+    uuid = str(uuid4())
+    timestamp = str(time.mktime(time.gmtime()))
+
     try:
         payload = json.load(request.body)
     except:
-        print 'Unable to decode JSON from payload.'
         abort(400, 'Invalid JSON payload.')
 
-    return create_task(
-        ip=payload['ip'],
-        role=payload['role'],
-        username=payload['username'],
-        password=payload['password'],
-    )
+    ip = payload['ip']
+    role = payload['role']
+    username = payload['username']
+    password = payload['password']
+
+    if not (ip and role and username and password):
+        abort(400, 'Missing one of the required arguments.')
+
+    task = redis_helper.add_to_queue({
+        'created_at': timestamp,
+        'last_update': None,
+        'role': role,
+        'ip': ip,
+        'username': username,
+        'password': password,
+        'uuid': uuid,
+        'attempts': 0,
+    })
+
+    if task:
+        response.status = 201
+        return uuid
+    else:
+        abort(500, 'Unable to process request')
 
 
 @app.route('/job/<uuid>')
@@ -51,8 +51,26 @@ def get_job_status(uuid):
     if uuid:
         return redis_helper.get_status(uuid)
     else:
-        print 'Unable to get status for {}'.format(uuid)
-        abort(404, 'Job not found.')
+        print 'No job specified.'
+        abort(400, 'No job specified.')
+
+
+@app.delete('/job/<uuid>')
+def abort_job(uuid):
+    if uuid:
+        abort_task = redis_helper.abort_job(uuid)
+        if abort_task:
+            response.status = 204
+        else:
+            abort(500, 'Unable to delete task.')
+    else:
+        print 'No job specified.'
+        abort(400, 'No job specified.')
+
+
+@app.route('/redis_status')
+def get_redis_status():
+    return redis_helper.get_redis_status()
 
 
 @app.route('/')
