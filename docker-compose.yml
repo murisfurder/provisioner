@@ -1,7 +1,6 @@
 api:
   build: .
-  dockerfile: Dockerfile.api
-  image: cloudnet/prov-api
+  dockerfile: docker/Dockerfile.api
   restart: always
   ports:
     - "8080:80"
@@ -9,7 +8,7 @@ api:
    - redis
 worker:
   build: .
-  dockerfile: Dockerfile.worker
+  dockerfile: docker/Dockerfile.worker
   restart: always
   links:
    - redis
