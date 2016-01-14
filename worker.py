@@ -20,6 +20,18 @@ def task_router(task):
     Task router, with sanity check
     """
 
+    # Define and lookup the required variables
+    attempts = task['attempts']
+    role = key_lookup(task, 'role')
+    uuid = key_lookup(task, 'uuid')
+    username = key_lookup(task, 'username')
+    password = key_lookup(task, 'password')
+    target_ip = key_lookup(task, 'ip')
+
+    status = redis_helper.get_status(uuid)
+    if status['status'] == 'Aborted':
+        return
+
     # Make sure there is at least 30 seconds between retries.
     # If not, pop it back into the queue
     if task['last_update']:
@@ -29,14 +41,6 @@ def task_router(task):
             return
 
     task['attempts'] += 1
-
-    # Define and lookup the required variables
-    attempts = task['attempts']
-    role = key_lookup(task, 'role')
-    uuid = key_lookup(task, 'uuid')
-    username = key_lookup(task, 'username')
-    password = key_lookup(task, 'password')
-    target_ip = key_lookup(task, 'ip')
 
     # Make sure we received all required fields
     if not (username and password and target_ip and role):

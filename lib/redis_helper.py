@@ -3,6 +3,7 @@ import redis
 import settings
 import time
 
+TTL = 24 * 3600
 
 def connect():
     r = redis.StrictRedis(
@@ -56,7 +57,6 @@ def push_status(
     ip=None,
     status=None,
     attempts=None,
-    ttl=3600
 ):
     r = connect()
     timestamp = str(time.mktime(time.gmtime()))
@@ -67,4 +67,13 @@ def push_status(
         'timestamp': timestamp,
         'attempts': attempts,
     }
-    return r.setex(uuid, ttl, json.dumps(payload))
+    return r.setex(uuid, TTL, json.dumps(payload))
+
+
+def abort_job(uuid):
+    r = connect()
+    status = get_status(uuid)
+    status['status'] = 'Aborted'
+    status['timestamp'] = str(time.mktime(time.gmtime()))
+
+    return r.setex(uuid, TTL, json.dumps(status))
