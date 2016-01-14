@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from bottle import request
-from bottle import Bottle, run
+from bottle import Bottle, run, abort
 from lib import redis_helper
 from uuid import uuid4
 import time
@@ -27,16 +27,16 @@ def create_task(ip=None, role=None, username=None, password=None):
         })
         return uuid
     else:
-        return False
+        abort(500, 'Unable to process request')
 
 
-@app.route('/submit', method='POST')
-def do_submit():
+@app.post('/job')
+def create_job():
     try:
         payload = json.load(request.body)
     except:
         print 'Unable to decode JSON from payload.'
-        return False
+        abort(400, 'Invalid JSON payload.')
 
     return create_task(
         ip=payload['ip'],
@@ -46,12 +46,13 @@ def do_submit():
     )
 
 
-@app.route('/status/<uuid>')
-def get_status(uuid):
+@app.route('/job/<uuid>')
+def get_job_status(uuid):
     if uuid:
         return redis_helper.get_status(uuid)
     else:
-        return 'Unable to get status for {}'.format(uuid)
+        print 'Unable to get status for {}'.format(uuid)
+        abort(404, 'Job not found.')
 
 
 @app.route('/')
