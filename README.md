@@ -34,7 +34,7 @@ $ curl http://192.168.56.132:8080/job/d7417be8-aab3-435b-8d15-ce71489ca5cd
 To scale the number of workers to four, simply run:
 
 ```
-docker-compose scale worker=4
+$ docker-compose scale worker=4
 ```
 
 ## API Documentation
