@@ -1,6 +1,6 @@
 - name: Provisions MySQL (running inside Docker)
-  remote_user: root
   hosts: all
+  sudo: yes
 
   vars:
     - mysql_root_password: Riwerlecmainyir

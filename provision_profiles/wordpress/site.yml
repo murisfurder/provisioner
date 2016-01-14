@@ -1,10 +1,11 @@
 - name: Provisions WordPress (running inside Docker)
-  remote_user: root
   hosts: all
+  sudo: yes
 
   vars:
     - mysql_root_password: Riwerlecmainyir
 
   roles:
     - docker.ubuntu
+    - mysql
     - wordpress

@@ -1,6 +1,6 @@
 - name: Provisions MongoDB (running inside Docker)
-  remote_user: root
   hosts: all
+  sudo: yes
 
   roles:
     - docker.ubuntu
