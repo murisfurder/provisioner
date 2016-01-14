@@ -17,7 +17,7 @@ def generate_password(lenght=20):
 
 
 def run_module(
-    remote_user='root',
+    remote_user=None,
     remote_pass=None,
     inventory=None,
     module_name=None,
@@ -33,7 +33,7 @@ def run_module(
 
 
 def run_playbook(
-    remote_user='root',
+    remote_user=None,
     remote_pass=None,
     inventory=None,
     playbook_uri=None,
@@ -66,7 +66,9 @@ def provision(
         remote_user=None,
         remote_pass=None,
         inventory=None,
-        role=None
+        role=None,
+        *a,
+        **kw
 ):
 
     extra_vars = {}
@@ -79,6 +81,7 @@ def provision(
 
     if remote_user and remote_pass and inventory:
         return run_playbook(
+            remote_user=remote_user,
             remote_pass=remote_pass,
             inventory=inventory,
             playbook_uri=playbook_uri,
