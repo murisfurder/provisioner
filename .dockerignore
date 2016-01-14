@@ -1,3 +1,8 @@
 venv
-docker/*
-docker-compose.yml
+docker*
+README.md
+bin/*
+.git
+.gitignore
+.gitmodules
+.dockerignore
