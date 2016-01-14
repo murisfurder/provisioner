@@ -77,4 +77,4 @@ def get_redis_status():
 def root():
     return 'Nothing to see here. Carry on.\n'
 
-run(app, host='0.0.0.0', port=80, server='gunicorn', workers=4)
+run(app, host='0.0.0.0', port=8080, server='gunicorn', workers=4)
