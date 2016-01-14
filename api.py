@@ -25,6 +25,11 @@ def create_job():
     username = payload['username']
     password = payload['password']
 
+    if 'extra_vars' in payload:
+        extra_vars = payload['extra_vars']
+    else:
+        extra_vars = None
+
     if not (ip and role and username and password):
         abort(400, 'Missing one of the required arguments.')
 
@@ -37,6 +42,7 @@ def create_job():
         'password': password,
         'uuid': uuid,
         'attempts': 0,
+        'extra_vars': extra_vars,
     })
 
     if task:

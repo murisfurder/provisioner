@@ -27,6 +27,7 @@ def task_router(task):
     username = key_lookup(task, 'username')
     password = key_lookup(task, 'password')
     target_ip = key_lookup(task, 'ip')
+    extra_vars = task['extra_vars']
 
     status = redis_helper.get_status(uuid)
     if status['status'] == 'Aborted':
@@ -112,6 +113,30 @@ def task_router(task):
                 uuid,
             )
             return
+
+    elif role == 'ssh-keys':
+        run_module = ansible_helper.install_ssh_keys(
+            remote_user=username,
+            remote_pass=password,
+            inventory=inventory,
+            extra_vars=extra_vars,
+        )
+        try:
+            failed = run_module['dark'][target_ip]['failed']
+        except:
+            failed = False
+
+        if failed:
+            task['last_update'] = str(time.mktime(time.gmtime()))
+            redis_helper.add_to_queue(task)
+            print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
+                role,
+                username,
+                target_ip,
+                uuid,
+            )
+            return
+
     elif role in playbooks:
         run_playbook = ansible_helper.provision(
             remote_user=username,

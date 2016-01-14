@@ -109,3 +109,41 @@ def ping_vm(remote_user, remote_pass, inventory):
         return True
     else:
         return False
+
+
+def install_ssh_keys(
+    remote_user=None,
+    remote_pass=None,
+    inventory=None,
+    extra_vars=None
+):
+    """
+     Install the SSH key(s) specified in 'ssh-keys' into the
+     user account 'ssh-user'.
+     'ssh-user' will default to 'remote_user' if absent.
+     """
+
+    if not remote_user and remote_pass and inventory and extra_vars:
+        print 'Required variable(s) missing.'
+        return False
+
+    if 'ssh-user' in extra_vars:
+        ssh_user = extra_vars['ssh-user']
+    else:
+        ssh_user = remote_user
+
+    if 'ssh-keys' in extra_vars:
+        ssh_keys = '\n'.join(extra_vars['ssh-keys'])
+    else:
+        print 'SSH Keys missing. Aborting.'
+        return False
+
+    run_authorized_keys = run_module(
+        remote_user=remote_user,
+        remote_pass=remote_pass,
+        module_name='authorized_key',
+        module_args={'user': ssh_user, 'key': ssh_keys},
+        inventory=inventory,
+    )
+
+    return run_authorized_keys

@@ -4,8 +4,6 @@ import requests
 import sys
 import os
 import json
-from pprint import pprint
-from time import sleep
 
 
 def get_docker_host():
@@ -25,14 +23,15 @@ def get_docker_host():
         sys.exit(1)
 
 
-def create_task(ip=None, username=None, password=None, role=None):
+def create_task(ip=None, username=None, password=None, role=None, extra_vars=None):
     if ip and username and password and role:
         endpoint = 'http://{}:8080/job'.format(get_docker_host())
         payload = {
             'ip': ip,
             'username': username,
             'password': password,
-            'role': role
+            'role': role,
+            'extra_vars': extra_vars,
         }
         r = requests.post(endpoint, data=json.dumps(payload))
         if r.status_code == 201:
@@ -67,14 +66,20 @@ def abort_task(uuid):
             print 'Unable to get abort task. Got error code: {}'.format(r.status_code)
 
 
+def install_ssh_keys(ip=None, username=None, password=None, role=None, ssh_user=None, ssh_keys=None):
+    return create_task(
+        ip=ip,
+        username=username,
+        password=password,
+        role='ssh-keys',
+        extra_vars={
+            'ssh-user': ssh_user,
+            'ssh-keys': ssh_keys,
+        }
+    )
+
+
 def get_redis_status():
     endpoint = 'http://{}:8080/redis_status'.format(get_docker_host())
     r = requests.get(endpoint)
     return r.content
-
-
-task = create_task(ip='127.0.0.1', username='foobar', password='foobar', role='ping')
-sleep(5)
-pprint(get_status(task))
-abort_task(task)
-pprint(get_redis_status())
