@@ -14,13 +14,13 @@ def connect():
     return r
 
 
-def add_to_queue(msg):
+def add_to_queue(task):
     r = connect()
     push_status(
-        uuid=msg['uuid'],
-        ip=msg['ip'],
+        uuid=task['uuid'],
+        ip=task['ip'],
         status='Queued',
-        attempts=msg['attempts']
+        attempts=task['attempts']
     )
     return r.rpush(settings.REDIS_LIST, json.dumps(msg))
 
@@ -30,12 +30,12 @@ def pop_from_queue():
     Pull the oldest message from the queue.
     """
     r = connect()
-    msg = r.lpop(settings.REDIS_LIST)
-    if msg:
+    task = r.lpop(settings.REDIS_LIST)
+    if task:
         try:
-            return json.loads(msg)
+            return json.loads(task)
         except:
-            print 'Unable to load message:\n{}'.format(msg)
+            print 'Unable to load message:\n{}'.format(task)
             return False
     else:
         return False
