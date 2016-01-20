@@ -13,11 +13,17 @@ $ docker-compose build
 $ docker-compose up
 ```
 
-Once the containers are up and running, you can start creating jobs using something like `curl`:
+In the example below, we'll be testing against a Vagrant box configured in `Vagrantfile`. Assuming you have Vagrant up and running, all you need to do is to run:
+
+```
+vagrant up
+```
+
+Once the containers and the Vagrant VM up and running, you can start creating jobs using something like `curl`:
 
 ```
 $ curl -H "Content-Type: application/json" \
-    -X POST -d '{"role": "ping", "ip": "192.168.33.10", "password": "foobar123", "username": "root"}' \
+    -X POST -d '{"role": "ping", "ip": "192.168.33.10", "username": "vagrant", "password": "foobar123"}' \
     http://192.168.56.132:8080/job
 d7417be8-aab3-435b-8d15-ce71489ca5cd
 ```
@@ -40,7 +46,6 @@ $ docker-compose scale worker=4
 ```
 
 ## API Documentation
-
 
 ### Create a job
 
@@ -77,7 +82,10 @@ The possible statuses for a job are:
 
 * Queued
 * Provisioning
+* Aborted
 * Done
+* Error
+* Queued
 
 ### Abort a job
 
