@@ -22,7 +22,7 @@ def add_to_queue(task):
         status='Queued',
         attempts=task['attempts']
     )
-    return r.rpush(settings.REDIS_LIST, json.dumps(msg))
+    return r.rpush(settings.REDIS_LIST, json.dumps(task))
 
 
 def pop_from_queue():
