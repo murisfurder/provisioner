@@ -28,8 +28,9 @@ def task_router(task):
     password = key_lookup(task, 'password')
     target_ip = key_lookup(task, 'ip')
     extra_vars = task['extra_vars']
-
+    msg = None
     status = redis_helper.get_status(uuid)
+
     if status['status'] == 'Aborted':
         return
 
@@ -97,13 +98,21 @@ def task_router(task):
     ]
 
     if role == 'ping':
-        run_ping = ansible_helper.ping_vm(
+        run_module = ansible_helper.ping_vm(
             remote_user=username,
             remote_pass=password,
             inventory=inventory
         )
-        if not run_ping:
-            print '{} is *not* running'.format(target_ip)
+
+        # Assume a failure unless module response
+        # indicates otherwise.
+        failed = True
+        if len(run_module['contacted']) > 0:
+            failed = False
+        elif len(run_module['dark']) > 1:
+            msg = run_module['dark'][target_ip]['msg']
+
+        if failed:
             task['last_update'] = str(time.mktime(time.gmtime()))
             redis_helper.add_to_queue(task)
             print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
@@ -121,10 +130,14 @@ def task_router(task):
             inventory=inventory,
             extra_vars=extra_vars,
         )
-        try:
-            failed = run_module['dark'][target_ip]['failed']
-        except:
+
+        # Assume a failure unless module response
+        # indicates otherwise.
+        failed = True
+        if len(run_module['contacted']) > 0:
             failed = False
+        elif len(run_module['dark']) > 1:
+            msg = run_module['dark'][target_ip]['msg']
 
         if failed:
             task['last_update'] = str(time.mktime(time.gmtime()))

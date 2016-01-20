@@ -97,18 +97,12 @@ def ping_vm(remote_user, remote_pass, inventory):
     Listen for 'pong' in the response from the VM.
     """
 
-    ping = run_module(
+    return run_module(
         remote_user=remote_user,
         remote_pass=remote_pass,
         module_name='ping',
         inventory=inventory,
     )
-
-    # We run Ansible's 'ping' module and look for the 'pong' response.
-    if 'pong' in str(ping):
-        return True
-    else:
-        return False
 
 
 def install_ssh_keys(
@@ -138,12 +132,10 @@ def install_ssh_keys(
         print 'SSH Keys missing. Aborting.'
         return False
 
-    run_authorized_keys = run_module(
+    return run_module(
         remote_user=remote_user,
         remote_pass=remote_pass,
         module_name='authorized_key',
         module_args={'user': ssh_user, 'key': ssh_keys},
         inventory=inventory,
     )
-
-    return run_authorized_keys

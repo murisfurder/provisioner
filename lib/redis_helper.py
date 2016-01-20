@@ -21,7 +21,8 @@ def add_to_queue(task):
         uuid=task['uuid'],
         ip=task['ip'],
         status='Queued',
-        attempts=task['attempts']
+        attempts=task['attempts'],
+        role=task['role']
     )
     return r.rpush(settings.REDIS_LIST, json.dumps(task))
 
