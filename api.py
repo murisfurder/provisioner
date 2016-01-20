@@ -55,7 +55,11 @@ def create_job():
 @app.route('/job/<uuid>')
 def get_job_status(uuid):
     if uuid:
-        return redis_helper.get_status(uuid)
+        job_query = redis_helper.get_status(uuid)
+        if job_query:
+            return job_query
+        else:
+            abort(404, 'Job not found.')
     else:
         print 'No job specified.'
         abort(400, 'No job specified.')
