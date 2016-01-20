@@ -1,6 +1,6 @@
 - name: Provision Docker (on Ubuntu 12.04+)
-  remote_user: root
   hosts: all
+  sudo: yes
 
   roles:
     - docker.ubuntu
