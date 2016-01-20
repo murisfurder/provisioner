@@ -48,7 +48,7 @@ def get_status(uuid):
         endpoint = 'http://{}:8080/job/{}'.format(get_docker_host(), uuid)
         r = requests.get(endpoint)
         if r.status_code == 200:
-            return r.content
+            return json.loads(r.content)
         else:
             print 'Unable to get status. Got error code: {}'.format(r.status_code)
     else:
