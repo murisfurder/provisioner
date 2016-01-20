@@ -5,6 +5,7 @@ import time
 
 TTL = 24 * 3600
 
+
 def connect():
     r = redis.StrictRedis(
         host=settings.REDIS_SERVER,
