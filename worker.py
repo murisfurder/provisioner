@@ -3,31 +3,19 @@ from lib import redis_helper
 import time
 
 
-def key_lookup(data, key):
-    """
-    Returns the value as string or False.
-    """
-
-    if key not in data:
-        print 'Key {} is missing.'.format(key)
-        return False
-
-    return str(data[key])
-
-
 def task_router(task):
     """
     Task router, with sanity check
     """
 
     # Define and lookup the required variables
-    attempts = task['attempts']
-    role = key_lookup(task, 'role')
-    uuid = key_lookup(task, 'uuid')
-    username = key_lookup(task, 'username')
-    password = key_lookup(task, 'password')
-    target_ip = key_lookup(task, 'ip')
-    extra_vars = task['extra_vars']
+    attempts = task.get('attempts')
+    role = task.get('role')
+    uuid = task.get('uuid')
+    username = task.get('username')
+    password = task.get('password')
+    target_ip = task.get('ip')
+    extra_vars = task.get('extra_vars')
     msg = None
     status = redis_helper.get_status(uuid)
 
@@ -36,7 +24,7 @@ def task_router(task):
 
     # Make sure there is at least 30 seconds between retries.
     # If not, pop it back into the queue
-    if task['last_update']:
+    if task.get('last_update'):
         last_update = float(task['last_update'])
         if last_update + 30 >= time.mktime(time.gmtime()):
             redis_helper.add_to_queue(task)
