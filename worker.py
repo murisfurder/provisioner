@@ -109,7 +109,7 @@ def task_router(task):
         failed = True
         if len(run_module['contacted']) > 0:
             failed = False
-        elif len(run_module['dark']) > 1:
+        elif len(run_module['dark']) > 0:
             msg = run_module['dark'][target_ip]['msg']
 
         if failed:
@@ -136,7 +136,7 @@ def task_router(task):
         failed = True
         if len(run_module['contacted']) > 0:
             failed = False
-        elif len(run_module['dark']) > 1:
+        elif len(run_module['dark']) > 0:
             msg = run_module['dark'][target_ip]['msg']
 
         if failed:
