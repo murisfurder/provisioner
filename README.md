@@ -16,7 +16,7 @@ $ docker-compose up
 In the example below, we'll be testing against a Vagrant box configured in `Vagrantfile`. Assuming you have Vagrant up and running, all you need to do is to run:
 
 ```
-vagrant up
+$ vagrant up
 ```
 
 Once the containers and the Vagrant VM up and running, you can start creating jobs using something like `curl`:
