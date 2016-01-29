@@ -87,14 +87,6 @@ def update_status(
     return r.setex(uuid, TTL, json.dumps(job_status))
 
 
-def abort_job(uuid):
-    r = connect()
-    status = get_status(uuid)
-    status['status'] = 'Aborted'
-    status['timestamp'] = str(time.mktime(time.gmtime()))
-    return r.setex(uuid, TTL, json.dumps(status))
-
-
 def get_redis_status():
     r = connect()
     return json.dumps(r.info())

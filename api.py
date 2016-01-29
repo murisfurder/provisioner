@@ -69,7 +69,10 @@ def get_job_status(uuid):
 @app.delete('/job/<uuid>')
 def abort_job(uuid):
     if uuid:
-        abort_task = redis_helper.abort_job(uuid)
+        abort_task = redis_helper.update_status(
+            uuid=uuid,
+            status='Aborted'
+        )
         if abort_task:
             response.status = 204
         else:
