@@ -17,13 +17,7 @@ def connect():
 
 def add_to_queue(task):
     r = connect()
-    push_status(
-        uuid=task['uuid'],
-        ip=task['ip'],
-        status='Queued',
-        attempts=task['attempts'],
-        role=task['role']
-    )
+    update_status(uuid=task['uuid'], status='Queued')
     return r.rpush(settings.REDIS_LIST, json.dumps(task))
 
 
@@ -53,23 +47,44 @@ def get_status(uuid):
         return False
 
 
-def push_status(
-    role=None,
-    uuid=None,
-    ip=None,
-    status=None,
-    attempts=None,
-):
+def create_status(uuid, role, ip):
+
+    if not uuid and role and ip:
+        return False
+
     r = connect()
     timestamp = str(time.mktime(time.gmtime()))
     payload = {
         'role': role,
-        'status': status,
+        'status': 'New',
         'ip': ip,
         'timestamp': timestamp,
-        'attempts': attempts,
+        'attempts': 0,
+        'msg': []
     }
     return r.setex(uuid, TTL, json.dumps(payload))
+
+
+def update_status(
+    uuid=None,
+    status=None,
+    attempts=None,
+    msg=None
+):
+
+    if not uuid:
+        return False
+
+    r = connect()
+    job_status = get_status(uuid)
+
+    job_status['timestamp'] = str(time.mktime(time.gmtime()))
+    job_status['attempts'] = attempts if attempts else job_status['attempts']
+    job_status['status'] = status if status else job_status['status']
+    if msg:
+        job_status['msg'].append(msg)
+
+    return r.setex(uuid, TTL, json.dumps(job_status))
 
 
 def abort_job(uuid):

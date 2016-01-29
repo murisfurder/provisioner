@@ -16,7 +16,6 @@ def task_router(task):
     password = task.get('password')
     target_ip = task.get('ip')
     extra_vars = task.get('extra_vars')
-    msg = None
     status = redis_helper.get_status(uuid)
 
     if status['status'] == 'Aborted':
@@ -30,24 +29,22 @@ def task_router(task):
             redis_helper.add_to_queue(task)
             return
 
-    task['attempts'] += 1
+    attempts += 1
+    task['attempts'] = attempts
 
     # Make sure we received all required fields
     if not (username and password and target_ip and role):
         return False
 
     # Give it maximum three attempts
-    if task['attempts'] > 3:
+    if attempts > 3:
         print 'Too many attempts for {}@{} (uuid: {})'.format(
             username,
             target_ip,
             uuid
         )
-        redis_helper.push_status(
-            role=role,
+        redis_helper.update_status(
             uuid=uuid,
-            ip=target_ip,
-            attempts=attempts,
             status='Failed'
         )
         return False
@@ -60,10 +57,8 @@ def task_router(task):
         uuid,
     )
 
-    redis_helper.push_status(
-        role=role,
+    redis_helper.update_status(
         uuid=uuid,
-        ip=target_ip,
         attempts=attempts,
         status='Provisioning'
     )
@@ -71,10 +66,6 @@ def task_router(task):
     inventory = ansible_helper.generate_inventory(
         target_ip=target_ip
     )
-
-    # @TODO add:
-    # * Registry
-    # * PostgreSQL
 
     playbooks = [
         'cloudcompose',
@@ -92,16 +83,12 @@ def task_router(task):
             inventory=inventory
         )
 
-        # Assume a failure unless module response
-        # indicates otherwise.
-        failed = True
-        if len(run_module['contacted']) > 0:
-            failed = False
-        elif len(run_module['dark']) > 0:
-            msg = run_module['dark'][target_ip]['msg']
-
-        if failed:
+        if len(run_module['dark']) > 0:
             task['last_update'] = str(time.mktime(time.gmtime()))
+            redis_helper.update_status(
+                uuid=uuid,
+                msg=run_module['dark'][target_ip]['msg']
+            )
             redis_helper.add_to_queue(task)
             print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
                 role,
@@ -119,16 +106,12 @@ def task_router(task):
             extra_vars=extra_vars,
         )
 
-        # Assume a failure unless module response
-        # indicates otherwise.
-        failed = True
-        if len(run_module['contacted']) > 0:
-            failed = False
-        elif len(run_module['dark']) > 0:
-            msg = run_module['dark'][target_ip]['msg']
-
-        if failed:
+        if len(run_module['dark']) > 0:
             task['last_update'] = str(time.mktime(time.gmtime()))
+            redis_helper.update_status(
+                uuid=uuid,
+                msg=run_module['dark'][target_ip]['msg']
+            )
             redis_helper.add_to_queue(task)
             print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
                 role,
@@ -162,10 +145,8 @@ def task_router(task):
         print 'Unknown role/playbook: {}'.format(role)
         return
 
-    redis_helper.push_status(
-        role=role,
+    redis_helper.update_status(
         uuid=uuid,
-        ip=target_ip,
         attempts=attempts,
         status='Done'
     )

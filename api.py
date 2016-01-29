@@ -33,6 +33,7 @@ def create_job():
     if not (ip and role and username and password):
         abort(400, 'Missing one of the required arguments.')
 
+    redis_helper.create_status(uuid, role, ip)
     task = redis_helper.add_to_queue({
         'created_at': timestamp,
         'last_update': None,
@@ -49,7 +50,7 @@ def create_job():
         response.status = 201
         return uuid
     else:
-        abort(500, 'Unable to process request')
+        abort(500, 'Unable to process request.')
 
 
 @app.route('/job/<uuid>')

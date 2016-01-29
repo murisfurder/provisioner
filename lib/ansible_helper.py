@@ -23,6 +23,12 @@ def run_module(
     module_name=None,
     module_args='',
 ):
+    """
+    The module will return output directly from Ansible.
+    Hosts will be divided into 'dark' (failed) and 'connected' (successful).
+    You can check the lenght of this to determine the success or
+    failure of the run.
+    """
     return ansible.runner.Runner(
         remote_user=remote_user,
         remote_pass=remote_pass,
