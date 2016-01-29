@@ -1,0 +1,10 @@
+- name: Provisions Docker Registry (running inside Docker)
+  hosts: all
+  sudo: yes
+
+  vars:
+    use_tls: false
+
+  roles:
+    - docker.ubuntu
+    - docker_registry

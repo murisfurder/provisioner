@@ -80,6 +80,7 @@ To get the status of a job, simply issue a GET against `/job/SomeUUID`. You shou
 
 The possible statuses for a job are:
 
+* New
 * Queued
 * Provisioning
 * Aborted
@@ -148,6 +149,26 @@ $ sudo docker inspect mysql | grep MYSQL_ROOT_PASSWORD
 * *Exposes ports:* 127.0.0.1:6379
 
 Installs the [official Redis Docker container](https://hub.docker.com/_/redis/).
+
+
+## Docker Registry
+
+* *Name*: docker_registry
+* *Requirement*: Ubuntu 12.04 or later
+* *Exposes ports:* 0.0.0.0:5000
+
+Installs the [official Docker Registry container](https://hub.docker.com/_registry/).
+
+The persistent data is stored under `/usr/local/registry` in the VM.
+
+This setup will by default use unencrypted communication (without authentication). Hence it's only suited for testing.
+
+In order to use the registry, you will need to add the following entry to `/etc/default/docker` (may differe depending on your distribution):
+
+```
+DOCKER_OPTS="--insecure-registry a.b.c.d:5000"
+```
+(Where a.b.c.d is the public IP of your server.)
 
 ## WordPress
 

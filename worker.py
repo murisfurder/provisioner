@@ -70,6 +70,7 @@ def task_router(task):
     playbooks = [
         'cloudcompose',
         'docker',
+        'docker_registry',
         'mongodb',
         'mysql',
         'redis',
