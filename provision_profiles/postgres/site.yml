@@ -1,0 +1,10 @@
+- name: Provisions PostgreSQL (running inside Docker)
+  hosts: all
+  sudo: yes
+
+  vars:
+    - postgres_root_password: CliegafEnennatNu8dru
+
+  roles:
+    - docker.ubuntu
+    - postgres

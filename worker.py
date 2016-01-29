@@ -73,6 +73,7 @@ def task_router(task):
         'docker_registry',
         'mongodb',
         'mysql',
+        'postgres',
         'redis',
         'wordpress',
     ]
@@ -144,6 +145,10 @@ def task_router(task):
             return
     else:
         print 'Unknown role/playbook: {}'.format(role)
+        redis_helper.update_status(
+            uuid=uuid,
+            msg='Unknown role/playbook: {}'.format(role)
+        )
         return
 
     redis_helper.update_status(

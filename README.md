@@ -9,7 +9,7 @@ Simple Ansible based provisioning system for Cloud.net.
 Spin up the container(s):
 
 ```
-$ docker-compose build
+$ docker-compose build --pull
 $ docker-compose up
 ```
 
@@ -150,7 +150,6 @@ $ sudo docker inspect mysql | grep MYSQL_ROOT_PASSWORD
 
 Installs the [official Redis Docker container](https://hub.docker.com/_/redis/).
 
-
 ## Docker Registry
 
 * *Name*: docker_registry
@@ -163,12 +162,26 @@ The persistent data is stored under `/usr/local/registry` in the VM.
 
 This setup will by default use unencrypted communication (without authentication). Hence it's only suited for testing.
 
-In order to use the registry, you will need to add the following entry to `/etc/default/docker` (may differe depending on your distribution):
+In order to use the registry, you will need to add the following entry to `/etc/default/docker` (may differ depending on your distribution):
 
 ```
 DOCKER_OPTS="--insecure-registry a.b.c.d:5000"
 ```
 (Where a.b.c.d is the public IP of your server.)
+
+## PostgreSQL
+
+* *Name*: postgres
+* *Requirement*: Ubuntu 12.04 or later
+* *Exposes ports:* 127.0.0.1:5432
+
+Installs the [official PostgreSQL container](https://hub.docker.com/_postgres/).
+
+The persistent data is stored under `/var/lib/postgresql/data` in the VM.
+
+The password for the user 'postgres' can be extracted by running:
+
+    $ sudo docker inspect postgres | grep POSTGRES_PASSWORD
 
 ## WordPress
 

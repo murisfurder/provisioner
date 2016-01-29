@@ -21,7 +21,7 @@ def create_job():
         abort(400, 'Invalid JSON payload.')
 
     ip = payload['ip']
-    role = payload['role']
+    role = payload['role'].lower()
     username = payload['username']
     password = payload['password']
 
