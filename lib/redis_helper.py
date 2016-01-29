@@ -3,8 +3,6 @@ import redis
 import settings
 import time
 
-TTL = 24 * 3600
-
 
 def connect():
     r = redis.StrictRedis(
@@ -62,7 +60,7 @@ def create_status(uuid, role, ip):
         'attempts': 0,
         'msg': []
     }
-    return r.setex(uuid, TTL, json.dumps(payload))
+    return r.setex(uuid, settings.STATUS_LIFETIME, json.dumps(payload))
 
 
 def update_status(
@@ -84,7 +82,7 @@ def update_status(
     if msg:
         job_status['msg'].append(msg)
 
-    return r.setex(uuid, TTL, json.dumps(job_status))
+    return r.setex(uuid, settings.STATUS_LIFETIME, json.dumps(job_status))
 
 
 def get_redis_status():

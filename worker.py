@@ -78,35 +78,20 @@ def task_router(task):
         'wordpress',
     ]
 
-    if role == 'ping':
-        run_module = ansible_helper.ping_vm(
-            remote_user=username,
-            remote_pass=password,
-            inventory=inventory
-        )
-
-        if len(run_module['dark']) > 0:
-            task['last_update'] = str(time.mktime(time.gmtime()))
-            redis_helper.update_status(
-                uuid=uuid,
-                msg=run_module['dark'][target_ip]['msg']
+    if role in ['ping', 'ssh-keys']:
+        if role == 'ping':
+            run_module = ansible_helper.ping_vm(
+                remote_user=username,
+                remote_pass=password,
+                inventory=inventory
             )
-            redis_helper.add_to_queue(task)
-            print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
-                role,
-                username,
-                target_ip,
-                uuid,
+        elif role == 'ssh-keys':
+            run_module = ansible_helper.install_ssh_keys(
+                remote_user=username,
+                remote_pass=password,
+                inventory=inventory,
+                extra_vars=extra_vars,
             )
-            return
-
-    elif role == 'ssh-keys':
-        run_module = ansible_helper.install_ssh_keys(
-            remote_user=username,
-            remote_pass=password,
-            inventory=inventory,
-            extra_vars=extra_vars,
-        )
 
         if len(run_module['dark']) > 0:
             task['last_update'] = str(time.mktime(time.gmtime()))
