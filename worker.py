@@ -1,5 +1,6 @@
 from lib import ansible_helper
 from lib import redis_helper
+import settings
 import time
 
 
@@ -67,18 +68,7 @@ def task_router(task):
         target_ip=target_ip
     )
 
-    playbooks = [
-        'cloudcompose',
-        'docker',
-        'docker_registry',
-        'mongodb',
-        'mysql',
-        'postgres',
-        'redis',
-        'wordpress',
-    ]
-
-    if role in ['ping', 'ssh-keys']:
+    if role in settings.MODULES:
         if role == 'ping':
             run_module = ansible_helper.ping_vm(
                 remote_user=username,
@@ -108,7 +98,7 @@ def task_router(task):
             )
             return
 
-    elif role in playbooks:
+    elif role in settings.PLAYBOOKS:
         run_playbook = ansible_helper.provision(
             remote_user=username,
             remote_pass=password,

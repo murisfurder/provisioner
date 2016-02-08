@@ -7,3 +7,19 @@ REDIS_DB = os.getenv('REDIS_DB', 0)
 REDIS_LIST = 'prov'
 
 STATUS_LIFETIME = 24 * 3600
+
+# Whitelisted playbooks and modules
+PLAYBOOKS = [
+    'cloudcompose',
+    'docker',
+    'docker_registry',
+    'mongodb',
+    'mysql',
+    'postgres',
+    'redis',
+    'wordpress',
+]
+MODULES = [
+    'ping',
+    'ssh-keys',
+]

@@ -5,7 +5,7 @@ from lib import redis_helper
 from uuid import uuid4
 import time
 import json
-
+import settings
 
 app = Bottle()
 
@@ -32,6 +32,9 @@ def create_job():
 
     if not (ip and role and username and password):
         abort(400, 'Missing one of the required arguments.')
+
+    if role not in (settings.MODULES + settings.PLAYBOOKS):
+        abort(400, 'Invalid role.')
 
     redis_helper.create_status(uuid, role, ip)
     task = redis_helper.add_to_queue({
