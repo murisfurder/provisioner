@@ -10,7 +10,6 @@ STATUS_LIFETIME = 24 * 3600
 
 # Whitelisted playbooks and modules
 PLAYBOOKS = [
-    'cloudcompose',
     'docker',
     'docker_registry',
     'mongodb',
