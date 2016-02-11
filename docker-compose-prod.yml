@@ -1,0 +1,24 @@
+nginx:
+  image: onapp/prov-nginx
+  restart: always
+  ports:
+    - 80:80
+    - 443:443
+  links:
+    - api:api
+  volumes:
+    - /etc/ssl/private/prov.key:/etc/ssl/private/prov.key
+    - /etc/ssl/private/prov.crt:/etc/ssl/private/prov.crt
+api:
+  image: onapp/prov-api
+  restart: always
+  links:
+   - redis
+worker:
+  image: onapp/prov-worker
+  restart: always
+  links:
+   - redis
+redis:
+  restart: always
+  image: redis

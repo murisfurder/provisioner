@@ -1,0 +1,4 @@
+FROM nginx
+COPY docker/prov.crt /etc/ssl/private/prov.crt
+copy docker/prov.key /etc/ssl/private/prov.key
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf

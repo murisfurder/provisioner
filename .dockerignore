@@ -1,5 +1,5 @@
 venv
-docker/*
+docker/Dockerfile.*
 README.md
 bin/*
 .git
@@ -8,3 +8,4 @@ bin/*
 .dockerignore
 Vagrantfile
 .vagrant
+bin/*

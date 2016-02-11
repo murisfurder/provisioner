@@ -1,0 +1,26 @@
+nginx:
+  build: .
+  dockerfile: docker/Dockerfile.nginx
+  restart: always
+  ports:
+    - 80:80
+    - 443:443
+  links:
+    - api:api
+api:
+  build: .
+  dockerfile: docker/Dockerfile.api
+  restart: always
+  ports:
+    - 8080:8080
+  links:
+   - redis
+worker:
+  build: .
+  dockerfile: docker/Dockerfile.worker
+  restart: always
+  links:
+   - redis
+redis:
+  restart: always
+  image: redis

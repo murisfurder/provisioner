@@ -1,17 +1,1 @@
-api:
-  build: .
-  dockerfile: docker/Dockerfile.api
-  restart: always
-  ports:
-    - "8080:8080"
-  links:
-   - redis
-worker:
-  build: .
-  dockerfile: docker/Dockerfile.worker
-  restart: always
-  links:
-   - redis
-redis:
-  restart: always
-  image: redis
+docker-compose-dev.yml
