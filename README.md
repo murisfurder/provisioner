@@ -47,6 +47,14 @@ $ docker-compose scale worker=4
 
 ## API Documentation
 
+### Get roles
+
+To get the list of possible 'roles', issue a GET against `/roles` and you'll get something similar to:
+
+```
+["docker", "docker_registry", "mongodb", "mysql", "postgres", "redis", "wordpress"]
+```
+
 ### Create a job
 
 To create a task, you need to issue a POST against `/job` with the following payload:

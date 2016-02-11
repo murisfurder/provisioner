@@ -14,6 +14,7 @@ app = Bottle()
 def create_job():
     uuid = str(uuid4())
     timestamp = str(time.mktime(time.gmtime()))
+    response.content_type = 'application/json'
 
     try:
         payload = json.load(request.body)
@@ -58,6 +59,7 @@ def create_job():
 
 @app.route('/job/<uuid>')
 def get_job_status(uuid):
+    response.content_type = 'application/json'
     if uuid:
         job_query = redis_helper.get_status(uuid)
         if job_query:
@@ -71,6 +73,7 @@ def get_job_status(uuid):
 
 @app.delete('/job/<uuid>')
 def abort_job(uuid):
+    response.content_type = 'application/json'
     if uuid:
         abort_task = redis_helper.update_status(
             uuid=uuid,
@@ -85,8 +88,15 @@ def abort_job(uuid):
         abort(400, 'No job specified.')
 
 
+@app.route('/roles')
+def get_roles():
+    response.content_type = 'application/json'
+    return json.dumps(settings.PLAYBOOKS)
+
+
 @app.route('/redis_status')
 def get_redis_status():
+    response.content_type = 'application/json'
     return redis_helper.get_redis_status()
 
 
