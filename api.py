@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from bottle import request, response, Bottle, run, abort
+from bottle import request, response, Bottle, run
 from lib import redis_helper
 from uuid import uuid4
 import time
@@ -8,6 +8,11 @@ import json
 import settings
 
 app = Bottle()
+
+
+def raise_error(error_code, msg):
+    response.status = error_code
+    return json.dumps({'message': msg})
 
 
 @app.post('/job')
@@ -19,7 +24,7 @@ def create_job():
     try:
         payload = json.load(request.body)
     except:
-        abort(400, 'Invalid JSON payload.')
+        return raise_error(400, 'Invalid JSON payload.')
 
     ip = payload['ip']
     role = payload['role'].lower()
@@ -32,10 +37,10 @@ def create_job():
         extra_vars = None
 
     if not (ip and role and username and password):
-        abort(400, 'Missing one of the required arguments.')
+        return raise_error(400, 'Missing one of the required arguments.')
 
     if role not in (settings.MODULES + settings.PLAYBOOKS):
-        abort(400, 'Invalid role.')
+        return raise_error(400, 'Invalid role.')
 
     redis_helper.create_status(uuid, role, ip)
     task = redis_helper.add_to_queue({
@@ -54,7 +59,7 @@ def create_job():
         response.status = 201
         return uuid
     else:
-        abort(500, 'Unable to process request.')
+        return raise_error(500, 'Unable to process request.')
 
 
 @app.route('/job/<uuid>')
@@ -65,10 +70,10 @@ def get_job_status(uuid):
         if job_query:
             return job_query
         else:
-            abort(404, 'Job not found.')
+            return raise_error(404, 'Job not found.')
     else:
         print 'No job specified.'
-        abort(400, 'No job specified.')
+        return raise_error(400, 'No job specified.')
 
 
 @app.delete('/job/<uuid>')
@@ -82,10 +87,10 @@ def abort_job(uuid):
         if abort_task:
             response.status = 204
         else:
-            abort(500, 'Unable to delete task.')
+            return raise_error(500, 'Unable to delete task.')
     else:
         print 'No job specified.'
-        abort(400, 'No job specified.')
+        return raise_error(400, 'No job specified.')
 
 
 @app.route('/roles')
