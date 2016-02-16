@@ -9,6 +9,7 @@ nginx:
   volumes:
     - /etc/ssl/private/prov.key:/etc/ssl/private/prov.key
     - /etc/ssl/private/prov.crt:/etc/ssl/private/prov.crt
+    - /var/www:/var/www
 api:
   image: onapp/prov-api
   restart: always
