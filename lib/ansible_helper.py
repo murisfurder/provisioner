@@ -78,7 +78,7 @@ def provision(
 ):
 
     extra_vars = {}
-    playbook_uri = 'provision_profiles/{}/site.yml'.format(role)
+    playbook_uri = 'provision_profiles/{}.yml'.format(role)
 
     if role in ['wordpress', 'mysql']:
         extra_vars = {
