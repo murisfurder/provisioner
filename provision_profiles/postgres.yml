@@ -6,5 +6,6 @@
     - postgres_root_password: CliegafEnennatNu8dru
 
   roles:
+    - unattended-upgrades
     - docker.ubuntu
     - postgres

@@ -1,3 +1,6 @@
 [submodule "provision_profiles/docker/roles/docker.ubuntu"]
 	path = provision_profiles/roles/docker.ubuntu
 	url = git@github.com:angstwad/docker.ubuntu.git
+[submodule "provision_profiles/roles/unattended-upgrades"]
+	path = provision_profiles/roles/unattended-upgrades
+	url = git@github.com:jnv/ansible-role-unattended-upgrades.git

@@ -6,5 +6,6 @@
     - mysql_root_password: Riwerlecmainyir
 
   roles:
+    - unattended-upgrades
     - docker.ubuntu
     - mysql
