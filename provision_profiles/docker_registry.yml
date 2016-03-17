@@ -5,8 +5,6 @@
   vars:
     use_tls: false
 
-  tasks:
-    include docker.yml
-
   roles:
+    - docker.ubuntu
     - docker_registry
