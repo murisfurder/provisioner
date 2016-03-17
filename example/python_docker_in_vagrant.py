@@ -9,7 +9,7 @@ job_id = python_example.create_task(
     ip='192.168.33.10',
     username='vagrant',
     password='foobar123',
-    role='ping'
+    role='docker'
 )
 
 
