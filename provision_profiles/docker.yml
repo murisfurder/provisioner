@@ -3,4 +3,5 @@
   sudo: yes
 
   roles:
+    - unattended-upgrades
     - docker.ubuntu

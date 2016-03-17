@@ -6,5 +6,6 @@
     use_tls: false
 
   roles:
+    - unattended-upgrades
     - docker.ubuntu
     - docker_registry
