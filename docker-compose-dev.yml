@@ -16,7 +16,7 @@ api:
   links:
    - redis
   volumes:
-   - .:/app
+   - .:/usr/src/app
 worker:
   build: .
   dockerfile: docker/Dockerfile.worker
@@ -24,7 +24,7 @@ worker:
   links:
    - redis
   volumes:
-   -  .:/app
+   -  .:/usr/src/app
 redis:
   restart: always
   image: redis
