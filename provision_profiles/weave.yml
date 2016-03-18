@@ -1,0 +1,16 @@
+- name: Provisions Weave
+  hosts: all
+  sudo: yes
+
+  vars:
+    - weave_url: https://github.com/weaveworks/weave/releases/download/latest_release/weave
+    - weave_bin: /usr/local/bin/weave
+    - is_master: false
+    - is_slave: false
+    - passphrase:
+    - master_ip:
+
+  roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - weave

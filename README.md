@@ -214,3 +214,17 @@ Additional required keys:
 
  * `extra_vars['ssh-user']`: The user where to which we want to install the SSH key (defaults to username)
  * `extra_vars['ssh-keys']`: A list of one or more SSH keys to install
+
+## Weave
+
+* *Name*: weave
+* *Requirement*: Ubuntu 12.04 or later
+
+Installs the [Weave Net](https://www.weave.works/products/weave-net/) with encrypted communication.
+
+Additional required keys:
+
+ * `extra_vars['is_master']`: Set to True to initiate the server as the master node.
+ * `extra_vars['is_slave']`: Set to True to initiate the server as a slave nodes.
+ * `extra_vars['passphrase']`: Must be the same on master and slave nodes.
+ * `extra_vars['master_ip']`: Required if is_slave. Specify the public IP of the master node.

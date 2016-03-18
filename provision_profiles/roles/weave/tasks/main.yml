@@ -1,0 +1,18 @@
+---
+- name: Download and Install Weave
+  get_url:
+    url={{ weave_url }}
+    dest={{ weave_bin }}
+
+- name: Setup Weave Permissions
+  file:
+    path={{ weave_bin }}
+    mode="u+rx,g+rx,o+rwx"
+
+- name: Launch Weave on master
+  command: weave launch --password {{ passphrase }}
+  when: is_master
+
+- name: Launch Weave on slave
+  command: sudo weave launch --password {{ passphrase }} {{ master_ip }}
+  when: is_slave

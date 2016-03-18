@@ -103,7 +103,8 @@ def task_router(task):
             remote_user=username,
             remote_pass=password,
             inventory=inventory,
-            role=role
+            role=role,
+            extra_vars=extra_vars,
         )
         if not (
             run_playbook[target_ip]['unreachable'] == 0 and

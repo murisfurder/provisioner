@@ -16,6 +16,7 @@ PLAYBOOKS = [
     'mysql',
     'postgres',
     'redis',
+    'weave',
     'wordpress',
 ]
 MODULES = [
