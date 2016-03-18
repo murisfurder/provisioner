@@ -19,8 +19,12 @@
 
 - name: Launch Weave on master
   command: weave launch --password {{ passphrase }}
+  args:
+    creates: /root/.weave_master
   when: is_master
 
 - name: Launch Weave on slave
-  command: sudo weave launch --password {{ passphrase }} {{ master_ip }}
+  command: weave launch --password {{ passphrase }} {{ master_ip }}
+  args:
+    creates: /root/.weave_slave
   when: is_slave
