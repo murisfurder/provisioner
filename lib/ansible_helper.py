@@ -13,6 +13,12 @@ def generate_inventory(uuid=False, target_ip=None):
 
 
 def generate_password(lenght=20):
+    """
+    Generate a strong password.
+    Source:
+    http://davidsj.co.uk/blog/python-generate-random-password-strings/
+    """
+
     # Just alphanumeric characters
     chars = string.letters + string.digits
 
@@ -84,7 +90,6 @@ def provision(
         **kw
 ):
 
-    extra_vars = {}
     playbook_uri = 'provision_profiles/{}.yml'.format(role)
 
     if role in ['wordpress', 'mysql']:
