@@ -13,7 +13,13 @@ def generate_inventory(uuid=False, target_ip=None):
 
 
 def generate_password(lenght=20):
-    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(lenght))
+    # Just alphanumeric characters
+    chars = string.letters + string.digits
+
+    # Alphanumeric + special characters
+    chars = string.letters + string.digits + string.punctuation
+
+    return ''.join((random.choice(chars)) for x in range(lenght))
 
 
 def run_module(
@@ -73,6 +79,7 @@ def provision(
         remote_pass=None,
         inventory=None,
         role=None,
+        extra_vars={},
         *a,
         **kw
 ):
@@ -81,9 +88,7 @@ def provision(
     playbook_uri = 'provision_profiles/{}.yml'.format(role)
 
     if role in ['wordpress', 'mysql']:
-        extra_vars = {
-            'mysql_root_password': generate_password(),
-        }
+        extra_vars['mysql_root_password'] = generate_password()
 
     if remote_user and remote_pass and inventory:
         return run_playbook(
