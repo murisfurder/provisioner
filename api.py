@@ -26,21 +26,37 @@ def create_job():
     except:
         return raise_error(400, 'Invalid JSON payload.')
 
-    ip = payload['ip']
-    role = payload['role'].lower()
-    username = payload['username']
-    password = payload['password']
-
-    if 'extra_vars' in payload:
-        extra_vars = payload['extra_vars']
-    else:
-        extra_vars = None
+    ip = payload.get('ip')
+    role = payload.get('role').lower()
+    username = payload.get('username')
+    password = payload.get('password')
+    extra_vars = payload.get('extra_vars', {})
 
     if not (ip and role and username and password):
         return raise_error(400, 'Missing one of the required arguments.')
 
     if role not in (settings.MODULES + settings.PLAYBOOKS):
         return raise_error(400, 'Invalid role.')
+
+    # Weave role handler
+    if role == 'weave':
+        if not extra_vars:
+            return raise_error(400, 'extra_vars are required when using the role weave.')
+
+        extra_vars['is_master'] = extra_vars.get('is_master', False)
+        extra_vars['is_slave'] = extra_vars.get('is_slave', False)
+
+        # Must be either master or slave
+        if not (extra_vars['is_master'] or extra_vars['is_slave']):
+            return raise_error(400, 'Must be either master or slave when using role weave.')
+
+        # A passphrase must always be supplied.
+        if not extra_vars.get('passphrase'):
+            return raise_error(400, 'A passphrase is always required when using role weave.')
+
+        # If the role is a slave, the master IP and passphrase is required.
+        if extra_vars['is_slave'] and not extra_vars.get('master_ip'):
+            return raise_error(400, 'master_ip is required when setting up a weave slave node.')
 
     redis_helper.create_status(uuid, role, ip)
     task = redis_helper.add_to_queue({
@@ -109,4 +125,4 @@ def get_redis_status():
 def root():
     return 'Nothing to see here. Carry on.\n'
 
-run(app, host='0.0.0.0', port=8080, server='gunicorn', workers=4)
+run(app, host='0.0.0.0', port=8080, server='gunicorn', workers=4, reload=True)

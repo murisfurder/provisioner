@@ -38,6 +38,7 @@ def create_task(ip=None, username=None, password=None, role=None, extra_vars=Non
             return r.content
         else:
             print 'Got error code: {}'.format(r.status_code)
+            print 'Error message:\n{}'.format(r.content)
     else:
         print 'Missing arguments.'
         sys.exit(1)

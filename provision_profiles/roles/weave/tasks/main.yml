@@ -1,0 +1,30 @@
+---
+- name: Download and Install Weave
+  get_url:
+    url={{ weave_url }}
+    dest={{ weave_bin }}
+
+- name: Setup Weave Permissions
+  file:
+    path={{ weave_bin }}
+    mode=0757
+
+- name: Install Docker Weave helper
+  copy:
+    src=docker-weave-run
+    dest=/usr/local/bin/docker-weave-run
+    owner=root
+    group=root
+    mode=0757
+
+- name: Launch Weave on master
+  command: weave launch --password {{ passphrase }}
+  args:
+    creates: /root/.weave_master
+  when: is_master
+
+- name: Launch Weave on slave
+  command: weave launch --password {{ passphrase }} {{ master_ip }}
+  args:
+    creates: /root/.weave_slave
+  when: is_slave

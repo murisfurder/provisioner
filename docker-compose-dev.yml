@@ -15,12 +15,16 @@ api:
     - 8080:8080
   links:
    - redis
+  volumes:
+   - .:/usr/src/app
 worker:
   build: .
   dockerfile: docker/Dockerfile.worker
   restart: always
   links:
    - redis
+  volumes:
+   -  .:/usr/src/app
 redis:
   restart: always
   image: redis
