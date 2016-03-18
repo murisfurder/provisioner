@@ -35,7 +35,7 @@ $ curl http://192.168.56.132:8080/job/d7417be8-aab3-435b-8d15-ce71489ca5cd
 {"status": "Done", "ip": "192.168.33.10", "attempts": 1, "role": "ping", "timestamp": "1449166675.0"}
 ```
 
-For an example Python implementation, please see [python_example.py](https://github.com/OnApp/provisioner/blob/master/example/python_example.py).
+For an example Python implementation, please see [examples/python_example.py](https://github.com/OnApp/provisioner/blob/master/example/python_example.py).
 
 ### Scaling
 
@@ -228,3 +228,5 @@ Additional required keys:
  * `extra_vars['is_slave']`: Set to True to initiate the server as a slave nodes.
  * `extra_vars['passphrase']`: Must be the same on master and slave nodes.
  * `extra_vars['master_ip']`: Required if is_slave. Specify the public IP of the master node.
+
+For a complete example, check out [example/python_weave_in_vagran.sh](https://github.com/OnApp/provisioner/blob/master/example/python_weave_in_vagrant.py).
