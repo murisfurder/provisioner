@@ -7,7 +7,15 @@
 - name: Setup Weave Permissions
   file:
     path={{ weave_bin }}
-    mode="u+rx,g+rx,o+rwx"
+    mode=0757
+
+- name: Install Docker weave helper
+  copy:
+    src=docker-weave-run
+    dest=/usr/local/bin/docker-weave-run
+    owner=root
+    group=root
+    mode=0757
 
 - name: Launch Weave on master
   command: weave launch --password {{ passphrase }}
