@@ -17,6 +17,7 @@ def task_router(task):
     password = task.get('password')
     target_ip = task.get('ip')
     extra_vars = task.get('extra_vars')
+    only_tags = task.get('only_tags')
     status = redis_helper.get_status(uuid)
 
     if status['status'] == 'Aborted':
@@ -105,6 +106,7 @@ def task_router(task):
             inventory=inventory,
             role=role,
             extra_vars=extra_vars,
+            only_tags=only_tags,
         )
         if not (
             run_playbook[target_ip]['unreachable'] == 0 and
