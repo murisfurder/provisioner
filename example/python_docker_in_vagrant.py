@@ -3,8 +3,6 @@
 import python_example
 from time import sleep
 
-DONE = False
-
 job_id = python_example.create_task(
     ip='192.168.33.10',
     username='vagrant',
@@ -12,15 +10,13 @@ job_id = python_example.create_task(
     role='docker'
 )
 
-
-while not DONE:
+finished = False
+while not finished:
     exit_status = ['Aborted', 'Done', 'Error']
     status = python_example.get_status(job_id)
-    print status
-    if status:
-        if status['status'] in exit_status:
-            DONE = True
-            break
+    if status['status'] in exit_status:
+        DONE = True
+        break
     else:
         print status
     sleep(5)

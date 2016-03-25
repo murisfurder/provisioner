@@ -23,7 +23,7 @@ def get_docker_host():
         sys.exit(1)
 
 
-def create_task(ip=None, username=None, password=None, role=None, extra_vars=None):
+def create_task(ip=None, username=None, password=None, role=None, extra_vars=None, only_tags=None):
     if ip and username and password and role:
         endpoint = 'http://{}:8080/job'.format(get_docker_host())
         payload = {
@@ -32,6 +32,7 @@ def create_task(ip=None, username=None, password=None, role=None, extra_vars=Non
             'password': password,
             'role': role,
             'extra_vars': extra_vars,
+            'only_tags': only_tags,
         }
         r = requests.post(endpoint, data=json.dumps(payload))
         if r.status_code == 201:
@@ -51,7 +52,7 @@ def get_status(uuid):
         if r.status_code == 200:
             return json.loads(r.content)
         else:
-            print 'Unable to get status. Got error code: {}'.format(r.status_code)
+            return {'status': 'Unable to get status'}
     else:
         print 'No UUID specified.'
         sys.exit(1)

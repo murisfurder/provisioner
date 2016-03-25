@@ -31,6 +31,7 @@ def create_job():
     username = payload.get('username')
     password = payload.get('password')
     extra_vars = payload.get('extra_vars', {})
+    only_tags = payload.get('only_tags', 'all')
 
     if not (ip and role and username and password):
         return raise_error(400, 'Missing one of the required arguments.')
@@ -58,6 +59,9 @@ def create_job():
         if extra_vars['is_slave'] and not extra_vars.get('master_ip'):
             return raise_error(400, 'master_ip is required when setting up a weave slave node.')
 
+    if only_tags:
+        only_tags = only_tags.split(',')
+
     redis_helper.create_status(uuid, role, ip)
     task = redis_helper.add_to_queue({
         'created_at': timestamp,
@@ -69,6 +73,7 @@ def create_job():
         'uuid': uuid,
         'attempts': 0,
         'extra_vars': extra_vars,
+        'only_tags': only_tags,
     })
 
     if task:

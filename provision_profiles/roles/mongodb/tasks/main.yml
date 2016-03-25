@@ -1,5 +1,5 @@
 ---
-- name: MongoDB
+- name: MongoDB (standalone)
   docker:
     name: mongodb
     image: mongo
@@ -9,3 +9,29 @@
     - "/var/lib/mongodb:/data/db"
     ports:
     - "127.0.0.1:27017:27017"
+  when: not is_rs
+
+- name: MongoDB (cluster)
+  command: /usr/local/bin/docker-weave-run -d --name {{ rs_node_name }} -p "127.0.0.1:27017:27017" -v /var/lib/mongodb:/data/db mongo --replSet rs0
+  when: is_rs and not rs_init
+
+- name: Initiate cluster
+  command: docker exec {{ rs_node_name }} mongo --eval "printjson(rs.initiate())"
+  tags:
+    - rs_init
+  when: is_rs and rs_init
+
+- name: Add slaves
+  command: docker exec {{ rs_node_name }} mongo --eval "printjson(rs.add('{{ item }}'))"
+  with_items:
+    - node1
+    - node2
+  tags:
+    - rs_init
+  when: is_rs and rs_init
+
+- name: Get node status
+  command: docker exec {{ rs_node_name }} mongo --eval "printjson(rs.status())"
+  tags:
+    - rs_init
+  when: is_rs and rs_init

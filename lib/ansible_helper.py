@@ -56,6 +56,7 @@ def run_playbook(
     inventory=None,
     playbook_uri=None,
     extra_vars=None,
+    only_tags=None,
     playbook_args='',
 ):
     stats = callbacks.AggregateStats()
@@ -75,6 +76,7 @@ def run_playbook(
             remote_pass=remote_pass,
             inventory=inventory,
             extra_vars=extra_vars,
+            only_tags=only_tags,
         ).run()
     else:
         print '"{}" is an invalid file.'.format(playbook_uri)
