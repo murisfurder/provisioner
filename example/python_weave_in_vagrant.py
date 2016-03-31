@@ -47,9 +47,9 @@ def create_weave_cluster(max_retries=100):
 
         for task in tasks:
             status = get_status(task)
-            print 'Task {} status is {}'.format(task, status['status'])
+            print 'Task weave ({}) status is {}'.format(task, status['status'])
             if status['status'] in EXIT_STATUS:
-                print 'Task {} exited.'.format(task)
+                print 'Task weave ({}) exited.'.format(task)
                 tasks.remove(task)
         sleep(5)
     else:
