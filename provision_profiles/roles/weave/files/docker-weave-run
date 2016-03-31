@@ -1,3 +1,2 @@
 #!/bin/bash
-eval "$(weave env)"
-/usr/bin/docker run --net weave "$@"
+/usr/bin/docker run $(weave config) "$@"
