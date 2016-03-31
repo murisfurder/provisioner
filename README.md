@@ -1,8 +1,10 @@
 # Provisioner
 
-Work in progress!
+**Warning**: Work in progress.
 
-Simple Ansible based provisioning system for Cloud.net.
+**tl;dr**: Provisioner is a RESTful API for Ansible (or a more primitive version of [Ansible Tower](https://www.ansible.com/tower)).
+
+The tool was developed for [Cloud.net](https://www.cloud.net) to bootstrap remote servers over SSH.
 
 ## Usage
 
