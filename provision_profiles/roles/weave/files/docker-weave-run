@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/bin/docker run $(weave config) "$@"
+/usr/bin/docker $(weave config) run "$@"
