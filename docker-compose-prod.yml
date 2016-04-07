@@ -7,9 +7,11 @@ nginx:
   links:
     - api:api
   volumes:
-    - /etc/ssl/private/prov.key:/etc/ssl/private/prov.key
-    - /etc/ssl/private/prov.crt:/etc/ssl/private/prov.crt
+    - /etc/ssl/private/prov.key:/etc/ssl/private/prov.key:ro
+    - /etc/ssl/private/prov.crt:/etc/ssl/private/prov.crt:ro
     - /var/www:/var/www
+    - /etc/nginx/auth.conf:/etc/nginx/api_auth.inc:ro
+    - /etc/nginx/htpasswd:/etc/nginx/.htpasswd:ro
 api:
   image: onapp/prov-api
   restart: always
