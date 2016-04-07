@@ -39,14 +39,6 @@ $ curl http://192.168.56.132:8080/job/d7417be8-aab3-435b-8d15-ce71489ca5cd
 
 For an example Python implementation, please see [python_example.py](example/python_example.py).
 
-### Scaling
-
-To scale the number of workers to four, simply run:
-
-```
-$ docker-compose scale worker=4
-```
-
 **Do not use this setup in production**, instead please see [production setup](doc/production_setup.md).
 
 ## More Information
