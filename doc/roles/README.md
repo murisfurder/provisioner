@@ -20,3 +20,14 @@ Additional required keys:
 
  * `extra_vars['ssh-user']`: The user where to which we want to install the SSH key (defaults to username)
  * `extra_vars['ssh-keys']`: A list of one or more SSH keys to install
+
+## Additional Roles
+
+ * [Docker](docker.md)
+ * [Docker Registry](docker_registry.md)
+ * [MongoDB](mongodb.md)
+ * [MySQL / MariaDB](mysql.md)
+ * [PostgreSQL](postgresql.md)
+ * [Redis](redis.md)
+ * [Weave](weave.md)
+ * [Wordpress](wordpress.md)
