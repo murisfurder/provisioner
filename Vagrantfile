@@ -4,6 +4,14 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
 
+  config.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+  end
+
+  config.vm.provider "vmware_fusion" do |v|
+      v.vmx["memsize"] = "1024"
+  end
+
   config.vm.define "vm0" do |vm0|
     vm0.vm.hostname = "vm0.local"
     vm0.vm.network "private_network", ip: "192.168.33.10"
