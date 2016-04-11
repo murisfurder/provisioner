@@ -7,11 +7,16 @@
 The tool was developed for [Cloud.net](https://www.cloud.net) to bootstrap remote servers over SSH.
 
 
-## Demo: Provision a MongoDB cluster with Weave
+## Demo
 
 [![asciicast](https://asciinema.org/a/1k90lebjne0j0fk5shuqb9nxm.png)](https://asciinema.org/a/1k90lebjne0j0fk5shuqb9nxm)
 
-A demo of Provisioner in action that first spins up a [Weave](doc/roles/weave.md) cluster and then provisions a [MongoDB cluster](doc/roles/mongodb.md) over the Weave network.
+A demo of provisioner and the [python_mongodb_cluster_in_vagrant.py](/example/python_mongodb_cluster_in_vagrant.py) example targeting three local Vagrant VMs.
+
+What this does is to:
+
+ * Create a Weave network (Role: [Weave](doc/roles/weave.md))
+ * Create a MongoDB ReplicaSet over the Weave network (Role: [MongoDB](doc/roles/mongodb.md))
 
 ## Development/local setup
 
