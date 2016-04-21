@@ -1,3 +1,4 @@
+---
 - name: Provisions MongoDB (running inside Docker)
   hosts: all
   sudo: yes

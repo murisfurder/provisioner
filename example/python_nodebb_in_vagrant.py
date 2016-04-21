@@ -11,9 +11,24 @@ NODES = [
 NODE_USERNAME = 'vagrant'
 NODE_PASSWORD = 'foobar123'
 EXIT_STATUS = ['Aborted', 'Done', 'Error', 'Failed']
+SECRET = 'yecUcAladLivetnepeecKakicJagcaf3OdkeOfya',
 
 
-def create_mongodb_cluster(max_retries=100):
+def initiate_nodebb_cluster():
+
+        return create_task(
+            ip=NODES[0]['ip'],
+            username=NODE_USERNAME,
+            password=NODE_PASSWORD,
+            role='nodebb',
+            extra_vars={
+                'init_db': True,
+                'secret': SECRET,
+            }
+        )
+
+
+def create_nodebb_servers(max_retries=100):
     tasks = []
 
     for node in NODES:
@@ -21,12 +36,9 @@ def create_mongodb_cluster(max_retries=100):
             ip=node['ip'],
             username=NODE_USERNAME,
             password=NODE_PASSWORD,
-            role='mongodb',
+            role='nodebb',
             extra_vars={
-                'is_rs': True,
-                'is_rs_master': node['master'],
-                'is_rs_slave': not node['master'],
-                'rs_node_name': node['name'],
+                'secret': SECRET,
             }
         ))
 
@@ -47,25 +59,10 @@ def create_mongodb_cluster(max_retries=100):
         return False
 
 
-def initiate_mongodb_cluster():
-
-        return create_task(
-            ip=NODES[0]['ip'],
-            username=NODE_USERNAME,
-            password=NODE_PASSWORD,
-            role='mongodb',
-            extra_vars={
-                'is_rs': True,
-                'rs_init': True,
-                'rs_node_name': NODES[0]['name'],
-            }
-        )
-
-
 def main():
-    print 'This requires that you have already executed `python_weave_in_vagrant.py`'
-    create_mongodb_cluster()
-    initiate_mongodb_cluster()
+    print 'This requires that you have already executed `python_weave_in_vagrant.py` and `python_mongodb_cluster_in_vagrant`'
+#    initiate_nodebb_cluster()
+    create_nodebb_servers()
 
 if __name__ == "__main__":
     main()
