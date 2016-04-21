@@ -4,6 +4,8 @@ from python_example import create_task, get_status
 import settings
 from time import sleep
 
+# The nodes must be named node0-2 for other roles to work.
+
 NODES = settings.NODES
 NODES[0]['master'] = True
 NODES[0]['name'] = 'node0'
