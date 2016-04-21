@@ -6,8 +6,11 @@ from time import sleep
 
 NODES = settings.NODES
 NODES[0]['master'] = True
+NODES[0]['name'] = 'node0'
 NODES[1]['master'] = False
+NODES[1]['name'] = 'node1'
 NODES[2]['master'] = False
+NODES[2]['name'] = 'node2'
 
 
 def create_mongodb_cluster(max_retries=100):
