@@ -12,7 +12,7 @@
   when: not is_rs
 
 - name: MongoDB (cluster)
-  command: /usr/local/bin/docker-weave-run -d --name {{ rs_node_name }} -p "127.0.0.1:27017:27017" -v /var/lib/mongodb:/data/db mongo --replSet rs0
+  command: /usr/local/bin/docker-weave-run -d --restart=always --name {{ rs_node_name }} -p "127.0.0.1:27017:27017" -v /var/lib/mongodb:/data/db mongo --replSet rs0
   when: is_rs and not rs_init
 
 - name: Initiate cluster

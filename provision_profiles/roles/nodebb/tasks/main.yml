@@ -4,5 +4,5 @@
   when: init_db
 
 - name: Starts NodeBB
-  command: "/usr/local/bin/docker-weave-run -d --name nodebb -e DBSERVERS={{ rs_servers }} -e SECRET={{ secret }} -p 4567:4567 vpetersson/nodebb"
+  command: "/usr/local/bin/docker-weave-run -d --restart=always --name nodebb -e DBSERVERS={{ rs_servers }} -e SECRET={{ secret }} -p 4567:4567 vpetersson/nodebb"
   when: not init_db
