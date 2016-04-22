@@ -3,7 +3,7 @@
 * *Name*: nodebb
 * *Requirement*: Ubuntu 12.04 or later
 * *Exposes ports:* 0.0.0.0:4567
-* *Requires:*
+* *Requires roles:*
   * Weave
   * MongoDB Cluster
 
