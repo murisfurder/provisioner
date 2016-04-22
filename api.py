@@ -59,6 +59,16 @@ def create_job():
         if extra_vars['is_slave'] and not extra_vars.get('master_ip'):
             return raise_error(400, 'master_ip is required when setting up a weave slave node.')
 
+    # NodeBB role handler
+    if role == 'nodebb':
+        if not extra_vars:
+            return raise_error(400, 'extra_vars are required when using the role nodebb.')
+
+        # A secret must always be supplied.
+        if not extra_vars.get('secret'):
+            return raise_error(400, 'A secret is always required when using role nodebb.')
+
+        extra_vars['is_master'] = extra_vars.get('is_master', False)
     if only_tags:
         only_tags = only_tags.split(',')
 

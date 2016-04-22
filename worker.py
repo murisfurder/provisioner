@@ -1,7 +1,14 @@
 from lib import ansible_helper
 from lib import redis_helper
+import os
 import settings
 import time
+
+
+def clear_known_hosts():
+    known_hosts_file = '/root/.ssh/known_hosts'
+    if os.path.isfile(known_hosts_file):
+        os.remove(known_hosts_file)
 
 
 def task_router(task):
@@ -149,6 +156,7 @@ def main():
 
         if task:
             task_router(task)
+        clear_known_hosts()
         time.sleep(1)
 
 if __name__ == '__main__':

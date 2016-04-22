@@ -1,0 +1,18 @@
+---
+- name: Install sample script
+  copy:
+    src=install_nodebb_sample_data.sh
+    dest=/usr/local/bin/install_nodebb_sample_data.sh
+    owner=root
+    group=root
+    mode=0755
+
+- name: Installs sample database
+  command: /usr/local/bin/install_nodebb_sample_data.sh
+  args:
+    creates: /root/nodebb_sample_install
+  when: init_db
+
+- name: Starts NodeBB
+  command: "/usr/local/bin/docker-weave-run -d --restart=always --name nodebb -e DBSERVERS={{ rs_servers }} -e SECRET={{ secret }} -p 4567:4567 vpetersson/nodebb"
+  when: not init_db
