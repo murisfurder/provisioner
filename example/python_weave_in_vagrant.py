@@ -1,24 +1,22 @@
 #!/usr/bin/env python
 
+import settings
 from time import sleep
 from python_example import get_status, create_task
 
 
-MASTER_IP = '192.168.33.10'
-SLAVE_IPS = ['192.168.33.11', '192.168.33.12']
+MASTER = settings.NODES[0]
+SLAVES = settings.NODES[1:]
 PASSPHRASE = 'WyctorGhadkevlagmarr'
-NODE_USERNAME = 'vagrant'
-NODE_PASSWORD = 'foobar123'
-EXIT_STATUS = ['Aborted', 'Done', 'Error', 'Failed']
 
 
 def create_weave_cluster(max_retries=100):
     tasks = []
 
     tasks.append(create_task(
-        ip=MASTER_IP,
-        username=NODE_USERNAME,
-        password=NODE_PASSWORD,
+        ip=MASTER['ip'],
+        username=MASTER['username'],
+        password=MASTER['password'],
         role='weave',
         extra_vars={
             'is_master': True,
@@ -26,16 +24,16 @@ def create_weave_cluster(max_retries=100):
         }
     ))
 
-    for node_ip in SLAVE_IPS:
+    for node in SLAVES:
         tasks.append(create_task(
-            ip=node_ip,
-            username=NODE_USERNAME,
-            password=NODE_PASSWORD,
+            ip=node['ip'],
+            username=node['username'],
+            password=node['password'],
             role='weave',
             extra_vars={
                 'is_slave': True,
                 'passphrase': PASSPHRASE,
-                'master_ip': MASTER_IP,
+                'master_ip': MASTER['ip'],
             }
         ))
 
@@ -48,7 +46,7 @@ def create_weave_cluster(max_retries=100):
         for task in tasks:
             status = get_status(task)
             print 'Task weave ({}) status is {}'.format(task, status['status'])
-            if status['status'] in EXIT_STATUS:
+            if status['status'] in settings.EXIT_STATUS:
                 print 'Task weave ({}) exited.'.format(task)
                 tasks.remove(task)
         sleep(5)

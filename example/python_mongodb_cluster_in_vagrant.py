@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 
-from python_weave_in_vagrant import create_weave_cluster
 from python_example import create_task, get_status
+import settings
 from time import sleep
 
+# The nodes must be named node0-2 for other roles to work.
 
-NODES = [
-    {'name': 'node0', 'ip': '192.168.33.10', 'master': True},
-    {'name': 'node1', 'ip': '192.168.33.11', 'master': False},
-    {'name': 'node2', 'ip': '192.168.33.12', 'master': False},
-]
-NODE_USERNAME = 'vagrant'
-NODE_PASSWORD = 'foobar123'
-EXIT_STATUS = ['Aborted', 'Done', 'Error', 'Failed']
+NODES = settings.NODES
+NODES[0]['master'] = True
+NODES[0]['name'] = 'node0'
+NODES[1]['master'] = False
+NODES[1]['name'] = 'node1'
+NODES[2]['master'] = False
+NODES[2]['name'] = 'node2'
 
 
 def create_mongodb_cluster(max_retries=100):
@@ -21,8 +21,8 @@ def create_mongodb_cluster(max_retries=100):
     for node in NODES:
         tasks.append(create_task(
             ip=node['ip'],
-            username=NODE_USERNAME,
-            password=NODE_PASSWORD,
+            username=node['username'],
+            password=node['password'],
             role='mongodb',
             extra_vars={
                 'is_rs': True,
@@ -41,7 +41,7 @@ def create_mongodb_cluster(max_retries=100):
         for task in tasks:
             status = get_status(task)
             print 'Task mongodb ({}) status is {}'.format(task, status['status'])
-            if status['status'] in EXIT_STATUS:
+            if status['status'] in settings.EXIT_STATUS:
                 print 'Task mongodb ({}) exited.'.format(task)
                 tasks.remove(task)
         sleep(5)
@@ -53,8 +53,8 @@ def initiate_mongodb_cluster():
 
         return create_task(
             ip=NODES[0]['ip'],
-            username=NODE_USERNAME,
-            password=NODE_PASSWORD,
+            username=NODES[0]['username'],
+            password=NODES[0]['password'],
             role='mongodb',
             extra_vars={
                 'is_rs': True,
@@ -65,7 +65,7 @@ def initiate_mongodb_cluster():
 
 
 def main():
-    create_weave_cluster()
+    print 'This requires that you have already executed:\n`python_weave_in_vagrant.py`'
     create_mongodb_cluster()
     initiate_mongodb_cluster()
 

@@ -14,6 +14,7 @@ PLAYBOOKS = [
     'docker_registry',
     'mongodb',
     'mysql',
+    'nodebb',
     'postgres',
     'redis',
     'weave',
