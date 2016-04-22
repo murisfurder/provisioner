@@ -1,13 +1,21 @@
 ---
+- stat:
+  path: /root/.weave_master
+  register: weave
+
+- set_fact: weave_provisioned={{weave.stat.exists}}
+
 - name: Download and Install Weave
   get_url:
     url={{ weave_url }}
     dest={{ weave_bin }}
+  when: not weave_provisioned
 
 - name: Setup Weave Permissions
   file:
     path={{ weave_bin }}
     mode=0757
+  when: not weave_provisioned
 
 - name: Install Docker Weave helper
   copy:
@@ -16,15 +24,16 @@
     owner=root
     group=root
     mode=0757
+  when: not weave_provisioned
 
 - name: Launch Weave on master
   command: weave launch --password {{ passphrase }}
   args:
     creates: /root/.weave_master
-  when: is_master
+  when: is_master and not weave_provisioned
 
 - name: Launch Weave on slave
   command: weave launch --password {{ passphrase }} {{ master_ip }}
   args:
     creates: /root/.weave_slave
-  when: is_slave
+  when: is_slave and not weave_provisioned
