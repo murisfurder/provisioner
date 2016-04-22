@@ -8,4 +8,5 @@ bin/*
 .dockerignore
 Vagrantfile
 .vagrant
-bin/*
+doc/*
+example/*
