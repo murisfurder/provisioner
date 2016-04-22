@@ -54,7 +54,7 @@ def create_nodebb_servers(max_retries=100):
 
 
 def main():
-    print 'This requires that you have already executed `python_weave_in_vagrant.py` and `python_mongodb_cluster_in_vagrant`'
+    print 'This requires that you have already executed\n*`python_weave_in_vagrant.py`\n*`python_mongodb_cluster_in_vagrant`'
     initiate_nodebb_cluster()
     create_nodebb_servers()
 

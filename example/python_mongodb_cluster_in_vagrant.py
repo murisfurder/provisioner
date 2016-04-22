@@ -65,7 +65,7 @@ def initiate_mongodb_cluster():
 
 
 def main():
-    print 'This requires that you have already executed `python_weave_in_vagrant.py`'
+    print 'This requires that you have already executed:\n`python_weave_in_vagrant.py`'
     create_mongodb_cluster()
     initiate_mongodb_cluster()
 
