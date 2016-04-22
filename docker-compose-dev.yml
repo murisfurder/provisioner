@@ -1,6 +1,6 @@
 nginx:
   build: .
-  dockerfile: docker/Dockerfile.nginx
+  dockerfile: Dockerfile.nginx
   restart: always
   ports:
     - 80:80
@@ -9,7 +9,7 @@ nginx:
     - api:api
 api:
   build: .
-  dockerfile: docker/Dockerfile.api
+  dockerfile: Dockerfile.api
   restart: always
   ports:
     - 8080:8080
@@ -19,7 +19,7 @@ api:
    - .:/usr/src/app
 worker:
   build: .
-  dockerfile: docker/Dockerfile.worker
+  dockerfile: Dockerfile.worker
   restart: always
   links:
    - redis

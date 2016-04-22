@@ -1,5 +1,4 @@
-venv
-docker/Dockerfile.*
+venv/*
 README.md
 bin/*
 .git
@@ -7,6 +6,8 @@ bin/*
 .gitmodules
 .dockerignore
 Vagrantfile
+Dockerfile.*
+docker-compose*
 .vagrant
 doc/*
 example/*
