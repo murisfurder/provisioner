@@ -8,18 +8,24 @@ REDIS_LIST = 'prov'
 
 STATUS_LIFETIME = 24 * 3600
 
-# Whitelisted playbooks and modules
-PLAYBOOKS = [
+SINGLE_HOST_PLAYBOOKS = [
     'docker',
     'docker_registry',
     'mongodb',
     'mysql',
-    'nodebb',
     'postgres',
     'redis',
-    'weave',
     'wordpress',
 ]
+
+CLUSTER_PLAYBOOKS = [
+    'nodebb',
+    'mongodb',
+    'weave',
+]
+
+PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS
+
 MODULES = [
     'ping',
     'ssh-keys',
