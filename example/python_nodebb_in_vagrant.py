@@ -44,7 +44,7 @@ def create_nodebb_servers(max_retries=100):
 
         for task in tasks:
             status = get_status(task)
-            print 'Task mongodb ({}) status is {}'.format(
+            print 'Task mongodb ({}) status is {}.'.format(
                 task,
                 status['status']
             )
