@@ -69,6 +69,7 @@ def create_job():
             return raise_error(400, 'A secret is always required when using role nodebb.')
 
         extra_vars['is_master'] = extra_vars.get('is_master', False)
+
     if only_tags:
         only_tags = only_tags.split(',')
 

@@ -115,6 +115,7 @@ def task_router(task):
             extra_vars=extra_vars,
             only_tags=only_tags,
         )
+
         if not (
             run_playbook[target_ip]['unreachable'] == 0 and
             run_playbook[target_ip]['failures'] == 0
