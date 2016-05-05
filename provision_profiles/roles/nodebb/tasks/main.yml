@@ -1,11 +1,11 @@
 ---
 - name: Install sample script
-  copy:
-    src=install_nodebb_sample_data.sh
-    dest=/usr/local/bin/install_nodebb_sample_data.sh
-    owner=root
-    group=root
-    mode=0755
+  template:
+    src: install_nodebb_sample_data.sh
+    dest: /usr/local/bin/install_nodebb_sample_data.sh
+    owner: root
+    group: root
+    mode: 0755
 
 - name: Installs sample database
   command: /usr/local/bin/install_nodebb_sample_data.sh
