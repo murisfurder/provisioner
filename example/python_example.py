@@ -23,7 +23,14 @@ def get_docker_host():
         sys.exit(1)
 
 
-def create_task(ip=None, username=None, password=None, role=None, extra_vars=None, only_tags=None):
+def create_task(
+    ip=None,
+    username=None,
+    password=None,
+    role=None,
+    extra_vars=None,
+    only_tags=None
+):
     if ip and username and password and role:
         endpoint = 'http://{}:8080/job'.format(get_docker_host())
         payload = {
@@ -65,10 +72,19 @@ def abort_task(uuid):
         if r.status_code == 204:
             print 'Successfully aborted task.'
         else:
-            print 'Unable to get abort task. Got error code: {}'.format(r.status_code)
+            print 'Unable to get abort task. Got error code: {}'.format(
+                r.status_code
+            )
 
 
-def install_ssh_keys(ip=None, username=None, password=None, role=None, ssh_user=None, ssh_keys=None):
+def install_ssh_keys(
+    ip=None,
+    username=None,
+    password=None,
+    role=None,
+    ssh_user=None,
+    ssh_keys=None
+):
     return create_task(
         ip=ip,
         username=username,
