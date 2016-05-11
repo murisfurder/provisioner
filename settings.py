@@ -6,8 +6,6 @@ REDIS_PORT = os.getenv('REDIS_PORT_6379_TCP_PORT', 6379)
 REDIS_DB = os.getenv('REDIS_DB', 0)
 REDIS_LIST = 'prov'
 
-STATUS_LIFETIME = 0
-
 SINGLE_HOST_PLAYBOOKS = [
     'docker',
     'docker_registry',
