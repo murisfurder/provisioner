@@ -1,3 +1,4 @@
 venv
 *.pyc
 .vagrant
+example/site_settings.py
