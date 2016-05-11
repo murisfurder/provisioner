@@ -8,3 +8,5 @@ NODES = [
 ]
 
 EXIT_STATUS = ['Aborted', 'Done', 'Error', 'Failed']
+
+from site_settings import *
