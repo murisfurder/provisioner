@@ -1,0 +1,46 @@
+---
+- name: Drupal
+  docker:
+    name: drupal
+    image: drupal
+    state: started
+    restart_policy: always
+    links:
+    - "postgres:postgres"
+    ports:
+    - "80:80"
+    volumes:
+    - "{{ drupal_config_dir }}:/var/www/html/sites"
+
+- command: docker exec drupal mkdir -p /var/www/html/sites/default/files /var/www/html/sites/all/themes /var/www/html/sites/all/modules
+
+- get_url:
+    url: "https://raw.githubusercontent.com/drupal/drupal/8.1.x/sites/{{ item }}"
+    dest: "{{ drupal_config_dir }}/{{ item }}"
+    mode: 0640
+  with_items:
+  - default/default.settings.php
+  - default/default.services.yml
+  - example.sites.php
+  - example.settings.local.php
+  - development.services.yml
+
+- command: cp "{{ drupal_config_dir }}/default/default.settings.php" "{{ drupal_config_dir }}/default/settings.php"
+
+- command: docker exec drupal chown -R www-data:www-data /var/www/html/sites
+
+# Create drupal database
+- template:
+    src: drupal.sql
+    dest: /tmp/drupal.sql
+
+- command: docker cp /tmp/drupal.sql postgres:/tmp/drupal.sql
+- command: docker exec postgres psql -U postgres -a -f /tmp/drupal.sql
+
+# Clean up
+- command: docker exec postgres rm /tmp/drupal.sql
+#- file:
+#    path: /tmp/drupal.sql
+#    state: absent
+
+- debug: msg="drupal pwd {{ postgres_drupal_password }}"

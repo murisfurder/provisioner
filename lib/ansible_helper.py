@@ -19,11 +19,11 @@ def generate_password(lenght=20):
     http://davidsj.co.uk/blog/python-generate-random-password-strings/
     """
 
-    # Just alphanumeric characters
-    chars = string.letters + string.digits
-
     # Alphanumeric + special characters
     chars = string.letters + string.digits + string.punctuation
+
+    # Remove '\' as it's tricky to deal with in MySQL pwds
+    chars.strip('\\').strip('%')
 
     return ''.join((random.choice(chars)) for x in range(lenght))
 
@@ -96,6 +96,11 @@ def provision(
 
     if role in ['wordpress', 'mysql']:
         extra_vars['mysql_root_password'] = generate_password()
+
+    if role in ['postgres', 'drupal']:
+        extra_vars['postgres_postgres_password'] = generate_password()
+        if role == 'drupal':
+            extra_vars['postgres_drupal_password'] = generate_password()
 
     if remote_user and remote_pass and inventory:
         return run_playbook(

@@ -1,0 +1,15 @@
+- name: Provisions Drupal (running inside Docker)
+  hosts: all
+  sudo: yes
+
+  vars:
+    - drupal_config_dir: /usr/local/drupal
+    - postgres_drupal_password:
+    - postgres_postgres_password:
+
+  roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - postgres
+    - drupal
+

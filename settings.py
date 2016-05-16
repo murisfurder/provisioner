@@ -9,6 +9,7 @@ REDIS_LIST = 'prov'
 SINGLE_HOST_PLAYBOOKS = [
     'docker',
     'docker_registry',
+    'drupal',
     'mongodb',
     'mysql',
     'postgres',
