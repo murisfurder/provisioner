@@ -3,7 +3,7 @@
   sudo: yes
 
   vars:
-    - postgres_root_password: CliegafEnennatNu8dru
+    - postgres_postgres_password:
 
   roles:
     - unattended-upgrades

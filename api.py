@@ -30,14 +30,15 @@ def create_job():
     role = payload.get('role').lower()
     username = payload.get('username')
     password = payload.get('password')
-    extra_vars = payload.get('extra_vars', {})
-    only_tags = payload.get('only_tags', 'all')
+    extra_vars = payload.get('extra_vars') if payload.get('extra_vars') else {}
+    only_tags = payload.get('only_tags') if payload.get('only_tags') else 'all'
 
     if not (ip and role and username and password):
         return raise_error(400, 'Missing one of the required arguments.')
 
     if role not in (settings.MODULES + settings.PLAYBOOKS):
         return raise_error(400, 'Invalid role.')
+
 
     # Weave role handler
     if role == 'weave':
