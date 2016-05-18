@@ -1,5 +1,6 @@
 from lib import ansible_helper
 from lib import redis_helper
+from lib import doc_parser
 import os
 import settings
 import time
@@ -140,7 +141,8 @@ def task_router(task):
     redis_helper.update_status(
         uuid=uuid,
         attempts=attempts,
-        status='Done'
+        status='Done',
+        install_notes=doc_parser.get_docs(role, extra_vars)
     )
 
     print 'Done provisioning {} for {}@{} (uuid: {})'.format(

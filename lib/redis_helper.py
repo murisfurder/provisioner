@@ -58,7 +58,8 @@ def create_status(uuid, role, ip):
         'ip': ip,
         'timestamp': timestamp,
         'attempts': 0,
-        'msg': []
+        'msg': [],
+        'install_notes': ''
     }
     return r.set(uuid, json.dumps(payload))
 
@@ -67,7 +68,8 @@ def update_status(
     uuid=None,
     status=None,
     attempts=None,
-    msg=None
+    msg=None,
+    install_notes=None,
 ):
 
     if not uuid:
@@ -79,6 +81,8 @@ def update_status(
     job_status['timestamp'] = str(time.mktime(time.gmtime()))
     job_status['attempts'] = attempts if attempts else job_status['attempts']
     job_status['status'] = status if status else job_status['status']
+    job_status['install_notes'] = install_notes if install_notes else job_status['install_notes']
+
     if msg:
         job_status['msg'].append(msg)
 

@@ -48,5 +48,3 @@
 - file:
     path: /tmp/drupal.sql
     state: absent
-
-- debug: msg="drupal pwd: {{ postgres_drupal_password }}"

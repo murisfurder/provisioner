@@ -9,5 +9,3 @@
       POSTGRES_PASSWORD: "{{ postgres_postgres_password }}"
     volumes:
     - "/var/lib/postgresql/data:/var/lib/postgresql/data"
-    ports:
-    - "127.0.0.1:5432:5432"
