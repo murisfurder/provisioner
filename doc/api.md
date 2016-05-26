@@ -36,6 +36,7 @@ To get the status of a job, simply issue a GET against `/job/SomeUUID`. You shou
   "attempts": 1,
   "role": "ping",
   "timestamp": "1449166675.0"
+  "install_notes": "Installation notes in Markdown format (if available)."
 }
 ```
 

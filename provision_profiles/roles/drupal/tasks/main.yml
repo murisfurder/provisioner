@@ -1,0 +1,50 @@
+---
+- name: Drupal
+  docker:
+    name: drupal
+    image: drupal
+    state: started
+    restart_policy: always
+    links:
+    - "postgres:postgres"
+    ports:
+    - "80:80"
+    volumes:
+    - "{{ drupal_config_dir }}:/var/www/html/sites"
+
+- command: docker exec drupal mkdir -p /var/www/html/sites/default/files /var/www/html/sites/all/themes /var/www/html/sites/all/modules /var/www/html/themes/
+
+- get_url:
+    url: "https://raw.githubusercontent.com/drupal/drupal/8.1.x/sites/{{ item }}"
+    dest: "{{ drupal_config_dir }}/{{ item }}"
+    mode: 0640
+  with_items:
+  - default/default.settings.php
+  - default/default.services.yml
+  - example.sites.php
+  - example.settings.local.php
+  - development.services.yml
+
+- command: cp -u "{{ drupal_config_dir }}/default/default.settings.php" "{{ drupal_config_dir }}/default/settings.php"
+
+# Set the right permission as per https://www.drupal.org/node/244924
+- command: docker exec drupal chown -R www-data:www-data /var/www/html
+- command: docker exec drupal find /var/www/html -type d -exec chmod u=rwx,g=rx,o= '{}' \;
+- command: docker exec drupal find /var/www/html -type f -exec chmod u=rw,g=r,o= '{}' \;
+- command: docker exec drupal find /var/www/html/sites -type d -name files -exec chmod ug=rwx,o= '{}' \;
+- command: docker exec drupal find /var/www/html/sites/default/files -type d -exec chmod ug=rwx,o= '{}' \;
+- command: docker exec drupal find /var/www/html/sites/default/files -type f -exec chmod ug=rw,o= '{}' \;
+
+# Create drupal database
+- template:
+    src: drupal.sql
+    dest: /tmp/drupal.sql
+
+- command: docker cp /tmp/drupal.sql postgres:/tmp/drupal.sql
+- command: docker exec postgres psql -U postgres -a -f /tmp/drupal.sql
+
+# Clean up
+- command: docker exec postgres rm /tmp/drupal.sql
+- file:
+    path: /tmp/drupal.sql
+    state: absent

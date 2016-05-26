@@ -31,6 +31,10 @@ def create_docker_nodes(max_retries=100):
             if status['status'] in settings.EXIT_STATUS:
                 print 'Task weave ({}) exited.'.format(task)
                 tasks.remove(task)
+
+            install_notes = status['install_notes']
+            if install_notes:
+                print install_notes
         sleep(5)
     else:
         return False
