@@ -37,7 +37,7 @@ $ docker exec -ti postgres psql -U postgres
 ## PostgreSQL
 
 User: posgres
-Password: `{{ posgres_postgres_password }}`
+Password: `{{ postgres_postgres_password }}`
 
 User: drupal
 Password: `{{ postgres_drupal_password }}`
