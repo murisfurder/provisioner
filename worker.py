@@ -17,6 +17,8 @@ def task_router(task):
     Task router, with sanity check
     """
 
+    error_msg = None
+
     # Define and lookup the required variables
     attempts = task.get('attempts')
     role = task.get('role')
@@ -93,10 +95,18 @@ def task_router(task):
             )
 
         if len(run_module['dark']) > 0:
+            failed = True
+            error_msg = run_module['dark'][target_ip].get('msg')
+
+        if run_module['contacted'] > 0:
+            failed = run_module['contacted'][target_ip].get('failed')
+            error_msg = run_module['contacted'][target_ip].get('msg')
+
+        if failed:
             task['last_update'] = str(time.mktime(time.gmtime()))
             redis_helper.update_status(
                 uuid=uuid,
-                msg=run_module['dark'][target_ip]['msg']
+                msg=error_msg,
             )
             redis_helper.add_to_queue(task)
             print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
