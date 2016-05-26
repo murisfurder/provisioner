@@ -9,7 +9,7 @@ import json
 def get_docker_host():
     """
     Fetch the DOCKER_HOST environment variable and
-    parse the IP.
+    parse the IP. Use localhost if no  DOCKER_HOST is present.
     """
 
     # raw_dockerhost will return something like:
@@ -19,8 +19,7 @@ def get_docker_host():
     if dockerhost:
         return dockerhost.split(':')[-2].strip('//')
     else:
-        print 'Unable to read DOCKER_HOST environment variable.'
-        sys.exit(1)
+        return '127.0.0.1'
 
 
 def create_task(
