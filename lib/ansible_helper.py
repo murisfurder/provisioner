@@ -37,6 +37,7 @@ def run_module(
     remote_pass=None,
     inventory=None,
     module_name=None,
+    become=True,
     module_args='',
 ):
     """
@@ -50,6 +51,7 @@ def run_module(
         remote_pass=remote_pass,
         module_name=module_name,
         module_args=module_args,
+        become=become,
         inventory=inventory
     ).run()
 
