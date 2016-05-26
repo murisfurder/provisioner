@@ -8,5 +8,5 @@ This using the built-in [authorized_key](https://docs.ansible.com/ansible/author
 Additional required keys:
 
  * `extra_vars['ssh_user']`: The user on the remote system where the key(s) are to be installed.
- * `extra_vars['ssh_keye']`: A list of one or many SSH keys. Must be provided as a list even if there is only one key.
+ * `extra_vars['ssh_keys']`: A list of one or many SSH keys. Must be provided as a list even if there is only one key.
 
