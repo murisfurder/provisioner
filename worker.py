@@ -152,7 +152,10 @@ def task_router(task):
         uuid=uuid,
         attempts=attempts,
         status='Done',
-        install_notes=doc_parser.get_docs(role, extra_vars)
+        install_notes=doc_parser.get_docs(
+            role=role,
+            extra_vars=extra_vars
+        )
     )
 
     print 'Done provisioning {} for {}@{} (uuid: {})'.format(

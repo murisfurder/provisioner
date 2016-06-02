@@ -2,8 +2,14 @@ import os
 from bottle import template
 
 
-def get_docs(role, extra_vars):
-    docs_uri = 'provision_profiles/{}_install_notes.tpl'.format(role)
+def get_docs(role=None, extra_vars=None):
+    script_path = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.abspath(os.path.join(script_path, '..'))
+
+    docs_uri = '{}/provision_profiles/{}_install_notes.tpl'.format(
+        project_root,
+        role
+    )
 
     if not os.path.isfile(docs_uri):
         return 'No installation notes available.'
