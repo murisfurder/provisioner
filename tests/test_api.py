@@ -1,8 +1,8 @@
 import api
 import json
+import settings
 from webtest import TestApp
 from nose.tools import eq_
-
 
 app = TestApp(api.app)
 
@@ -10,6 +10,11 @@ app = TestApp(api.app)
 def test_root_page():
     r = app.get('/')
     eq_(r.body, 'Nothing to see here. Carry on.\n')
+
+
+def test_roles_listing():
+    r = app.get('/roles')
+    eq_(r.json, settings.SINGLE_HOST_PLAYBOOKS)
 
 
 def test_abort_without_job_provided():
@@ -25,9 +30,8 @@ def test_get_job_status_without_job_provided():
 
 
 def test_create_job_without_payload():
-    r = api.create_job()
-    r_json = json.loads(r)
-    eq_(r_json['message'], 'Invalid JSON payload.')
+    r = app.post('/job', expect_errors=True)
+    eq_(r.json['message'], 'Invalid JSON payload.')
 
 
 def test_create_job_without_username():
@@ -43,7 +47,7 @@ def test_create_job_without_username():
     )
     eq_(r.status_code, 400)
     eq_(
-        json.loads(r.body)['message'],
+        r.json['message'],
         'Missing one of the required arguments.'
     )
 
@@ -61,7 +65,7 @@ def test_create_job_without_role():
     )
     eq_(r.status_code, 400)
     eq_(
-        json.loads(r.body)['message'],
+        r.json['message'],
         'Missing one of the required arguments.'
     )
 
@@ -80,7 +84,7 @@ def test_create_job_with_invalid_role():
     )
     eq_(r.status_code, 400)
     eq_(
-        json.loads(r.body)['message'],
+        r.json['message'],
         'Invalid role.'
     )
 
@@ -99,7 +103,7 @@ def test_create_job_with_weave_without_extra_vars():
     )
     eq_(r.status_code, 400)
     eq_(
-        json.loads(r.body)['message'],
+        r.json['message'],
         'extra_vars are required when using the role weave.'
     )
 
@@ -123,7 +127,7 @@ def test_create_job_with_weave_slave_and_master():
     )
     eq_(r.status_code, 400)
     eq_(
-        json.loads(r.body)['message'],
+        r.json['message'],
         'Must be master or slave. Not both.'
     )
 
@@ -144,6 +148,8 @@ def test_create_job_with_nodebb_without_secret():
     )
     eq_(r.status_code, 400)
     eq_(
-        json.loads(r.body)['message'],
+        r.json['message'],
         'A secret is always required when using role nodebb.'
     )
+
+
