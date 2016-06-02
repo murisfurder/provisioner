@@ -47,31 +47,49 @@ def create_job():
     # Weave role handler
     if role == 'weave':
         if len(extra_vars) < 2:
-            return raise_error(400, 'extra_vars are required when using the role weave.')
+            return raise_error(
+                400,
+                'extra_vars are required when using the role weave.'
+            )
 
         extra_vars['is_master'] = extra_vars.get('is_master', False)
         extra_vars['is_slave'] = extra_vars.get('is_slave', False)
 
         # Must be either master or slave
         if not (extra_vars['is_master'] or extra_vars['is_slave']):
-            return raise_error(400, 'Must be either master or slave when using role weave.')
+            return raise_error(
+                400,
+                'Must be either master or slave when using role weave.'
+            )
 
         # A passphrase must always be supplied.
         if not extra_vars.get('passphrase'):
-            return raise_error(400, 'A passphrase is always required when using role weave.')
+            return raise_error(
+                400,
+                'A passphrase is always required when using role weave.'
+            )
 
         # If the role is a slave, the master IP and passphrase is required.
         if extra_vars['is_slave'] and not extra_vars.get('master_ip'):
-            return raise_error(400, 'master_ip is required when setting up a weave slave node.')
+            return raise_error(
+                400,
+                'master_ip is required when setting up a weave slave node.'
+            )
 
     # NodeBB role handler
     if role == 'nodebb':
         if len(extra_vars) < 2:
-            return raise_error(400, 'extra_vars are required when using the role nodebb.')
+            return raise_error(
+                400,
+                'extra_vars are required when using the role nodebb.'
+            )
 
         # A secret must always be supplied.
         if not extra_vars.get('secret'):
-            return raise_error(400, 'A secret is always required when using role nodebb.')
+            return raise_error(
+                400,
+                'A secret is always required when using role nodebb.'
+            )
 
         extra_vars['is_master'] = extra_vars.get('is_master', False)
 
