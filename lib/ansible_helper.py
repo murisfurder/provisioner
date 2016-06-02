@@ -20,14 +20,7 @@ def generate_password(lenght=20):
     """
 
     # Alphanumeric + special characters
-    chars = string.letters + string.digits + string.punctuation
-
-    # Remove '\' as it's tricky to deal with in MySQL/PostgreSQL pwds
-    illegal_chars = [';', '\\', '%']
-    for i in illegal_chars:
-        chars.replace(i, '')
-
-    chars.replace('\\', '').replace('%', '').replace(';', '')
+    chars = string.letters + string.digits
 
     return ''.join((random.choice(chars)) for x in range(lenght))
 
