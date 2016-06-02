@@ -27,7 +27,7 @@ def create_job():
         return raise_error(400, 'Invalid JSON payload.')
 
     ip = payload.get('ip')
-    role = payload.get('role').lower()
+    role = payload.get('role').lower() if payload.get('role') else False
     username = payload.get('username')
     password = payload.get('password')
     extra_vars = payload.get('extra_vars') if payload.get('extra_vars') else {}
@@ -42,34 +42,53 @@ def create_job():
     # Add public ip as an extra var for easier read back.
     extra_vars['public_ip'] = ip
 
+    if role in ['weave', 'nodebb', 'ssh']:
+        if len(extra_vars) < 2:
+            return raise_error(
+                400,
+                'extra_vars are required when using the role {}.'.format(role)
+            )
+
     # Weave role handler
     if role == 'weave':
-        if not extra_vars:
-            return raise_error(400, 'extra_vars are required when using the role weave.')
-
         extra_vars['is_master'] = extra_vars.get('is_master', False)
         extra_vars['is_slave'] = extra_vars.get('is_slave', False)
 
         # Must be either master or slave
+        if extra_vars['is_master'] and extra_vars['is_slave']:
+            return raise_error(
+                400,
+                'Must be master or slave. Not both.'
+            )
+
         if not (extra_vars['is_master'] or extra_vars['is_slave']):
-            return raise_error(400, 'Must be either master or slave when using role weave.')
+            return raise_error(
+                400,
+                'Must be either master or slave.'
+            )
 
         # A passphrase must always be supplied.
         if not extra_vars.get('passphrase'):
-            return raise_error(400, 'A passphrase is always required when using role weave.')
+            return raise_error(
+                400,
+                'A passphrase is always required when using role weave.'
+            )
 
         # If the role is a slave, the master IP and passphrase is required.
         if extra_vars['is_slave'] and not extra_vars.get('master_ip'):
-            return raise_error(400, 'master_ip is required when setting up a weave slave node.')
+            return raise_error(
+                400,
+                'master_ip is required when setting up a weave slave node.'
+            )
 
     # NodeBB role handler
     if role == 'nodebb':
-        if not extra_vars:
-            return raise_error(400, 'extra_vars are required when using the role nodebb.')
-
         # A secret must always be supplied.
         if not extra_vars.get('secret'):
-            return raise_error(400, 'A secret is always required when using role nodebb.')
+            return raise_error(
+                400,
+                'A secret is always required when using role nodebb.'
+            )
 
         extra_vars['is_master'] = extra_vars.get('is_master', False)
 
@@ -98,7 +117,7 @@ def create_job():
 
 
 @app.route('/job/<uuid>')
-def get_job_status(uuid):
+def get_job_status(uuid=None):
     response.content_type = 'application/json'
     if uuid:
         job_query = redis_helper.get_status(uuid)
@@ -112,7 +131,7 @@ def get_job_status(uuid):
 
 
 @app.delete('/job/<uuid>')
-def abort_job(uuid):
+def abort_job(uuid=None):
     response.content_type = 'application/json'
     if uuid:
         abort_task = redis_helper.update_status(
@@ -144,4 +163,13 @@ def get_redis_status():
 def root():
     return 'Nothing to see here. Carry on.\n'
 
-run(app, host='0.0.0.0', port=8080, server='gunicorn', workers=4, reload=True)
+
+if __name__ == '__main__':
+    run(
+        app,
+        host='0.0.0.0',
+        port=8080,
+        server='gunicorn',
+        workers=4,
+        reload=True
+    )
