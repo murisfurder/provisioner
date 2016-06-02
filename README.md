@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/OnApp/provisioner.svg?branch=master)](https://travis-ci.org/OnApp/provisioner)
+
 # Provisioner
 
 **Warning**: Work in progress.
