@@ -44,22 +44,29 @@ def create_job():
     # Add public ip as an extra var for easier read back.
     extra_vars['public_ip'] = ip
 
-    # Weave role handler
-    if role == 'weave':
+    if role in ['weave', 'nodebb', 'ssh']:
         if len(extra_vars) < 2:
             return raise_error(
                 400,
-                'extra_vars are required when using the role weave.'
+                'extra_vars are required when using the role {}.'.format(role)
             )
 
+    # Weave role handler
+    if role == 'weave':
         extra_vars['is_master'] = extra_vars.get('is_master', False)
         extra_vars['is_slave'] = extra_vars.get('is_slave', False)
 
         # Must be either master or slave
+        if extra_vars['is_master'] and extra_vars['is_slave']:
+            return raise_error(
+                400,
+                'Must be master or slave. Not both.'
+            )
+
         if not (extra_vars['is_master'] or extra_vars['is_slave']):
             return raise_error(
                 400,
-                'Must be either master or slave when using role weave.'
+                'Must be either master or slave.'
             )
 
         # A passphrase must always be supplied.
@@ -78,12 +85,6 @@ def create_job():
 
     # NodeBB role handler
     if role == 'nodebb':
-        if len(extra_vars) < 2:
-            return raise_error(
-                400,
-                'extra_vars are required when using the role nodebb.'
-            )
-
         # A secret must always be supplied.
         if not extra_vars.get('secret'):
             return raise_error(
@@ -106,7 +107,7 @@ def create_job():
         'password': password,
         'uuid': uuid,
         'attempts': 0,
-        'extra_vars': extra_vars if extra_vars else {},
+        'extra_vars': extra_vars,
         'only_tags': only_tags,
     })
 

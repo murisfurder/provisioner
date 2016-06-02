@@ -102,3 +102,48 @@ def test_create_job_with_weave_without_extra_vars():
         json.loads(r.body)['message'],
         'extra_vars are required when using the role weave.'
     )
+
+
+def test_create_job_with_weave_slave_and_master():
+    payload = {
+        'ip': '127.0.0.1',
+        'password': 'foobar',
+        'username': 'foobar',
+        'role': 'weave',
+        'extra_vars': {
+            'is_slave': True,
+            'is_master': True,
+        }
+    }
+
+    r = app.post_json(
+        '/job',
+        payload,
+        expect_errors=True
+    )
+    eq_(r.status_code, 400)
+    eq_(
+        json.loads(r.body)['message'],
+        'Must be master or slave. Not both.'
+    )
+
+
+def test_create_job_with_nodebb_without_secret():
+    payload = {
+        'ip': '127.0.0.1',
+        'password': 'foobar',
+        'username': 'foobar',
+        'role': 'nodebb',
+        'extra_vars': {'foo': 'bar'}
+    }
+
+    r = app.post_json(
+        '/job',
+        payload,
+        expect_errors=True
+    )
+    eq_(r.status_code, 400)
+    eq_(
+        json.loads(r.body)['message'],
+        'A secret is always required when using role nodebb.'
+    )
