@@ -1,6 +1,7 @@
 Jinja2==2.8
 MarkupSafe==0.23
 PyYAML==3.11
+WebTest==2.0.21
 ansible==1.9.4
 bottle==0.12.9
 ecdsa==0.13
