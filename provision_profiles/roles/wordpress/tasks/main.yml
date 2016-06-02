@@ -11,3 +11,10 @@
       - "mysql:mysql"
     ports:
     - "80:80"
+
+- name: Install zip package
+  command: docker exec wordpress {{ item }}
+  with_items:
+    - apt-get update
+    - apt-get install -y zip
+    - apt-get clean
