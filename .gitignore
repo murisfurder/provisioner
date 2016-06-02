@@ -1,4 +1,5 @@
-venv
 *.pyc
+.DS_Store
 .vagrant
 example/site_settings.py
+venv
