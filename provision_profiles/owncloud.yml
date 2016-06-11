@@ -1,0 +1,11 @@
+- name: Provisions Owncloud (running inside Docker)
+  hosts: all
+  sudo: yes
+
+  vars:
+    - mysql_root_password:
+
+  roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - owncloud
