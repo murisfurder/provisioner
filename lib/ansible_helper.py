@@ -93,8 +93,10 @@ def provision(
 
     playbook_uri = 'provision_profiles/{}.yml'.format(role)
 
-    if role in ['wordpress', 'mysql']:
+    if role in ['wordpress', 'mysql', 'owncloud']:
         extra_vars['mysql_root_password'] = generate_password()
+        if role == 'owncloud':
+            extra_vars['mysql_owncloud_password'] = generate_password()
 
     if role in ['postgres', 'drupal']:
         extra_vars['postgres_postgres_password'] = generate_password()

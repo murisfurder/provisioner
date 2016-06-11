@@ -12,6 +12,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'drupal',
     'mongodb',
     'mysql',
+    'owncloud',
     'postgres',
     'redis',
     'wordpress',
