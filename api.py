@@ -3,9 +3,10 @@
 from bottle import request, response, Bottle, run
 from lib import redis_helper
 from uuid import uuid4
-import time
+import copy
 import json
 import settings
+import time
 
 app = Bottle()
 
@@ -150,7 +151,11 @@ def abort_job(uuid=None):
 @app.route('/roles')
 def get_roles():
     response.content_type = 'application/json'
-    return json.dumps(settings.SINGLE_HOST_PLAYBOOKS)
+    ROLES = copy.deepcopy(settings.SINGLE_HOST_PLAYBOOKS)
+    for r in ROLES:
+        if r in settings.HIDDEN_PLAYBOOKS:
+            ROLES.remove(r)
+    return json.dumps(ROLES)
 
 
 @app.route('/redis_status')

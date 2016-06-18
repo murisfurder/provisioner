@@ -7,6 +7,7 @@ REDIS_DB = os.getenv('REDIS_DB', 0)
 REDIS_LIST = 'prov'
 
 SINGLE_HOST_PLAYBOOKS = [
+    'dns',
     'docker',
     'docker_registry',
     'drupal',
@@ -25,6 +26,10 @@ CLUSTER_PLAYBOOKS = [
 ]
 
 PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS
+
+HIDDEN_PLAYBOOKS = [
+    'dns',
+]
 
 MODULES = [
     'ping',
