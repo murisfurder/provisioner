@@ -16,6 +16,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'owncloud',
     'postgres',
     'redis',
+    'redmine',
     'wordpress',
 ]
 
