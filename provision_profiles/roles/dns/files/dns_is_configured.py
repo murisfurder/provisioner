@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import dns.resolver
-import socket
 import netifaces
+import socket
 
 
 def do_dns_lookup(fqdn):
