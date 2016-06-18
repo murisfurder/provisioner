@@ -150,7 +150,11 @@ def abort_job(uuid=None):
 @app.route('/roles')
 def get_roles():
     response.content_type = 'application/json'
-    return json.dumps(settings.SINGLE_HOST_PLAYBOOKS)
+    ROLES = settings.SINGLE_HOST_PLAYBOOKS
+    for r in ROLES:
+        if r in settings.HIDDEN_PLAYBOOKS:
+            ROLES.remove(r)
+    return json.dumps(ROLES)
 
 
 @app.route('/redis_status')

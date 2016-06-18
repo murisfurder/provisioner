@@ -2,7 +2,7 @@ import api
 import json
 import settings
 from webtest import TestApp
-from nose.tools import eq_
+from nose.tools import eq_, assert_not_equal
 
 app = TestApp(api.app)
 
@@ -12,9 +12,9 @@ def test_root_page():
     eq_(r.body, 'Nothing to see here. Carry on.\n')
 
 
-def test_roles_listing():
+def test_roles_listing_without_hidden():
     r = app.get('/roles')
-    eq_(r.json, settings.SINGLE_HOST_PLAYBOOKS)
+    assert_not_equal(r.json, settings.SINGLE_HOST_PLAYBOOKS)
 
 
 def test_abort_without_job_provided():
