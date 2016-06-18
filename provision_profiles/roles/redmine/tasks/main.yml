@@ -1,0 +1,54 @@
+---
+- name: MySQL
+  docker:
+    name: mysql
+    image: mariadb
+    state: started
+    restart_policy: on-failure
+    restart_policy_retry: 10
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      MYSQL_USER: redmine
+      MYSQL_PASSWORD: "{{ mysql_redmine_password }}"
+      MYSQL_DATABASE: redmine
+    volumes:
+    - "/var/lib/mysql:/var/lib/mysql"
+
+- name: Create required folders
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /usr/local/redmine-store
+  - /usr/local/redmine-store/config
+  - /usr/local/redmine-store/files
+  - /usr/local/redmine-store/plugins
+  - /usr/local/redmine-store/themes
+
+- name: Create config files
+  template:
+    src: "{{ item }}.j2"
+    dest: "/usr/local/redmine-store/config/{{ item }}"
+  with_items:
+  - configuration.yml
+  - database.yml
+
+- name: Redmine
+  docker:
+    name: redmine
+    image: redmine
+    state: started
+    restart_policy: on-failure
+    restart_policy_retry: 10
+    env:
+      MYSQL_DATABASE: redmine
+      MYSQL_USER_USER: redmine
+      MYSWL_PASS: "{{ mysql_redmine_password }}"
+    links:
+    - "mysql:mysql"
+    ports:
+    - "80:3000"
+    volumes:
+    - "/usr/local/redmine-store/files:/usr/src/redmine/files"
+    - "/usr/local/redmine-store/plugins:/usr/src/redmine/plugins"
+    - "/usr/local/redmine-store/themes:/usr/src/redmine/themes"
