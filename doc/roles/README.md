@@ -17,3 +17,4 @@ For all roles, the 'role', 'ip', 'username' and 'password' keys are required.
  * [SSH](ssh.md)
  * [Weave](weave.md)
  * [Wordpress](wordpress.md)
+ * [Joomla!](joomla.md)
