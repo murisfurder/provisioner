@@ -9,6 +9,7 @@ install:
 
 before_script:
   - echo -e "[local]\nlocalhost ansible_connection=local" > localhost
+  - python bin/generate_tests_playbook.py
 
 # command to run tests
 script:
