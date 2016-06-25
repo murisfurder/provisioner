@@ -3,7 +3,16 @@ python:
   - "2.7"
 
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install:
+  - "pip install -r requirements.txt"
+  - "pip install -r requirements-dev.txt"
+
+before_script:
+  - echo -e "[local]\nlocalhost ansible_connection=local" > localhost
+  - python bin/generate_tests_playbook.py
 
 # command to run tests
-script: nosetests
+script:
+  - find . -name \*.py -exec pep8 --ignore=E402,E501 {} +
+  - nosetests
+  - ansible-playbook --syntax-check -i localhost provision_profiles/all.yml
