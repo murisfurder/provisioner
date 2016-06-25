@@ -5,5 +5,11 @@ python:
 # command to install dependencies
 install: "pip install -r requirements.txt"
 
+before_script:
+  - echo -e "[local]\nlocalhost ansible_connection=local" > localhost
+
 # command to run tests
-script: nosetests
+script:
+  - find . -name \*.py -exec pep8 --ignore=E402,E501 {} +
+  - nosetests
+  - ansible-playbook --syntax-check -i localhost provision_profiles/all.yml

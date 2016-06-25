@@ -1,0 +1,17 @@
+- name: Verify DNS record
+  hosts: all
+- roles
+    - dns
+    - docker.ubuntu
+    - docker_registry
+    - drupal
+    - mongodb
+    - mysql
+    - nodebb
+    - owncloud
+    - postgres
+    - redis
+    - redmine
+    - unattended-upgrades
+    - weave
+    - wordpress
