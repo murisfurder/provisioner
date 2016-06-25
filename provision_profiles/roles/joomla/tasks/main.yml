@@ -1,0 +1,29 @@
+---
+- name: MySQL
+  docker:
+    name: mysql
+    image: mariadb
+    state: started
+    restart_policy: always
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      MYSQL_USER: joomla
+      MYSQL_PASSWORD: "{{ mysql_joomla_password }}"
+      MYSQL_DATABASE: joomla
+    volumes:
+    - "/var/lib/mysql:/var/lib/mysql"
+
+- name: Joomla
+  docker:
+    name: joomla
+    image: joomla
+    state: started
+    restart_policy: always
+    links:
+    - "mysql:mysql"
+    env:
+      JOOMLA_DB_USER: joomla
+      JOOMLA_DB_PASSWORD: "{{ mysql_joomla_password }}"
+      JOOMLA_DB_NAME: joomla
+    ports:
+    - "80:80"

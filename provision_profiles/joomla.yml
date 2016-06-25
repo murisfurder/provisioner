@@ -1,0 +1,12 @@
+- name: Provisions Joomla (running inside Docker)
+  hosts: all
+  sudo: yes
+
+  vars:
+    - mysql_joomla_password:
+    - mysql_root_password:
+
+  roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - joomla
