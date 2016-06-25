@@ -151,5 +151,3 @@ def test_create_job_with_nodebb_without_secret():
         r.json['message'],
         'A secret is always required when using role nodebb.'
     )
-
-
