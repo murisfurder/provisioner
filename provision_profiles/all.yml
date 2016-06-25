@@ -1,6 +1,6 @@
 - name: Verify DNS record
   hosts: all
-- roles
+  roles:
     - dns
     - docker.ubuntu
     - docker_registry
