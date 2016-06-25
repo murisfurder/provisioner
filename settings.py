@@ -12,6 +12,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'docker_registry',
     'drupal',
     'joomla',
+    'letsencrypt',
     'mongodb',
     'mysql',
     'owncloud',
@@ -31,6 +32,7 @@ PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS
 
 HIDDEN_PLAYBOOKS = [
     'dns',
+    'letsencrypt',
 ]
 
 MODULES = [

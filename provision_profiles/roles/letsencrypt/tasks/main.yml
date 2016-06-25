@@ -1,0 +1,25 @@
+---
+- name: Get certbot-auto
+  get_url:
+    url: https://dl.eff.org/certbot-auto
+    dest: /usr/local/sbin/certbot-auto
+    mode: 0755
+
+- name: Create www-root
+  file:
+    path: /var/www
+    state: directory
+
+- name: Try to get certificate
+  command: "/usr/local/sbin/certbot-auto certonly -n --agree-tos --email {{ email }} --webroot -w /var/www -d {{ ansible_fqdn }}"
+
+# Need to also restart web server with hook
+- name: Automatically renew cert
+  cron:
+    name: Lets Encrypt renewal
+    hour: 1
+    minute: 00
+    weekday: 0
+    user: root
+    job: /usr/local/sbin/certbot-auto renew --quiet --no-self-upgrade
+

@@ -1,0 +1,7 @@
+- name: Install Let's Encrypt
+  hosts: all
+  sudo: yes
+  vars:
+    email:
+  roles:
+    - letsencrypt
