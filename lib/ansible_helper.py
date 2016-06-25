@@ -94,6 +94,7 @@ def provision(
     playbook_uri = 'provision_profiles/{}.yml'.format(role)
 
     if role in [
+        'joomla',
         'mysql',
         'owncloud',
         'redmine',
@@ -105,8 +106,13 @@ def provision(
             extra_vars['mysql_owncloud_password'] = generate_password()
         if role == 'redmine':
             extra_vars['mysql_redmine_password'] = generate_password()
+        if role == 'joomla':
+            extra_vars['mysql_joomla_password'] = generate_password()
 
-    if role in ['postgres', 'drupal']:
+    if role in [
+        'postgres',
+        'drupal',
+    ]:
         extra_vars['postgres_postgres_password'] = generate_password()
         if role == 'drupal':
             extra_vars['postgres_drupal_password'] = generate_password()
