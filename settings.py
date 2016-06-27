@@ -14,6 +14,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'joomla',
     'mongodb',
     'mysql',
+    'nginx',
     'owncloud',
     'postgres',
     'redis',
@@ -31,6 +32,8 @@ PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS
 
 HIDDEN_PLAYBOOKS = [
     'dns',
+    'letsencrypt,'
+    'nginx',
 ]
 
 MODULES = [
