@@ -6,7 +6,8 @@
   with_items:
   - /etc/nginx/conf.d
   - /var/www
-  - /etc/ssl/certs
+  - /etc/ssl/private
+  - /etc/letsencrypt
 
 - name: Create config files
   template:
@@ -22,10 +23,19 @@
     force: no
 
 - name: Generate DH file
-  command: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048 creates=/etc/ssl/certs/dhparam.pem
+  command: openssl dhparam -out /etc/ssl/private/dhparam.pem 2048 creates=/etc/ssl/private/dhparam.pem
 
 - name: Generate self-signed certificate as a placeholder
-  command: openssl req -new -nodes -x509 -subj "/C=US/ST=London/L=London/O=IT/CN=${ansible_fqdn}" -days 3650 -keyout "/etc/ssl/certs/{{ ansible_fqdn }}.key" -out "/etc/ssl/certs/{{ ansible_fqdn }}.crt" -extensions v3_ca creates="/etc/ssl/certs/{{ ansible_fqdn }}.crt"
+  command: openssl req -new -nodes -x509 -subj "/C=GB/ST=London/L=London/O=IT/CN={{ ansible_fqdn }}" -days 3650 -keyout "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.key" -out "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.crt" -extensions v3_ca creates="/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.crt"
+
+- name: Creates symlinks to certificates
+  file:
+    src: "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.{{ item }}"
+    dest: "/etc/ssl/private/{{ ansible_fqdn }}.{{ item }}"
+    state: link
+  with_items:
+  - crt
+  - key
 
 - name: Nginx
   docker:
@@ -39,5 +49,6 @@
     - "443:443"
     volumes:
     - "/etc/nginx/conf.d:/etc/nginx/conf.d:ro"
-    - "/etc/ssl/certs:/etc/ssl/certs:ro"
+    - "/etc/ssl/private:/etc/ssl/private:ro"
     - "/var/www:/var/www:ro"
+    - "/etc/letsencrypt:/etc/letsencrypt:ro"
