@@ -6,7 +6,7 @@
   with_items:
   - /etc/nginx/conf.d
   - /var/www
-  - "/etc/letsencrypt/live/{{ ansible_fqdn }}"
+  - /etc/ssl/certs
 
 - name: Create config files
   template:
@@ -25,7 +25,7 @@
   command: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048 creates=/etc/ssl/certs/dhparam.pem
 
 - name: Generate self-signed certificate as a placeholder
-  command: openssl req -new -nodes -x509 -subj "/C=US/ST=London/L=London/O=IT/CN=${ansible_fqdn}" -days 3650 -keyout "/etc/letsencrypt/live/{{ ansible_fqdn }}/privkey.pem" -out "/etc/letsencrypt/live/{{ ansible_fqdn }}/fullchain.pem" -extensions v3_ca creates="/etc/letsencrypt/live/{{ ansible_fqdn }}/fullchain.pem"
+  command: openssl req -new -nodes -x509 -subj "/C=US/ST=London/L=London/O=IT/CN=${ansible_fqdn}" -days 3650 -keyout "/etc/ssl/certs/{{ ansible_fqdn }}.key" -out "/etc/ssl/certs/{{ ansible_fqdn }}.crt" -extensions v3_ca creates="/etc/ssl/certs/{{ ansible_fqdn }}.crt"
 
 - name: Nginx
   docker:
@@ -39,6 +39,5 @@
     - "443:443"
     volumes:
     - "/etc/nginx/conf.d:/etc/nginx/conf.d:ro"
-    - "/etc/letsencrypt/live/{{ ansible_fqdn }}:/etc/letsencrypt/live/{{ ansible_fqdn }}:ro"
-    - "/etc/ssl/certs/dhparam.pem:/etc/ssl/certs/dhparam.pem:ro"
+    - "/etc/ssl/certs:/etc/ssl/certs:ro"
     - "/var/www:/var/www:ro"
