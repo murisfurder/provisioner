@@ -32,6 +32,8 @@ PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS
 
 HIDDEN_PLAYBOOKS = [
     'dns',
+    'letsencrypt,'
+    'nginx',
 ]
 
 MODULES = [
