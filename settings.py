@@ -12,6 +12,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'docker_registry',
     'drupal',
     'joomla',
+    'letsencrypt',
     'mongodb',
     'mysql',
     'nginx',
