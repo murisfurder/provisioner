@@ -14,6 +14,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'joomla',
     'mongodb',
     'mysql',
+    'nginx',
     'owncloud',
     'postgres',
     'redis',
