@@ -15,17 +15,18 @@
 
 - name: Symlink certificate
   file:
-    src: /etc/ssl/certs/{{ ansible_fqdn }}.crt
-    dest: /etc/letsencrypt/live/{{ ansible_fqdn }}/fullchain.pem
-    state: hard
-    force: yes
+    src: /etc/letsencrypt/live/{{ ansible_fqdn }}/fullchain.pem
+    dest: /etc/ssl/private/{{ ansible_fqdn }}.crt
+    state: link
 
 - name: Symlink certificate key
   file:
-    src: /etc/ssl/certs/{{ ansible_fqdn }}.key
-    dest: /etc/letsencrypt/live/{{ ansible_fqdn }}/privkey.pem
-    state: hard
-    force: yes
+    src: /etc/letsencrypt/live/{{ ansible_fqdn }}/privkey.pem
+    dest: /etc/ssl/private/{{ ansible_fqdn }}.key
+    state: link
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx
 
 # Need to also restart web server with hook
 - name: Automatically renew cert
