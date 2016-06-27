@@ -15,6 +15,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'letsencrypt',
     'mongodb',
     'mysql',
+    'nginx',
     'owncloud',
     'postgres',
     'redis',
@@ -32,7 +33,8 @@ PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS
 
 HIDDEN_PLAYBOOKS = [
     'dns',
-    'letsencrypt',
+    'letsencrypt,'
+    'nginx',
 ]
 
 MODULES = [
