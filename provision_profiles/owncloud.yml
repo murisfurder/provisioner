@@ -5,8 +5,9 @@
   vars:
     - mysql_root_password:
     - mysql_owncloud_password:
-
+    - mysql_owncloud_user:
   roles:
     - unattended-upgrades
     - docker.ubuntu
+    - mysql
     - owncloud

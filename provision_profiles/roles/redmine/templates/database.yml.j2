@@ -1,8 +1,8 @@
 production:
   adapter: mysql2
-  database: redmine
+  database: {{ mysql_redmine_user }}
   host: mysql
   port: 3306
-  username: redmine
+  username: {{ mysql_redmine_user }}
   password: {{ mysql_redmine_password }}
   encoding: utf8

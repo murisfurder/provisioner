@@ -4,9 +4,10 @@
 
   vars:
     - mysql_joomla_password:
+    - mysql_joomla_user:
     - mysql_root_password:
-
   roles:
     - unattended-upgrades
     - docker.ubuntu
+    - mysql
     - joomla

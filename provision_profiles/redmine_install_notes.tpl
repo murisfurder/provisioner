@@ -4,11 +4,10 @@ Congratulations! You've just installed a Redmine server.
 
 # Redmine Installation Notes
 
- * Point your browser to http://{{ public_ip }
+* Point your browser to [http://{{ public_ip  }}](http://{{ public_ip })
  * Press the 'login' link in the upper right-hand corner and login with the credentials 'admin'/'admin'
  * Click 'My Account' in the upper right-hand corner and select 'Change password'
  * Assign a new password to the administrator account
-
 
 # Technical Details
 
@@ -28,9 +27,6 @@ $ docker run -it --link mysql:mysql --rm mariadb sh -c 'exec mysql -hmysql -uroo
 
 ## MySQL
 
-User: root
-Password: `{{ mysql_root_password  }}`
-
-User: redmine
-Database: redmine
+User: {{ mysql_redmine_user }}
+Database: {{ mysql_redmine_user }}
 Password: `{{ mysql_redmine_password }}`

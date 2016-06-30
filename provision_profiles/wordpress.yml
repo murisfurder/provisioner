@@ -5,7 +5,7 @@
   vars:
     - mysql_root_password:
     - mysql_wordpress_password:
-    - wordpress_user: wordpress
+    - mysql_wordpress_user: wordpress
   roles:
     - unattended-upgrades
     - docker.ubuntu

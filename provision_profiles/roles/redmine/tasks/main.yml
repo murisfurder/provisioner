@@ -1,18 +1,6 @@
 ---
-- name: MySQL
-  docker:
-    name: mysql
-    image: mariadb
-    state: started
-    restart_policy: on-failure
-    restart_policy_retry: 10
-    env:
-      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
-      MYSQL_USER: redmine
-      MYSQL_PASSWORD: "{{ mysql_redmine_password }}"
-      MYSQL_DATABASE: redmine
-    volumes:
-    - "/var/lib/mysql:/var/lib/mysql"
+- name: Create database user
+  command: /usr/local/sbin/mysql_create_db.sh {{ mysql_redmine_user }} {{ mysql_redmine_password }}
 
 - name: Create required folders
   file:
@@ -41,8 +29,8 @@
     restart_policy: on-failure
     restart_policy_retry: 10
     env:
-      MYSQL_DATABASE: redmine
-      MYSQL_USER_USER: redmine
+      MYSQL_DATABASE: "{{ mysql_redmine_user }}"
+      MYSQL_USER_USER: "{{ mysql_redmine_user }}"
       MYSWL_PASS: "{{ mysql_redmine_password }}"
     links:
     - "mysql:mysql"

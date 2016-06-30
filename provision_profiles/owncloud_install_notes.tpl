@@ -4,13 +4,13 @@ Congratulations! You've just installed an Owncloud server.
 
 # Owncloud Installation Notes
 
- * Point your browser to http://{{ public_ip }}
+ * Point your browser to [http://{{ public_ip  }}](http://{{ public_ip }})
  * Enter a username and password to create your administrator account
  * Click 'Storage & Database'
   * Select 'MySQL/MariaDB'
-  * Enter 'owncloud' as Database user
+  * Enter '{{ mysql_owncloud_user }}' as Database user
   * Enter '{{ mysql_owncloud_password  }}' as the password
-  * Enter 'owncloud' as the Database name
+  * Enter '{{ mysql_owncloud_user }}' as the Database name
   * Enter 'mysql' as the Database host
  * Click  Finish Setup
 
@@ -31,8 +31,6 @@ $ docker run -it --link mysql:mysql --rm mariadb sh -c 'exec mysql -hmysql -uroo
 
 ## MySQL
 
-User: root
-Password: {{ mysql_root_password  }}
-
-User: owncloud
+Database: {{ mysql_owncloud_user }}
+User: {{ mysql_owncloud_user }}
 Password: {{ mysql_owncloud_password }}
