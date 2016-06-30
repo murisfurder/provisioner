@@ -11,3 +11,9 @@
     - "/var/lib/mysql:/var/lib/mysql"
     ports:
     - "127.0.0.1:3306:3306"
+
+- name: Copies in createdb script
+  copy:
+    src: mysql_create_db.sh
+    dest: /usr/local/sbin/mysql_create_db.sh
+    mode: 0755

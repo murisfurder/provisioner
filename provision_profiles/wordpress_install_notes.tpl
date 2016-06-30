@@ -4,9 +4,8 @@ Congratulations! You've just installed a WordPress server.
 
 # WordPress Installation Notes
 
- * Point your browser to http://{{ public_ip }}
+ * Point your browser to [http://{{ public_ip  }}](http://{{ public_ip }})
  * Follow the instructions to configure your WordPress site and create your administration account
-
 
 # Technical Details
 
@@ -25,5 +24,6 @@ $ docker run -it --link mysql:mysql --rm mariadb sh -c 'exec mysql -hmysql -uroo
 
 ## MySQL
 
-User: root
-Password: `{{ mysql_root_password  }}`
+User: wordpress
+Database: wordpress
+Password: `{{ mysql_wordpress_password  }}`

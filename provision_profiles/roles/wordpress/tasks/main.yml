@@ -1,4 +1,7 @@
 ---
+- name: Create database user
+  command: /usr/local/sbin/mysql_create_db.sh {{ mysql_wordpress_user }} {{ mysql_wordpress_password }}
+
 - name: WordPress
   docker:
     name: wordpress
@@ -6,7 +9,9 @@
     state: started
     restart_policy: always
     env:
-      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      WORDPRESS_DB_USER: "{{ mysql_wordpress_user }}"
+      WORDPRESS_DB_PASSWORD: "{{ mysql_wordpress_password }}"
+      WORDPRESS_DB_NAME: "{{ mysql_wordpress_user }}"
     links:
       - "mysql:mysql"
     ports:

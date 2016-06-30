@@ -1,17 +1,6 @@
 ---
-- name: MySQL
-  docker:
-    name: mysql
-    image: mariadb
-    state: started
-    restart_policy: always
-    env:
-      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
-      MYSQL_USER: joomla
-      MYSQL_PASSWORD: "{{ mysql_joomla_password }}"
-      MYSQL_DATABASE: joomla
-    volumes:
-    - "/var/lib/mysql:/var/lib/mysql"
+- name: Create database user
+  command: /usr/local/sbin/mysql_create_db.sh {{ mysql_joomla_user }} {{ mysql_joomla_password }}
 
 - name: Joomla
   docker:
@@ -22,8 +11,8 @@
     links:
     - "mysql:mysql"
     env:
-      JOOMLA_DB_USER: joomla
+      JOOMLA_DB_USER: "{{ mysql_joomla_user }}"
       JOOMLA_DB_PASSWORD: "{{ mysql_joomla_password }}"
-      JOOMLA_DB_NAME: joomla
+      JOOMLA_DB_NAME: "{{ mysql_joomla_user }}"
     ports:
     - "80:80"

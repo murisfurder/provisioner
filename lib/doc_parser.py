@@ -1,3 +1,4 @@
+import logging
 import os
 from bottle import template
 
@@ -17,5 +18,6 @@ def get_docs(role=None, extra_vars=None):
     try:
         install_notes = template(docs_uri, **extra_vars)
         return install_notes
-    except:
+    except Exception as e:
+        logging.exception("Failed to process install notes")
         return 'Failed to process installation notes.'

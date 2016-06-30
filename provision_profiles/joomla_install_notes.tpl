@@ -8,9 +8,9 @@ Congratulations! You've just installed a Joomla! server.
  * Fill out the required information to create your administrator account
  * Use the following information in the next step to configure the database:
   * Host Name: `mysql`
-  * Username: `joomla`
+  * Username: `{{ mysql_joomla_user }}`
   * Password: `{{ mysql_joomla_password }}`
-  * Database Name: `joomla`
+  * Database Name: `{{ mysql_joomla_user }}`
  * Follow the installation wizard
  * Make sure you click 'Remove Installation Folder' in the last step
 
@@ -34,9 +34,6 @@ $ docker run -it --link mysql:mysql --rm mariadb sh -c 'exec mysql -hmysql -uroo
 
 ## MySQL
 
-User: root
-Password: `{{ mysql_root_password }}`
-
-User: joomla
+User: {{ mysql_joomla_user }}
 Password: `{{ mysql_joomla_password }}`
-Database: joomla
+Database: {{ mysql_joomla_user }}

@@ -3,8 +3,9 @@
   sudo: yes
 
   vars:
-    - mysql_root_password: Riwerlecmainyir
-
+    - mysql_root_password:
+    - mysql_wordpress_password:
+    - mysql_wordpress_user: wordpress
   roles:
     - unattended-upgrades
     - docker.ubuntu

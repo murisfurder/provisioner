@@ -1,17 +1,6 @@
 ---
-- name: MySQL
-  docker:
-    name: mysql
-    image: mariadb
-    state: started
-    restart_policy: always
-    env:
-      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
-      MYSQL_USER: owncloud
-      MYSQL_PASSWORD: "{{ mysql_owncloud_password }}"
-      MYSQL_DATABASE: owncloud
-    volumes:
-    - "/var/lib/mysql:/var/lib/mysql"
+- name: Create database user
+  command: /usr/local/sbin/mysql_create_db.sh {{ mysql_owncloud_user }} {{ mysql_owncloud_password }}
 
 - name: Owncloud
   docker:
