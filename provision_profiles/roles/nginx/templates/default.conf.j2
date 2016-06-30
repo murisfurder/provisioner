@@ -1,8 +1,13 @@
 # vim: tabstop=2 shiftwidth=2 softtabstop=2
 
+include conf.d/*.upstream;
+
 server {
   listen 80;
   server_name {{ ansible_fqdn }};
+
+  # Include all upstream redirect files
+  include conf.d/*.inc;
 
   location / {
     root   /var/www;
@@ -41,6 +46,9 @@ server {
   add_header X-Content-Type-Options nosniff;
 
   ssl_dhparam /etc/ssl/private/dhparam.pem;
+
+  # Include all upstream redirect files
+  include conf.d/*.inc;
 
   location / {
     root   /var/www;

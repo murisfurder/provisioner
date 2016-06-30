@@ -1,0 +1,15 @@
+---
+- name: Copies in dummy interface file
+  copy:
+    src: init_dummy_interface.sh
+    dest: /usr/local/sbin/init_dummy_interface.sh
+    mode: 0755
+
+- name: Ensure module dummy module is loaded on boot
+  lineinfile:
+    dest: /etc/rc.local
+    insertbefore: 'exit 0'
+    line: "/usr/local/sbin/init_dummy_interface.sh"
+
+- name: Create dummy interface
+  command: /usr/local/sbin/init_dummy_interface.sh

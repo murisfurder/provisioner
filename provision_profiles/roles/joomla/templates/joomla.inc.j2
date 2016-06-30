@@ -1,0 +1,5 @@
+# vim: tabstop=2 shiftwidth=2 softtabstop=2
+
+location /{{ role }} {
+  proxy_pass http://{{ role }}/;
+}

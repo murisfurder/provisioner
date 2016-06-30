@@ -40,8 +40,9 @@ def create_job():
     if role not in (settings.MODULES + settings.PLAYBOOKS):
         return raise_error(400, 'Invalid role.')
 
-    # Add public ip as an extra var for easier read back.
+    # Add public ip and role as extra var for easier read back.
     extra_vars['public_ip'] = ip
+    extra_vars['role'] = role
 
     if role in ['weave', 'nodebb', 'ssh']:
         if len(extra_vars) < 2:

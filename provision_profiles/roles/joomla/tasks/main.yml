@@ -15,4 +15,16 @@
       JOOMLA_DB_PASSWORD: "{{ mysql_joomla_password }}"
       JOOMLA_DB_NAME: "{{ mysql_joomla_user }}"
     ports:
-    - "80:80"
+    - "192.168.10.1:{{ http_port }}:80"
+
+- name: Copies in Nginx config
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ item }}"
+    mode: 0644
+  with_items:
+  - joomla.inc
+  - joomla.upstream
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx
