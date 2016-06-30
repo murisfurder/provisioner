@@ -25,5 +25,6 @@ $ docker run -it --link mysql:mysql --rm mariadb sh -c 'exec mysql -hmysql -uroo
 
 ## MySQL
 
-User: root
-Password: `{{ mysql_root_password  }}`
+User: wordpress
+Database: wordpress
+Password: `{{ mysql_wordpress_password  }}`

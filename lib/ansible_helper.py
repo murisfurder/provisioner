@@ -102,20 +102,17 @@ def provision(
     ]:
         extra_vars['mysql_root_password'] = generate_password()
 
-        if role == 'owncloud':
-            extra_vars['mysql_owncloud_password'] = generate_password()
-        if role == 'redmine':
-            extra_vars['mysql_redmine_password'] = generate_password()
-        if role == 'joomla':
-            extra_vars['mysql_joomla_password'] = generate_password()
+        if not role == 'mysql':
+            extra_vars['mysql_{}_password'.format(role)] = generate_password()
 
     if role in [
         'postgres',
         'drupal',
     ]:
         extra_vars['postgres_postgres_password'] = generate_password()
-        if role == 'drupal':
-            extra_vars['postgres_drupal_password'] = generate_password()
+
+        if not role == 'postgres':
+            extra_vars['postgres_{}_password'.format(role)] = generate_password()
 
     if remote_user and remote_pass and inventory:
         return run_playbook(
