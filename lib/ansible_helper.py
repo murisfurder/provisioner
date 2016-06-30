@@ -103,6 +103,7 @@ def provision(
         extra_vars['mysql_root_password'] = generate_password()
 
         if not role == 'mysql':
+            extra_vars['mysql_{}_user'.format(role)] = role
             extra_vars['mysql_{}_password'.format(role)] = generate_password()
 
     if role in [
@@ -112,6 +113,7 @@ def provision(
         extra_vars['postgres_postgres_password'] = generate_password()
 
         if not role == 'postgres':
+            extra_vars['postgres_{}_user'.format(role)] = role
             extra_vars['postgres_{}_password'.format(role)] = generate_password()
 
     if remote_user and remote_pass and inventory:
