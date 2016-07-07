@@ -3,25 +3,7 @@
 include conf.d/*.upstream;
 
 server {
-  listen 80;
-  server_name {{ ansible_fqdn }};
-
-  # Include all upstream redirect files
-  include conf.d/*.inc;
-
-  location / {
-    root   /var/www;
-    index  index.html index.htm;
-  }
-
-  location ~ /.well-known {
-    root /var/www;
-    try_files $uri $uri/ =404;
-    allow all;
-  }
-}
-
-server {
+  listen 80 default_server;
   listen 443 ssl;
   server_name {{ ansible_fqdn }};
 
@@ -49,11 +31,6 @@ server {
 
   # Include all upstream redirect files
   include conf.d/*.inc;
-
-  location / {
-    root   /var/www;
-    index  index.html index.htm;
-  }
 
   location ~ /.well-known {
     root /var/www;

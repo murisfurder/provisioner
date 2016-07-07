@@ -7,6 +7,7 @@
     name: joomla
     image: joomla
     state: started
+    hostname: "{{ ansible_fqdn }}"
     restart_policy: always
     links:
     - "mysql:mysql"
@@ -19,12 +20,12 @@
 
 - name: Copies in Nginx config
   template:
-    src: "{{ item }}.j2"
-    dest: "/etc/nginx/conf.d/{{ item }}"
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
     mode: 0644
   with_items:
-  - joomla.inc
-  - joomla.upstream
+  - app.inc
+  - app.upstream
 
 - name: Reload Nginx
   command: docker exec nginx pkill -HUP -f nginx

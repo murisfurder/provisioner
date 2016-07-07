@@ -6,6 +6,7 @@
   docker:
     name: wordpress
     image: wordpress
+    hostname: "{{ ansible_fqdn }}"
     state: started
     restart_policy: always
     env:
@@ -15,11 +16,19 @@
     links:
       - "mysql:mysql"
     ports:
-    - "80:80"
+    - "192.168.10.1:{{ http_port }}:80"
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.inc
+  - app.upstream
 
 - name: Install zip package
   command: docker exec wordpress {{ item }}
   with_items:
     - apt-get update
-    - apt-get install -y zip
-    - apt-get clean
+    - apt-get install -y zip less
