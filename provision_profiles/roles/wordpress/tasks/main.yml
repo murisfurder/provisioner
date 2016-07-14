@@ -6,7 +6,7 @@
   docker:
     name: wordpress
     image: wordpress
-    hostname: "{{ ansible_fqdn }}"
+    hostname: "{{ role  }}.{{ ansible_fqdn }}"
     state: started
     restart_policy: always
     env:
@@ -24,11 +24,12 @@
     dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
     mode: 0644
   with_items:
-  - app.inc
+  - app.conf
   - app.upstream
 
 - name: Install zip package
   command: docker exec wordpress {{ item }}
+  ignore_errors: yes
   with_items:
     - apt-get update
     - apt-get install -y zip less

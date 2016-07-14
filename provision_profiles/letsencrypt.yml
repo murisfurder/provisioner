@@ -4,4 +4,7 @@
   vars:
     email:
   roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - nginx
     - letsencrypt

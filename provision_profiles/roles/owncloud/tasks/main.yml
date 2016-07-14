@@ -13,4 +13,16 @@
     links:
     - "mysql:mysql"
     ports:
-    - "80:80"
+    - "192.168.10.1:{{ http_port }}:80"
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx

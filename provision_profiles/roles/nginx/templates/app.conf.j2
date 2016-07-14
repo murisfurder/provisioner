@@ -1,0 +1,31 @@
+# vim: tabstop=2 shiftwidth=2 softtabstop=2
+
+server {
+  listen 80;
+  server_name {{ role }}.{{ ansible_fqdn }};
+  server_tokens off;
+  return 301 https://{{ role }}.{{ ansible_fqdn }}$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  server_name {{ role }}.{{ ansible_fqdn }};
+  server_tokens off;
+
+  include conf.d/ssl.inc;
+
+  location / {
+    proxy_set_header Host {{ role  }}.{{ ansible_fqdn }};
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    proxy_pass http://{{ role }}/;
+  }
+
+  location ~ /.well-known {
+    root /var/www;
+    try_files $uri $uri/ =404;
+    allow all;
+  }
+}

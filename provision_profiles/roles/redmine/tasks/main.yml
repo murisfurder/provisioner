@@ -26,6 +26,7 @@
     name: redmine
     image: redmine
     state: started
+    hostname: "{{ role }}.{{ ansible_fqdn }}"
     restart_policy: on-failure
     restart_policy_retry: 10
     env:
@@ -34,9 +35,21 @@
       MYSWL_PASS: "{{ mysql_redmine_password }}"
     links:
     - "mysql:mysql"
-    ports:
-    - "80:3000"
     volumes:
     - "/usr/local/redmine-store/files:/usr/src/redmine/files"
     - "/usr/local/redmine-store/plugins:/usr/src/redmine/plugins"
     - "/usr/local/redmine-store/themes:/usr/src/redmine/themes"
+    ports:
+    - "192.168.10.1:{{ http_port }}:3000"
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx

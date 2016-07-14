@@ -6,8 +6,10 @@
     - mysql_root_password:
     - mysql_owncloud_password:
     - mysql_owncloud_user:
+    - http_port: 8002
   roles:
     - unattended-upgrades
     - docker.ubuntu
+    - docker_network
     - mysql
     - owncloud

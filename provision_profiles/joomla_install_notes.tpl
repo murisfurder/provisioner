@@ -4,13 +4,9 @@ Congratulations! You've just installed a Joomla! server.
 
 # Joomla! Installation Notes
 
-Your Joomla! installation is now accessible at [http://{{ public_ip }}/joomla](http://{{ public_ip }}/joomla).
-
-To make Joomla! your default web application for your server, login to your server and run `provcfg set-default joomla`. This will make Joomla! accessible at [http://{{ public_ip }}](http://{{ public_ip }}).
-
 To complete your Joomla installation, please follow the steps below.
 
- * Point your browser to [http://{{ public_ip }}](http://{{ public_ip }})
+ * Point your browser to [https://{{ role }}.yourdomain.com](https://{{ role }}.yourdomain.com)
  * Fill out the required information to create your administrator account
  * Use the following information in the next step to configure the database:
   * Host Name: `mysql`

@@ -4,7 +4,7 @@ Congratulations! You've just installed a Redmine server.
 
 # Redmine Installation Notes
 
-* Point your browser to [http://{{ public_ip  }}](http://{{ public_ip })
+ * Point your browser to [https://{{ role }}.yourdomain.com](https://{{ role }}.yourdomain.com)
  * Press the 'login' link in the upper right-hand corner and login with the credentials 'admin'/'admin'
  * Click 'My Account' in the upper right-hand corner and select 'Change password'
  * Assign a new password to the administrator account

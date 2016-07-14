@@ -10,6 +10,7 @@
   roles:
     - unattended-upgrades
     - docker.ubuntu
+    - docker_network
     - nginx
     - mysql
     - wordpress

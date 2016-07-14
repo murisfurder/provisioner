@@ -11,7 +11,7 @@
     state: directory
 
 - name: Try to get certificate
-  command: "/usr/local/sbin/certbot-auto certonly -n --agree-tos --email {{ email }} --webroot -w /var/www -d {{ ansible_fqdn }}"
+  command: "/usr/local/sbin/certbot-auto certonly -n --agree-tos --email {{ email }} --webroot -w /var/www -d {{ ansible_fqdn }} -d wordpress.{{ ansible_fqdn }} -d drupal.{{ ansible_fqdn }} -d joomla.{{ ansible_fqdn }} -d owncloud.{{ ansible_fqdn }} -d redmine.{{ ansible_fqdn }} -d nodebb.{{ ansible_fqdn }} "
 
 - name: Symlink certificate
   file:

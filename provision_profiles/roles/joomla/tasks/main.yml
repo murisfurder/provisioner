@@ -7,7 +7,7 @@
     name: joomla
     image: joomla
     state: started
-    hostname: "{{ ansible_fqdn }}"
+    hostname: "{{ role }}.{{ ansible_fqdn }}"
     restart_policy: always
     links:
     - "mysql:mysql"
@@ -24,7 +24,7 @@
     dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
     mode: 0644
   with_items:
-  - app.inc
+  - app.conf
   - app.upstream
 
 - name: Reload Nginx

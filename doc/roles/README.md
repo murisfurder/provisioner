@@ -16,5 +16,13 @@ For all roles, the 'role', 'ip', 'username' and 'password' keys are required.
  * [Redmine](redmine.md)
  * [SSH](ssh.md)
  * [Weave](weave.md)
- * [Wordpress](wordpress.md)
+ * [WordPress](wordpress.md)
  * [Joomla!](joomla.md)
+
+
+##  Port mappings
+
+ * 8000: Joomla!
+ * 8001: WordPress
+ * 8002: Owncloud
+ * 8003: Redmine
