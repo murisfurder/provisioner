@@ -1,0 +1,344 @@
+FORMAT: 1A
+HOST: http://prov.yourexample.com/
+
+# Provisioner
+
+Provisioner is a RESTful API for Ansible (or a more primitive version of [Ansible Tower](https://www.ansible.com/tower)).
+
+The tool was developed for Cloud.net to bootstrap remote servers over SSH.
+
+# List and Create Jobs [/job]
+
+## List All Jobs [GET]
+
+List the UUID of all jobs that have been created.
+
++ Response 200 (application/json)
+
+        [
+          '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+          '20b184a6-a74c-421f-92b6-c45e775c6d7e',
+          '85205b83-01d4-487d-9f04-7a0fceff0272',
+          'f8c820f1-69e5-4621-afa7-d81126b0c65a',
+          '3f8d1b7a-8ec1-45b3-88e2-1edccaeea471',
+          'e50bf529-c736-4217-9cfb-f7cad531ae44',
+          '5394be81-d999-4688-96f8-8df4a728fd8f',
+          '64f99dfd-4353-4db1-8872-26594866469b',
+          'fd83a4e6-4860-40df-9d12-f6dec254aa2f',
+          '2504a29f-bb58-4e1d-800b-b45d53002a2f',
+        ]
+
+## Create a Job [POST]
+
+Create a new job with the description outlined below. All successful jobs will return the Job ID.
+
++ Attributes
+    + ip (string, required) - The IP address or hostname of the target server
+    + username (string, required) - The username of the target server
+    + password (string, required) - The password  for the target server
+    + role (string, required) - The role to deploy
+    + extra_vars (object, optional) - Extra variables to be passed to the role
+        + is_rs (boolean) - [mongodb] Set to True to initiate replica set configuration of MongoDB.
+        + is_rs_master (boolean) - [mongodb] Set to True to initiate the server as a the master (primary) node.
+        + is_rs_slave (boolean) - [mongodb] Set to True for all slaves (secondaries).
+        + rs_init (boolean) - [mongodb] Set to True to initialize the cluster (must be after the cluster has been fully initiated).
+        + secret (string) - [nodebb] Shared secret for cookies
+        + rs_servers (string) - [nodebb] Comma separated list of MongoDB servers
+        + init_db (boolean) - [nodebb] If set to True, a sample database will be created. The credentials are admin/password. You should **not** use this for anything other than testing.
+        + ssh_user (boolean) - [ssh] The user on the remote system where the key(s) are to be installed.
+        + ssh_keys (array) - [ssh] A list of one or many SSH keys.
+        + is_master (boolean) - [weave] Set to True to initiate the server as the master node.
+        + is_slave (boolean) - [weave]  Set to True to initiate the server as a slave nodes.
+        + passphrase (string) - [weave] Must be the same on master and slave nodes.
+        + master_ip (string) - [weave] Required if is slave. Specify the public IP of the master node.
+
+
++ Request Provision Docker (application/json)
+
+        {
+          'ip': '10.10.10.10',
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'docker',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision Docker Registry (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'docker_registry',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision Drupal (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'drupal',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision Joomla! (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'drupal',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
+
++ Request Provision stand-alone MongoDB (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'mongodb',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
+
++ Request Provision MongoDB ReplicaSet (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'mongodb',
+          'extra_vars': {
+            'is_rs': True,
+            'is_master': True,
+          }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision stand-alone MariaDB / MySQL (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'mysql',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision NodeBB cluster (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'nodebb',
+          'extra_vars': {
+              'secret': 'SomeSecret',
+              'rs_servers': 'mongo0,mongo1,mongo2',
+          }
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision Owncloud  (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'owncloud',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision PostgreSQL  (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'postgresql',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision Redis (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'redis',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision Redmine (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'redmine',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision SSH Keys (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'ssh',
+          'extra_vars': {
+             'ssh_user': 'jdoe',
+             'ssh_keys': ['ssh-rsa AAAAB3NzaC1...'],
+          }
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision Weave (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'weave',
+          'extra_vars': {
+             'is_master': True,
+             'passphrase': 'SomeSecret',
+          }
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
++ Request Provision WordPress (application/json)
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'wordpress',
+        }
+
++ Response 201 (application/json)
+
+        {
+          'message': '4fb35c9e-fd41-4f12-80eb-8ace25782a2a',
+        }
+
+
+# Interact with Jobs [/job/{uuid}]
+
++ Parameters
+    + uuid (string) - The UUID from the job
+
+## Get Job Status [GET]
+
++ Attributes
+    + ip (string) - The IP address or hostname of the target server.
+    + status (string) - The status of the job. Possible values are: New, Queued, Provisioning, Aborted, Done, Error, Queued..
+    + attempts (number) - The number of attempts that have been performed.
+    + role (string) - The role that was applied.
+    + timestamp (string) - The timestamp of the last activity in Epoch time.
+    + install_notes (string) - Markdown formatted installation notes for the role.
+
++ Response 200 (application/json)
+
+        {
+          "status": "Done",
+          "ip": "192.168.33.10",
+          "attempts": 1,
+          "role": "ping",
+          "timestamp": "1449166675.0"
+          "install_notes": "Installation notes in Markdown format (if available)."
+         }
+## Abort a Job [DELETE]
+
++ Response 204
+
+# Roles [/roles]
+
+Returns a list of all possible roles.
+
+## Get all roles [GET]
+
++ Response 200 (application/json)
+
+        [
+          "docker",
+          "docker_registry",
+          "mongodb",
+          "mysql",
+          "postgres",
+          "redis",
+          "wordpress"
+        ]
