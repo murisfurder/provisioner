@@ -33,14 +33,11 @@
       MYSQL_DATABASE: "{{ mysql_redmine_user }}"
       MYSQL_USER_USER: "{{ mysql_redmine_user }}"
       MYSWL_PASS: "{{ mysql_redmine_password }}"
-    links:
-    - "mysql:mysql"
+    net: provisioner
     volumes:
     - "/usr/local/redmine-store/files:/usr/src/redmine/files"
     - "/usr/local/redmine-store/plugins:/usr/src/redmine/plugins"
     - "/usr/local/redmine-store/themes:/usr/src/redmine/themes"
-    ports:
-    - "192.168.10.1:{{ http_port }}:3000"
 
 - name: Copies in Nginx config
   template:

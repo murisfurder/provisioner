@@ -6,11 +6,12 @@
     - mysql_root_password:
     - mysql_wordpress_password:
     - mysql_wordpress_user: wordpress
-    - http_port: 8001
+    - http_port: 80
   roles:
     - unattended-upgrades
     - docker.ubuntu
     - docker_network
+    - letsencrypt
     - nginx
     - mysql
     - wordpress

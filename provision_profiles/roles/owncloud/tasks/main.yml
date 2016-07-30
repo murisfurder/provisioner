@@ -8,12 +8,9 @@
     image: owncloud:9-apache
     state: started
     restart_policy: always
+    net: provisioner
     volumes:
     - "/usr/local/owncloud:/var/www/html"
-    links:
-    - "mysql:mysql"
-    ports:
-    - "192.168.10.1:{{ http_port }}:80"
 
 - name: Copies in Nginx config
   template:

@@ -11,6 +11,7 @@
     image: registry:2
     state: started
     restart_policy: always
+    net: provisioner
     volumes:
     - "/usr/local/registry:/var/lib/registry"
     - "/etc/ssl/private/registry.key:/etc/ssl/private/registry.key"

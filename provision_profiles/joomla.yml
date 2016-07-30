@@ -6,7 +6,7 @@
     - mysql_joomla_password:
     - mysql_joomla_user:
     - mysql_root_password:
-    - http_port: 8000
+    - http_port: 80
   roles:
     - unattended-upgrades
     - docker.ubuntu

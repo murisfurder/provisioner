@@ -49,8 +49,11 @@
 - name: Creates symlinks to certificates
   file:
     src: "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.crt"
-    dest: "/etc/ssl/private/{{ ansible_fqdn }}.crt"
+    dest: "/etc/ssl/private/{{ item }}.crt"
     state: link
+  with_items:
+    - "{{ ansible_fqdn }}"
+    - "{{ ansible_eth0.ipv4.address }}.nip.io"
   when: not sslcrt.stat.exists
 
 - stat:
@@ -60,8 +63,11 @@
 - name: Creates symlinks to certificates
   file:
     src: "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.key"
-    dest: "/etc/ssl/private/{{ ansible_fqdn }}.key"
+    dest: "/etc/ssl/private/{{ item }}.key"
     state: link
+  with_items:
+    - "{{ ansible_fqdn }}"
+    - "{{ ansible_eth0.ipv4.address }}.nip.io"
   when: not sslkey.stat.exists
 
 - name: Nginx
@@ -71,6 +77,7 @@
     state: started
     restart_policy: on-failure
     restart_policy_retry: 10
+    net: provisioner
     ports:
     - "80:80"
     - "443:443"

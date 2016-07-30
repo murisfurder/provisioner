@@ -4,7 +4,7 @@
 
   vars:
     - mysql_root_password:
-    - http_port: 8003
+    - http_port: 3000
   roles:
     - unattended-upgrades
     - docker.ubuntu

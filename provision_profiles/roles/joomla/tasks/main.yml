@@ -8,15 +8,13 @@
     image: joomla
     state: started
     hostname: "{{ role }}.{{ ansible_fqdn }}"
+    net: provisioner
     restart_policy: always
-    links:
-    - "mysql:mysql"
     env:
       JOOMLA_DB_USER: "{{ mysql_joomla_user }}"
       JOOMLA_DB_PASSWORD: "{{ mysql_joomla_password }}"
       JOOMLA_DB_NAME: "{{ mysql_joomla_user }}"
-    ports:
-    - "192.168.10.1:{{ http_port }}:80"
+      JOOMLA_DB_HOST: 'mysql'
 
 - name: Copies in Nginx config
   template:

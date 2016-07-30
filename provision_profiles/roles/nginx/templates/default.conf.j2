@@ -10,9 +10,37 @@ server {
 }
 
 server {
+  listen 80;
+  server_tokens off;
+  server_name {{ ansible_eth0.ipv4.address }}.nip.io;
+  return 301 https://{{ ansible_eth0.ipv4.address }}.nip.io$request_uri;
+}
+
+server {
   listen 443 ssl;
   server_name {{ ansible_fqdn }};
   server_tokens off;
+
+  ssl_certificate /etc/ssl/private/{{ ansible_fqdn }}.crt;
+  ssl_certificate_key /etc/ssl/private/{{ ansible_fqdn }}.key;
+
+  include conf.d/ssl.inc;
+  include conf.d/default.inc;
+
+  location ~ /.well-known {
+    root /var/www;
+    try_files $uri $uri/ =404;
+    allow all;
+  }
+}
+
+server {
+  listen 443 ssl;
+  server_name {{ ansible_eth0.ipv4.address }}.nip.io;
+  server_tokens off;
+
+  ssl_certificate /etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.crt;
+  ssl_certificate_key /etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.key;
 
   include conf.d/ssl.inc;
   include conf.d/default.inc;

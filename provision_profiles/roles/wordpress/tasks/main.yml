@@ -6,17 +6,14 @@
   docker:
     name: wordpress
     image: wordpress
-    hostname: "{{ role  }}.{{ ansible_fqdn }}"
+    hostname: "{{ role }}.{{ ansible_fqdn }}"
     state: started
     restart_policy: always
+    net: provisioner
     env:
       WORDPRESS_DB_USER: "{{ mysql_wordpress_user }}"
       WORDPRESS_DB_PASSWORD: "{{ mysql_wordpress_password }}"
       WORDPRESS_DB_NAME: "{{ mysql_wordpress_user }}"
-    links:
-      - "mysql:mysql"
-    ports:
-    - "192.168.10.1:{{ http_port }}:80"
 
 - name: Copies in Nginx config
   template:
