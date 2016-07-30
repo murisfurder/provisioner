@@ -4,13 +4,10 @@ Congratulations! You've just installed your own Docker Registry.
 
 # Docker Registry Installation Notes
 
-* The persistent data is stored under `/usr/local/registry` in the host.
-* This setup will by default use unencrypted communication (without authentication). Hence it's only suited for testing.
+* Your Docker Registry is now accessible at [docker-registry..yourdomain.com](https://docker-registry.yourdomain.com). If you do not have a properly configured DNS name, you can use [docker-registry.{{ public_ip }}.nip.io](docker-registry.{{ public_ip }}.nip.io)
+
+You can read more about how to manage your own Docker Registry [here](https://docs.docker.com/registry/deploying/).
 
 ## Technical Details
 
-In order to use the registry, you will need to add the following entry to `/etc/default/docker` (may differ depending on your distribution):
-
-```
-DOCKER_OPTS="--insecure-registry a.b.c.d:5000"
-```
+* The persistent data is stored under `/usr/local/registry` in the host.

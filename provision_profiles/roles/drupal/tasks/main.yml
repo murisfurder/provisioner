@@ -5,12 +5,18 @@
     image: drupal
     state: started
     restart_policy: always
-    links:
-    - "postgres:postgres"
-    ports:
-    - "80:80"
+    net: provisioner
     volumes:
     - "{{ drupal_config_dir }}:/var/www/html/sites"
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream
 
 - command: docker exec drupal mkdir -p /var/www/html/sites/default/files /var/www/html/sites/all/themes /var/www/html/sites/all/modules /var/www/html/themes/
 
@@ -48,3 +54,6 @@
 - file:
     path: /tmp/drupal.sql
     state: absent
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx

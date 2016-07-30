@@ -15,8 +15,8 @@
   command:
     "/usr/local/sbin/certbot-auto certonly -n --expand --agree-tos --email {{ email }} --webroot -w /var/www {{ item }}"
   with_items:
-    - "-d {{ ansible_eth0.ipv4.address }}.nip.io -d wordpress.{{ ansible_eth0.ipv4.address }}.nip.io -d drupal.{{ ansible_eth0.ipv4.address }}.nip.io -d joomla.{{ ansible_eth0.ipv4.address }}.nip.io -d owncloud.{{ ansible_eth0.ipv4.address }}.nip.io -d redmine.{{ ansible_eth0.ipv4.address }}.nip.io -d nodebb.{{ ansible_eth0.ipv4.address }}.nip.io"
-    - "-d {{ ansible_fqdn }} -d wordpress.{{ ansible_fqdn }} -d drupal.{{ ansible_fqdn }} -d joomla.{{ ansible_fqdn }} -d owncloud.{{ ansible_fqdn }} -d redmine.{{ ansible_fqdn }} -d nodebb.{{ ansible_fqdn }}"
+    - "-d {{ ansible_eth0.ipv4.address }}.nip.io -d wordpress.{{ ansible_eth0.ipv4.address }}.nip.io -d drupal.{{ ansible_eth0.ipv4.address }}.nip.io -d joomla.{{ ansible_eth0.ipv4.address }}.nip.io -d owncloud.{{ ansible_eth0.ipv4.address }}.nip.io -d redmine.{{ ansible_eth0.ipv4.address }}.nip.io -d nodebb.{{ ansible_eth0.ipv4.address }}.nip.io -d docker-registry.{{ ansible_eth0.ipv4.address }}.nip.io"
+    - "-d {{ ansible_fqdn }} -d wordpress.{{ ansible_fqdn }} -d drupal.{{ ansible_fqdn }} -d joomla.{{ ansible_fqdn }} -d owncloud.{{ ansible_fqdn }} -d redmine.{{ ansible_fqdn }} -d nodebb.{{ ansible_fqdn }} -d docker-registry.{{ ansible_fqdn }}"
 
 - name: Symlink certificate
   file:

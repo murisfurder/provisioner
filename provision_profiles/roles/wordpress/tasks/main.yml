@@ -30,3 +30,6 @@
   with_items:
     - apt-get update
     - apt-get install -y zip less
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx

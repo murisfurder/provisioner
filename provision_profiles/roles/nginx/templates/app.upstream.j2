@@ -1,5 +1,5 @@
 # vim: tabstop=2 shiftwidth=2 softtabstop=2
 
-upstream {{ role }} {
-  server {{ role }}:{{ http_port }};
+upstream {{ role | regex_replace('_', '-') }} {
+  server {{ role | regex_replace('_', '-') }}:{{ http_port }};
 }

@@ -4,7 +4,7 @@ Congratulations! You've just installed a Drupal server.
 
 # Drupal Installation Notes
 
- * Point your browser to http://{{ public_ip }}
+ * Point your browser to [https://{{ role }}.yourdomain.com](https://{{ role }}.yourdomain.com)
  * Select your language
  * Select Standard
  * Select PostgreSQL

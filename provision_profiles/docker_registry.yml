@@ -3,9 +3,12 @@
   sudo: yes
 
   vars:
-    use_tls: false
+    - http_port: 5000
 
   roles:
     - unattended-upgrades
     - docker.ubuntu
+    - docker_network
+    - nginx
+    - letsencrypt
     - docker_registry
