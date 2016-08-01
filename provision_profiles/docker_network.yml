@@ -4,4 +4,4 @@
 
   roles:
     - unattended-upgrades
-    - docker_netwwork
+    - docker_network
