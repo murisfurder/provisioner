@@ -16,6 +16,12 @@ def raise_error(error_code, msg):
     return json.dumps({'message': msg})
 
 
+# TODO: Implement
+@app.get('/job')
+def get_jobs():
+    return
+
+
 @app.post('/job')
 def create_job():
     uuid = str(uuid4())
@@ -111,6 +117,7 @@ def create_job():
         'only_tags': only_tags,
     })
 
+    # TODO: We should return this as JSON in the next version.
     if task:
         response.status = 201
         return uuid
