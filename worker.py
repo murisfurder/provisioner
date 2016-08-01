@@ -20,7 +20,8 @@ def prepare_ssh():
     ssh_keys = settings.SSH_PRIVATE_KEYS
 
     # SSH is picky with permissions.
-    os.mkdir(ssh_dir)
+    if not os.path.isdir(ssh_dir):
+        os.mkdir(ssh_dir)
     os.chmod(ssh_dir, 0700)
 
     # Clear out any old hosts to avoid
@@ -30,7 +31,7 @@ def prepare_ssh():
 
     if has_ssh_keys:
         with open(id_rsa, 'wb') as f:
-            f.write(ssh_keys)
+            f.write('{}\n'.format(ssh_keys))
         os.chmod(id_rsa, 0600)
 
 
