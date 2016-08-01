@@ -104,7 +104,7 @@ def test_create_job_with_weave_without_extra_vars():
     eq_(r.status_code, 400)
     eq_(
         r.json['message'],
-        'extra_vars are required when using the role weave.'
+        'Must be either master or slave.'
     )
 
 
