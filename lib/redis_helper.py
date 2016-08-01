@@ -45,6 +45,14 @@ def get_status(uuid):
         return False
 
 
+def get_jobs():
+    jobs = []
+    r = connect()
+    for job in r.scan_iter():
+        jobs.append(job)
+    return jobs
+
+
 def create_status(uuid, role, ip):
 
     if not uuid and role and ip:
