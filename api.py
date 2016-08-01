@@ -16,6 +16,12 @@ def raise_error(error_code, msg):
     return json.dumps({'message': msg})
 
 
+# TODO: Implement
+@app.get('/job')
+def get_jobs():
+    return
+
+
 @app.post('/job')
 def create_job():
     uuid = str(uuid4())
@@ -40,8 +46,9 @@ def create_job():
     if role not in (settings.MODULES + settings.PLAYBOOKS):
         return raise_error(400, 'Invalid role.')
 
-    # Add public ip as an extra var for easier read back.
+    # Add public ip and role as extra var for easier read back.
     extra_vars['public_ip'] = ip
+    extra_vars['role'] = role
 
     if role in ['weave', 'nodebb', 'ssh']:
         if len(extra_vars) < 2:
@@ -110,6 +117,7 @@ def create_job():
         'only_tags': only_tags,
     })
 
+    # TODO: We should return this as JSON in the next version.
     if task:
         response.status = 201
         return uuid

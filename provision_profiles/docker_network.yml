@@ -1,0 +1,7 @@
+- name: Provisions Redis (running inside Docker)
+  hosts: all
+  sudo: yes
+
+  roles:
+    - unattended-upgrades
+    - docker_network

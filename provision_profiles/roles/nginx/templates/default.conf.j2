@@ -1,13 +1,31 @@
 # vim: tabstop=2 shiftwidth=2 softtabstop=2
 
+include conf.d/*.upstream;
+
+server {
+  listen 80 default_server;
+  server_tokens off;
+  server_name {{ ansible_fqdn }};
+  return 301 https://{{ ansible_fqdn }}$request_uri;
+}
+
 server {
   listen 80;
-  server_name {{ ansible_fqdn }};
+  server_tokens off;
+  server_name {{ ansible_eth0.ipv4.address }}.nip.io;
+  return 301 https://{{ ansible_eth0.ipv4.address }}.nip.io$request_uri;
+}
 
-  location / {
-    root   /var/www;
-    index  index.html index.htm;
-  }
+server {
+  listen 443 ssl;
+  server_name {{ ansible_fqdn }};
+  server_tokens off;
+
+  ssl_certificate /etc/ssl/private/{{ ansible_fqdn }}.crt;
+  ssl_certificate_key /etc/ssl/private/{{ ansible_fqdn }}.key;
+
+  include conf.d/ssl.inc;
+  include conf.d/default.inc;
 
   location ~ /.well-known {
     root /var/www;
@@ -18,34 +36,14 @@ server {
 
 server {
   listen 443 ssl;
-  server_name {{ ansible_fqdn }};
+  server_name {{ ansible_eth0.ipv4.address }}.nip.io;
+  server_tokens off;
 
-  ssl_certificate /etc/ssl/private/{{ ansible_fqdn }}.crt;
-  ssl_certificate_key /etc/ssl/private/{{ ansible_fqdn }}.key;
+  ssl_certificate /etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.crt;
+  ssl_certificate_key /etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.key;
 
-  # from https://cipherli.st/
-  # and https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
-
-  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-  ssl_prefer_server_ciphers on;
-  ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
-  ssl_ecdh_curve secp384r1;
-  ssl_session_cache shared:SSL:10m;
-  ssl_session_tickets off;
-  ssl_stapling on;
-  ssl_stapling_verify on;
-  resolver 8.8.8.8 8.8.4.4 valid=300s;
-  resolver_timeout 5s;
-  add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
-  add_header X-Frame-Options DENY;
-  add_header X-Content-Type-Options nosniff;
-
-  ssl_dhparam /etc/ssl/private/dhparam.pem;
-
-  location / {
-    root   /var/www;
-    index  index.html index.htm;
-  }
+  include conf.d/ssl.inc;
+  include conf.d/default.inc;
 
   location ~ /.well-known {
     root /var/www;

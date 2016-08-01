@@ -7,12 +7,23 @@
     name: joomla
     image: joomla
     state: started
+    hostname: "{{ role }}.{{ ansible_fqdn }}"
+    net: provisioner
     restart_policy: always
-    links:
-    - "mysql:mysql"
     env:
       JOOMLA_DB_USER: "{{ mysql_joomla_user }}"
       JOOMLA_DB_PASSWORD: "{{ mysql_joomla_password }}"
       JOOMLA_DB_NAME: "{{ mysql_joomla_user }}"
-    ports:
-    - "80:80"
+      JOOMLA_DB_HOST: 'mysql'
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx

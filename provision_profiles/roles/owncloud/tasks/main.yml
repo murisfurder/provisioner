@@ -8,9 +8,18 @@
     image: owncloud:9-apache
     state: started
     restart_policy: always
+    net: provisioner
     volumes:
     - "/usr/local/owncloud:/var/www/html"
-    links:
-    - "mysql:mysql"
-    ports:
-    - "80:80"
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx

@@ -6,10 +6,14 @@
     - drupal_config_dir: /usr/local/drupal
     - postgres_drupal_password:
     - postgres_postgres_password:
+    - http_port: 80
 
   roles:
     - unattended-upgrades
     - docker.ubuntu
+    - docker_network
+    - nginx
+    - letsencrypt
     - postgres
     - drupal
 

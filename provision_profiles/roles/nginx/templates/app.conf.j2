@@ -1,0 +1,67 @@
+# vim: tabstop=2 shiftwidth=2 softtabstop=2
+
+server {
+  listen 80;
+  server_name {{ role | regex_replace('_', '-') }}.{{ ansible_fqdn }};
+  server_tokens off;
+  return 301 https://{{ role | regex_replace('_', '-') }}.{{ ansible_fqdn }}$request_uri;
+}
+
+server {
+  listen 80;
+  server_name {{ role | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
+  server_tokens off;
+  return 301 https://{{ role | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}$request_uri;
+}
+
+server {
+  listen 443 ssl;
+  server_name {{ role | regex_replace('_', '-') }}.{{ ansible_fqdn }};
+  server_tokens off;
+
+  ssl_certificate /etc/ssl/private/{{ ansible_fqdn }}.crt;
+  ssl_certificate_key /etc/ssl/private/{{ ansible_fqdn }}.key;
+
+  include conf.d/ssl.inc;
+
+  location / {
+    proxy_set_header Host {{ role | regex_replace('_', '-') }}.{{ ansible_fqdn }};
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    proxy_pass http://{{ role | regex_replace('_', '-') }}/;
+  }
+
+  location ~ /.well-known {
+    root /var/www;
+    try_files $uri $uri/ =404;
+    allow all;
+  }
+}
+
+server {
+  listen 443 ssl;
+  server_name {{ role | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
+  server_tokens off;
+
+  ssl_certificate /etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.crt;
+  ssl_certificate_key /etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.key;
+
+  include conf.d/ssl.inc;
+
+  location / {
+    proxy_set_header Host {{ role | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    proxy_pass http://{{ role | regex_replace('_', '-') }}/;
+  }
+
+  location ~ /.well-known {
+    root /var/www;
+    try_files $uri $uri/ =404;
+    allow all;
+  }
+}

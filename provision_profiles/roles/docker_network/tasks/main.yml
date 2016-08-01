@@ -1,0 +1,4 @@
+---
+- name: Creates Docker network
+  command: docker network create provisioner
+  ignore_errors: yes

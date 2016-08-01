@@ -1,35 +1,19 @@
 ---
-- name: Create self-signed SSL cert
-  shell: openssl req -newkey rsa:4096 -sha256 -nodes -x509 -subj '/C=GB/ST=NA/L=London/O=Cloud.net/CN={{ ansible_fqdn }}' -days 3650 -keyout /etc/ssl/private/registry.key -out /etc/ssl/private/registry.crt
-  args:
-    creates: /etc/ssl/private/registry.crt
-  when: use_tls
-
-- name: Docker Registry (TLS)
-  docker:
-    name: registry
-    image: registry:2
-    state: started
-    restart_policy: always
-    volumes:
-    - "/usr/local/registry:/var/lib/registry"
-    - "/etc/ssl/private/registry.key:/etc/ssl/private/registry.key"
-    - "/etc/ssl/private/registry.crt:/etc/ssl/private/registry.crt"
-    ports:
-      - "5000:5000"
-    env:
-      REGISTRY_HTTP_TLS_CERTIFICATE: /etc/ssl/private/registry.crt
-      REGISTRY_HTTP_TLS_KEY: /etc/ssl/private/registry.key
-  when: use_tls
-
 - name: Docker Registry
   docker:
-    name: registry
-    image: registry:2
-    state: started
+    name: docker-registry
+    image: registry:2.1
+    net: provisioner
+    state: reloaded
     restart_policy: always
     volumes:
     - "/usr/local/registry:/var/lib/registry"
-    ports:
-      - "5000:5000"
-  when: not use_tls
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream

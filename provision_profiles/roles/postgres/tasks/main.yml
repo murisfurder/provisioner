@@ -4,6 +4,7 @@
     name: postgres
     image: postgres
     state: started
+    net: provisioner
     restart_policy: always
     env:
       POSTGRES_PASSWORD: "{{ postgres_postgres_password }}"

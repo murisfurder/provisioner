@@ -5,6 +5,7 @@
     image: mariadb
     state: started
     restart_policy: always
+    net: provisioner
     env:
       MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
     volumes:

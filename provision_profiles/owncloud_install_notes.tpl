@@ -4,7 +4,7 @@ Congratulations! You've just installed an Owncloud server.
 
 # Owncloud Installation Notes
 
- * Point your browser to [http://{{ public_ip  }}](http://{{ public_ip }})
+ * Point your browser to [https://{{ role }}.yourdomain.com](https://{{ role }}.yourdomain.com)
  * Enter a username and password to create your administrator account
  * Click 'Storage & Database'
   * Select 'MySQL/MariaDB'

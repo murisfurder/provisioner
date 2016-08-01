@@ -25,6 +25,13 @@ function generate_sql {
   echo 'FLUSH PRIVILEGES;'
 }
 
+# Wait for the MySQL container to come online
+STRING=""
+while [[ -z "$STRING" ]]; do
+  STRING=$(docker logs mysql 2>&1 | grep "ready for connections")
+  sleep 5
+done
+
 # Create SQL file
 generate_sql > "/tmp/$MYSQL_USER.sql"
 

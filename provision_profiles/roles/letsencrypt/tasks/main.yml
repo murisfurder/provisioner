@@ -11,22 +11,34 @@
     state: directory
 
 - name: Try to get certificate
-  command: "/usr/local/sbin/certbot-auto certonly -n --agree-tos --email {{ email }} --webroot -w /var/www -d {{ ansible_fqdn }}"
+  ignore_errors: True
+  command:
+    "/usr/local/sbin/certbot-auto certonly -n --expand --agree-tos --email {{ email }} --webroot -w /var/www {{ item }}"
+  with_items:
+    - "-d {{ ansible_eth0.ipv4.address }}.nip.io -d wordpress.{{ ansible_eth0.ipv4.address }}.nip.io -d drupal.{{ ansible_eth0.ipv4.address }}.nip.io -d joomla.{{ ansible_eth0.ipv4.address }}.nip.io -d owncloud.{{ ansible_eth0.ipv4.address }}.nip.io -d redmine.{{ ansible_eth0.ipv4.address }}.nip.io -d nodebb.{{ ansible_eth0.ipv4.address }}.nip.io -d docker-registry.{{ ansible_eth0.ipv4.address }}.nip.io"
+    - "-d {{ ansible_fqdn }} -d wordpress.{{ ansible_fqdn }} -d drupal.{{ ansible_fqdn }} -d joomla.{{ ansible_fqdn }} -d owncloud.{{ ansible_fqdn }} -d redmine.{{ ansible_fqdn }} -d nodebb.{{ ansible_fqdn }} -d docker-registry.{{ ansible_fqdn }}"
 
 - name: Symlink certificate
   file:
-    src: /etc/letsencrypt/live/{{ ansible_fqdn }}/fullchain.pem
-    dest: /etc/ssl/private/{{ ansible_fqdn }}.crt
+    src: /etc/letsencrypt/live/{{ item }}/fullchain.pem
+    dest: /etc/ssl/private/{{ item }}.crt
     state: link
+  with_items:
+    - "{{ ansible_fqdn }}"
+    - "{{ ansible_eth0.ipv4.address }}.nip.io"
 
 - name: Symlink certificate key
   file:
-    src: /etc/letsencrypt/live/{{ ansible_fqdn }}/privkey.pem
-    dest: /etc/ssl/private/{{ ansible_fqdn }}.key
+    src: /etc/letsencrypt/live/{{ item }}/privkey.pem
+    dest: /etc/ssl/private/{{ item }}.key
     state: link
+  with_items:
+    - "{{ ansible_fqdn }}"
+    - "{{ ansible_eth0.ipv4.address }}.nip.io"
 
 - name: Reload Nginx
-  command: docker exec nginx pkill -HUP -f nginx
+  command: docker restart nginx
+  ignore_errors: yes
 
 # Need to also restart web server with hook
 - name: Automatically renew cert

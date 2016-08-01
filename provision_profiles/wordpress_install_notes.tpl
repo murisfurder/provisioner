@@ -4,7 +4,7 @@ Congratulations! You've just installed a WordPress server.
 
 # WordPress Installation Notes
 
- * Point your browser to [http://{{ public_ip  }}](http://{{ public_ip }})
+ * Point your browser to [{{ role }}.yourdomain.com](https://{{ role }}.yourdomain.com). If you do not have a properly configured DNS name, you can use [{{ role }}.{{ ansible_eth0.ipv4.address  }}.nip.io]({{ role }}.{{ ansible_eth0.ipv4.address }}.nip.io)
  * Follow the instructions to configure your WordPress site and create your administration account
 
 # Technical Details
