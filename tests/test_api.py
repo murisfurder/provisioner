@@ -34,11 +34,10 @@ def test_create_job_without_payload():
     eq_(r.json['message'], 'Invalid JSON payload.')
 
 
-def test_create_job_without_username():
+def test_create_job_without_password():
     payload = {
         'ip': '127.0.0.1',
         'role': 'docker',
-        'password': 'foobar',
     }
     r = app.post_json(
         '/job',

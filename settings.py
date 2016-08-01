@@ -41,3 +41,7 @@ MODULES = [
     'ping',
     'ssh-keys',
 ]
+
+
+REMOTE_USER = os.getenv('REMOTE_USER', 'root')
+SSH_PRIVATE_KEYS = os.getenv('SSH_PRIVATE_KEYS', '')
