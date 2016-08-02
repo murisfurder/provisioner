@@ -6,10 +6,33 @@ import settings
 import time
 
 
-def clear_known_hosts():
-    known_hosts_file = '/root/.ssh/known_hosts'
+def has_ssh_keys():
+    """
+    This will return true if no key is set.
+    """
+    return bool(settings.SSH_PRIVATE_KEYS)
+
+
+def prepare_ssh():
+    ssh_dir = '/root/.ssh'
+    known_hosts_file = os.path.join(ssh_dir, 'known_hosts')
+    id_rsa = os.path.join(ssh_dir, 'id_rsa')
+    ssh_keys = settings.SSH_PRIVATE_KEYS
+
+    # SSH is picky with permissions.
+    if not os.path.isdir(ssh_dir):
+        os.mkdir(ssh_dir)
+    os.chmod(ssh_dir, 0700)
+
+    # Clear out any old hosts to avoid
+    # potential conflicts.
     if os.path.isfile(known_hosts_file):
         os.remove(known_hosts_file)
+
+    if has_ssh_keys:
+        with open(id_rsa, 'wb') as f:
+            f.write('{}\n'.format(ssh_keys))
+        os.chmod(id_rsa, 0600)
 
 
 def task_router(task):
@@ -23,7 +46,7 @@ def task_router(task):
     attempts = task.get('attempts')
     role = task.get('role')
     uuid = task.get('uuid')
-    username = task.get('username')
+    username = task.get('username', settings.REMOTE_USER)
     password = task.get('password')
     target_ip = task.get('ip')
     extra_vars = task.get('extra_vars')
@@ -45,7 +68,7 @@ def task_router(task):
     task['attempts'] = attempts
 
     # Make sure we received all required fields
-    if not (username and password and target_ip and role):
+    if not ((password or has_ssh_keys()) and target_ip and role):
         return False
 
     # Give it maximum three attempts
@@ -168,11 +191,11 @@ def task_router(task):
 
 def main():
     while True:
+        prepare_ssh()
         task = redis_helper.pop_from_queue()
 
         if task:
             task_router(task)
-        clear_known_hosts()
         time.sleep(1)
 
 if __name__ == '__main__':
