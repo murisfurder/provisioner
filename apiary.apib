@@ -33,9 +33,9 @@ List the UUID of all jobs that have been created.
 Create a new job with the description outlined below. All successful jobs will return the Job ID.
 
 + Attributes
-    + ip (string, required) - The IP address or hostname of the target server
-    + username (string, required) - The username of the target server
-    + password (string, required) - The password  for the target server
+    + ip (string, required) - The IP address or hostname of the target server.
+    + username (string, optional) - The username of the target server. Defaults to 'root'.
+    + password (string, optional) - The password for the target server. Required if no SSH Key is passed.
     + role (string, required) - The role to deploy
     + extra_vars (object, optional) - Extra variables to be passed to the role
         + is_rs (boolean) - [mongodb] Set to True to initiate replica set configuration of MongoDB.
