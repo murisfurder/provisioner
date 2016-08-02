@@ -16,10 +16,10 @@ def raise_error(error_code, msg):
     return json.dumps({'message': msg})
 
 
-# TODO: Implement
 @app.get('/job')
 def get_jobs():
-    return
+    jobs = redis_helper.get_jobs()
+    return json.dumps(jobs)
 
 
 @app.post('/job')
