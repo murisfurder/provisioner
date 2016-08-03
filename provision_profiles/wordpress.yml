@@ -12,7 +12,6 @@
     - unattended-upgrades
     - docker.ubuntu
     - docker_network
-    - letsencrypt
     - nginx
     - mysql
     - wordpress

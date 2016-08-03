@@ -13,5 +13,4 @@
     - docker_network
     - mysql
     - nginx
-    - letsencrypt
     - joomla

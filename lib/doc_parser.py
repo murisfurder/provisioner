@@ -16,7 +16,7 @@ def get_docs(role=None, extra_vars=None):
         return 'No installation notes available.'
 
     try:
-        install_notes = template(docs_uri, role=role, **extra_vars)
+        install_notes = template(docs_uri, **extra_vars)
         return install_notes
     except Exception as e:
         logging.exception("Failed to process install notes")

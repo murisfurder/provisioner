@@ -18,8 +18,7 @@ To complete your Joomla installation, please follow the steps below.
 
 # Technical Details
 
-Your Joomla! server is running inside Docker and the name of the container is 'joomla'. The container connects to
-a MySQL server that is also running inside Docker.
+Your Joomla! server is running inside Docker and the name of the container is 'joomla'. The container connects to a MySQL server that is also running inside Docker.
 
 Please note that the Joomla! data resides inside the Docker container. As such, you likely want to use something like [Akeeba Backup](http://extensions.joomla.org/extension/akeeba-backup) to make backups of your Joomla installation.
 
