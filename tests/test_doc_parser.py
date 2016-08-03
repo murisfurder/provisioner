@@ -14,10 +14,11 @@ def test_drupal_without_vars():
 
 def test_drupal_with_vars():
     r = doc_parser.get_docs(
+        role = 'drupal',
         extra_vars={
             'role': 'drupal',
             'public_ip': '127.0.0.1',
-            'mysql_drupal_password': 'foobar',
+            'mysql_drupal_user': 'foobar',
             'mysql_drupal_password': 'foobar',
         }
     )
