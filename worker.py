@@ -6,17 +6,10 @@ import settings
 import time
 
 
-def has_ssh_keys():
-    """
-    This will return true if no key is set.
-    """
-    return bool(settings.SSH_PRIVATE_KEYS)
-
-
 def prepare_ssh():
     ssh_dir = '/root/.ssh'
     known_hosts_file = os.path.join(ssh_dir, 'known_hosts')
-    id_rsa = os.path.join(ssh_dir, 'id_rsa')
+    id_rsa_file = os.path.join(ssh_dir, 'id_rsa')
     ssh_keys = settings.SSH_PRIVATE_KEYS
 
     # SSH is picky with permissions.
@@ -24,15 +17,19 @@ def prepare_ssh():
         os.mkdir(ssh_dir)
     os.chmod(ssh_dir, 0700)
 
-    # Clear out any old hosts to avoid
+    # Clear out any old hosts and keys to avoid
     # potential conflicts.
     if os.path.isfile(known_hosts_file):
         os.remove(known_hosts_file)
 
-    if has_ssh_keys():
-        with open(id_rsa, 'wb') as f:
+    if os.path.isfile(id_rsa_file):
+        os.remove(id_rsa_file)
+
+    # Returns true if there are keys.
+    if bool(ssh_keys):
+        with open(id_rsa_file, 'wb') as f:
             f.write('{}\n'.format(ssh_keys))
-        os.chmod(id_rsa, 0600)
+        os.chmod(id_rsa_file, 0600)
 
 
 def task_router(task):
