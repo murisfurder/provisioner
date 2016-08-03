@@ -3,9 +3,8 @@
   sudo: yes
 
   vars:
-    - drupal_config_dir: /usr/local/drupal
-    - postgres_drupal_password:
-    - postgres_postgres_password:
+    - mysql_drupal_password:
+    - mysql_drupal_password:
     - http_port: 80
 
   roles:
@@ -13,7 +12,6 @@
     - docker.ubuntu
     - docker_network
     - nginx
-    - letsencrypt
-    - postgres
+    - mysql
     - drupal
 

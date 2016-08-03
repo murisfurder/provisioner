@@ -99,6 +99,7 @@ def provision(
         'owncloud',
         'redmine',
         'wordpress',
+        'drupal',
     ]:
         extra_vars['mysql_root_password'] = generate_password()
 
@@ -108,7 +109,6 @@ def provision(
 
     if role in [
         'postgres',
-        'drupal',
     ]:
         extra_vars['postgres_postgres_password'] = generate_password()
 

@@ -7,38 +7,35 @@ Congratulations! You've just installed a Drupal server.
  * Point your browser to [https://{{ role }}.yourdomain.com](https://{{ role }}.yourdomain.com)
  * Select your language
  * Select Standard
- * Select PostgreSQL
+ * Select MySQL
   * Enter 'drupal' as the database and username
-  * Enter `{{ postgres_drupal_password }}` as the password
+  * Enter `{{ mysql_drupal_password }}` as the password
  * Select Advanced
-  * Enter 'postgres' under host
+  * Enter 'mysql' under host
  * Follow the remaining steps
 
 
 # Technical Details
 
-Your Drupal server is running inside Docker and the name of the container is 'drupal'. The container connects to
-a PostgreSQL server that is also running inside Docker.
+Your Drupal server is running inside Docker and the name of the container is 'drupal'. The container connects to a MySQL/MariaDB server that is also running inside Docker.
 
-The runtime environment inside Docker is ephemeral and all persistent storage resides outside of the runtime environment. The two important locations are as follows:
+Please note that the Drupal data resides inside the Docker container. As such, you likely want to use something like [Backup and Migrate](https://www.drupal.org/project/backup_migrate) to make backups of your Drupal installation.
 
- * `/usr/local/drupal` - This is where the user generated content (themes etc) resides.
- * `/var/lib/postgresql` - This is where the PostgreSQL data resides on disk.
 
-To connect to the PostgreSQL database, use the following command:
+Important paths:
+
+* `/var/lib/mysql` - This is where the MySQL data resides on disk.
+
+To connect to your MySQL instance, use the following command:
 
 ```
-$ docker exec -ti postgres psql -U postgres
+$ docker run -it --link mysql:mysql --rm mariadb sh -c 'exec mysql -hmysql -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD"'
 ```
-
 
 # Credentials
 
-## PostgreSQL
+## MySQL
 
-User: posgres
-Password: `{{ postgres_postgres_password }}`
-
-User: drupal
-Password: `{{ postgres_drupal_password }}`
-Database: drupal
+User: {{ mysql_drupal_user }}
+Password: `{{ mysql_drupal_password }}`
+Database: {{ mysql_drupal_user }}

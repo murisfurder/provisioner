@@ -16,9 +16,10 @@ def test_drupal_with_vars():
     r = doc_parser.get_docs(
         role='drupal',
         extra_vars={
+            'role': 'drupal',
             'public_ip': '127.0.0.1',
-            'postgres_drupal_password': 'foobar',
-            'postgres_postgres_password': 'foobar',
+            'mysql_drupal_user': 'foobar',
+            'mysql_drupal_password': 'foobar',
         }
     )
     assert_in('Congratulations!', r)
