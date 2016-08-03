@@ -29,7 +29,7 @@ def prepare_ssh():
     if os.path.isfile(known_hosts_file):
         os.remove(known_hosts_file)
 
-    if has_ssh_keys:
+    if has_ssh_keys():
         with open(id_rsa, 'wb') as f:
             f.write('{}\n'.format(ssh_keys))
         os.chmod(id_rsa, 0600)
