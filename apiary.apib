@@ -38,20 +38,21 @@ Create a new job with the description outlined below. All successful jobs will r
     + password (string, optional) - The password for the target server. Required if no SSH Key is passed.
     + role (string, required) - The role to deploy
     + extra_vars (object, optional) - Extra variables to be passed to the role
+        + email (string) - [letsencrypt] Required for issuing SSL certificates with Let's Encrypt.
+        + fqdn (string) - [letsencrypt, nginx] Set the Fully Qualified Domain Name (FQDN) for the target server. Defaults to the full hostname of the server.
+        + init_db (boolean) - [nodebb] If set to True, a sample database will be created. The credentials are admin/password. You should **not** use this for anything other than testing.
+        + is_master (boolean) - [weave] Set to True to initiate the server as the master node.
         + is_rs (boolean) - [mongodb] Set to True to initiate replica set configuration of MongoDB.
         + is_rs_master (boolean) - [mongodb] Set to True to initiate the server as a the master (primary) node.
         + is_rs_slave (boolean) - [mongodb] Set to True for all slaves (secondaries).
-        + rs_init (boolean) - [mongodb] Set to True to initialize the cluster (must be after the cluster has been fully initiated).
-        + secret (string) - [nodebb] Shared secret for cookies
-        + rs_servers (string) - [nodebb] Comma separated list of MongoDB servers
-        + init_db (boolean) - [nodebb] If set to True, a sample database will be created. The credentials are admin/password. You should **not** use this for anything other than testing.
-        + ssh_user (boolean) - [ssh] The user on the remote system where the key(s) are to be installed.
-        + ssh_keys (array) - [ssh] A list of one or many SSH keys.
-        + is_master (boolean) - [weave] Set to True to initiate the server as the master node.
         + is_slave (boolean) - [weave]  Set to True to initiate the server as a slave nodes.
-        + passphrase (string) - [weave] Must be the same on master and slave nodes.
         + master_ip (string) - [weave] Required if is slave. Specify the public IP of the master node.
-        + email (string) - [letsencrypt] Required for issuing SSL certificates with Let's Encrypt.
+        + passphrase (string) - [weave] Must be the same on master and slave nodes.
+        + rs_init (boolean) - [mongodb] Set to True to initialize the cluster (must be after the cluster has been fully initiated).
+        + rs_servers (string) - [nodebb] Comma separated list of MongoDB servers
+        + secret (string) - [nodebb] Shared secret for cookies
+        + ssh_keys (array) - [ssh] A list of one or many SSH keys.
+        + ssh_user (boolean) - [ssh] The user on the remote system where the key(s) are to be installed.
 
 
 + Request Provision Docker (application/json)
@@ -274,6 +275,7 @@ Create a new job with the description outlined below. All successful jobs will r
           'password': 'SuperSecretPassword',
           'role': 'letsencrypt',
           'extra_vars': {
+              'fqdn': 'www.example.com'
               'email': 'john@doe.com',
           }
         }
