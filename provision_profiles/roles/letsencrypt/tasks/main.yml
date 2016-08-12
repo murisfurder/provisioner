@@ -16,7 +16,7 @@
     "/usr/local/sbin/provcfg generate-cert {{ item }} {{ email }}"
   with_items:
     - "{{ ansible_eth0.ipv4.address }}.nip.io"
-    - "{{ ansible_fqdn }}"
+    - "{{ fqdn|default(ansible_fqdn) }}"
 
 - name: Symlink certificate
   file:
@@ -24,7 +24,7 @@
     dest: /etc/ssl/private/{{ item }}.crt
     state: link
   with_items:
-    - "{{ ansible_fqdn }}"
+    - "{{ fqdn|default(ansible_fqdn) }}"
     - "{{ ansible_eth0.ipv4.address }}.nip.io"
 
 - name: Symlink certificate key
@@ -33,7 +33,7 @@
     dest: /etc/ssl/private/{{ item }}.key
     state: link
   with_items:
-    - "{{ ansible_fqdn }}"
+    - "{{ fqdn|default(ansible_fqdn) }}"
     - "{{ ansible_eth0.ipv4.address }}.nip.io"
 
 - name: Reload Nginx
