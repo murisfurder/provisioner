@@ -5,9 +5,12 @@
   vars:
     - mysql_root_password:
     - http_port: 3000
+    - fqdn:
+
   roles:
     - unattended-upgrades
     - docker.ubuntu
     - docker_network
+    - nginx
     - mysql
     - redmine
