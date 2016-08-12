@@ -4,11 +4,11 @@
   sudo: yes
 
   vars:
-    is_rs: false
-    is_rs_master: false
-    is_rs_slave: false
-    rs_node_name:
-    rs_init: false
+   - is_rs: false
+   - is_rs_master: false
+   - is_rs_slave: false
+   - rs_node_name:
+   - rs_init: false
 
   roles:
     - unattended-upgrades
