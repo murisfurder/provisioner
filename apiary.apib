@@ -284,6 +284,22 @@ Create a new job with the description outlined below. All successful jobs will r
 
         4fb35c9e-fd41-4f12-80eb-8ace25782a2a
 
++ Request Provision Nginx
+
+        {
+          'ip': "10.10.10.10,
+          'username': 'root',
+          'password': 'SuperSecretPassword',
+          'role': 'nginx',
+          'extra_vars': {
+              'fqdn': 'www.example.com',
+          }
+        }
+
++ Response 201 (text/plain)
+
+        4fb35c9e-fd41-4f12-80eb-8ace25782a2a
+
 # Interact with Jobs [/job/{uuid}]
 
 + Parameters
