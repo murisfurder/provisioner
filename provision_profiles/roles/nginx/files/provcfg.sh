@@ -10,6 +10,7 @@ grafana
 nodebb
 owncloud
 prometheus
+prometheus-pushgateway
 redmine
 wordpress
 )

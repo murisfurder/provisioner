@@ -10,6 +10,15 @@
   args:
     creates: "/etc/nginx/conf.d/{{ role }}-app.htpasswd"
 
+- name: Prometheus Push Gateway
+  docker:
+    name: prometheus-pushgateway
+    image: prom/pushgateway
+    state: started
+    hostname: "{{ role }}-pushgateway.{{ ansible_fqdn }}"
+    net: provisioner
+    restart_policy: always
+
 - name: Prometheus
   docker:
     name: prometheus
@@ -29,6 +38,15 @@
   with_items:
   - app.conf
   - app.upstream
+
+- name: Copies in Nginx config for push gateway
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - pushgateway.conf
+  - pushgateway.upstream
 
 - name: Reload Nginx
   command: docker exec nginx pkill -HUP -f nginx
