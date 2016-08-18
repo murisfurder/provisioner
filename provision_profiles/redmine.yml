@@ -5,7 +5,7 @@
   vars:
     - mysql_root_password:
     - http_port: 3000
-    - fqdn:
+    - fqdn: false
 
   roles:
     - unattended-upgrades

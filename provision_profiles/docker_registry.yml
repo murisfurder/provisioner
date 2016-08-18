@@ -4,7 +4,7 @@
 
   vars:
     - http_port: 5000
-    - fqdn:
+    - fqdn: false
 
   roles:
     - unattended-upgrades
