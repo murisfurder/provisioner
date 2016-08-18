@@ -11,5 +11,4 @@
     - docker.ubuntu
     - docker_network
     - nginx
-    - letsencrypt
     - docker_registry

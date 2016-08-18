@@ -2,9 +2,9 @@
 
 server {
   listen 80;
-  server_name {{ role | regex_replace('_', '-') }}.{{ fqdn|default(ansible_fqdn) }};
+  server_name {{ role | regex_replace('_', '-') }}.{{ fqdn }};
   server_tokens off;
-  return 301 https://{{ role | regex_replace('_', '-') }}.{{ fqdn|default(ansible_fqdn) }}$request_uri;
+  return 301 https://{{ role | regex_replace('_', '-') }}.{{ fqdn }}$request_uri;
 }
 
 server {
@@ -16,16 +16,21 @@ server {
 
 server {
   listen 443 ssl;
-  server_name {{ role | regex_replace('_', '-') }}.{{ fqdn|default(ansible_fqdn) }};
+  server_name {{ role | regex_replace('_', '-') }}.{{ fqdn }};
   server_tokens off;
 
-  ssl_certificate /etc/ssl/private/{{ fqdn|default(ansible_fqdn) }}.crt;
-  ssl_certificate_key /etc/ssl/private/{{ fqdn|default(ansible_fqdn) }}.key;
+  ssl_certificate /etc/ssl/private/{{ fqdn }}.crt;
+  ssl_certificate_key /etc/ssl/private/{{ fqdn }}.key;
 
   include conf.d/ssl.inc;
 
   location / {
-    proxy_set_header Host {{ role | regex_replace('_', '-') }}.{{ fqdn|default(ansible_fqdn) }};
+    {% if nginx_auth|default(false) -%}
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/conf.d/{{ role }}-app.htpasswd;
+    {% endif -%}
+
+    proxy_set_header Host {{ role | regex_replace('_', '-') }}.{{ fqdn }};
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
@@ -51,6 +56,11 @@ server {
   include conf.d/ssl.inc;
 
   location / {
+    {% if nginx_auth|default(false) -%}
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/conf.d/{{ role }}-app.htpasswd;
+    {% endif -%}
+
     proxy_set_header Host {{ role | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;

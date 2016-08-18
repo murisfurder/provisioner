@@ -4,6 +4,7 @@
 
   vars:
     - http_port: 9090
+    - nginx_auth: true
     - fqdn:
 
   roles:

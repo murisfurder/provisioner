@@ -5,6 +5,11 @@
     dest: "/usr/local/etc/prometheus.yml"
     mode: 0644
 
+- name: Create htaccess file
+  command: htpasswd -bc "/etc/nginx/conf.d/{{ role }}-app.htpasswd" prometheus "{{ prometheus_password }}"
+  args:
+    creates: "/etc/nginx/conf.d/{{ role }}-app.htpasswd"
+
 - name: Prometheus
   docker:
     name: prometheus

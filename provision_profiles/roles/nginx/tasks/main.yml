@@ -6,6 +6,10 @@
 - debug:
     msg: "Using {{ fqdn }} as the fqdn."
 
+- name: Install package required for htaccess
+  apt:
+    name: apache2-utils
+
 - name: Create required folders
   file:
     path: "{{ item }}"

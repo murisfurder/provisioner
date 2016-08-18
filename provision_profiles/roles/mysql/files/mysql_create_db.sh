@@ -45,3 +45,5 @@ docker exec $MYSQL_CONTAINER sh -c '\
 
 # Clean up
 docker exec $MYSQL_CONTAINER rm /root/createdb.sql
+
+touch /root/.created-mysql-database-$MYSQL_USER
