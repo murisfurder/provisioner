@@ -1,6 +1,8 @@
 ---
 - name: Create database user
   command: /usr/local/sbin/mysql_create_db.sh {{ mysql_redmine_user }} {{ mysql_redmine_password }}
+  args:
+    creates: "/root/.created-mysql-database-{{ mysql_redmine_user }}"
 
 - name: Create required folders
   file:

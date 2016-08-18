@@ -6,7 +6,7 @@
     - mysql_drupal_password:
     - mysql_drupal_password:
     - http_port: 80
-    - fqdn:
+    - fqdn: false
 
   roles:
     - unattended-upgrades

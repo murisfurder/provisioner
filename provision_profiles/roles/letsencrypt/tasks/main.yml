@@ -1,4 +1,8 @@
 ---
+- set_fact:
+    fqdn: "{{ ansible_fqdn }}"
+  when: not fqdn
+
 - name: Get certbot-auto
   get_url:
     url: https://dl.eff.org/certbot-auto
@@ -16,7 +20,7 @@
     "/usr/local/sbin/provcfg generate-cert {{ item }} {{ email }}"
   with_items:
     - "{{ ansible_eth0.ipv4.address }}.nip.io"
-    - "{{ fqdn|default(ansible_fqdn) }}"
+    - "{{ fqdn }}"
 
 - name: Symlink certificate
   file:
@@ -24,7 +28,7 @@
     dest: /etc/ssl/private/{{ item }}.crt
     state: link
   with_items:
-    - "{{ fqdn|default(ansible_fqdn) }}"
+    - "{{ fqdn }}"
     - "{{ ansible_eth0.ipv4.address }}.nip.io"
 
 - name: Symlink certificate key
@@ -33,7 +37,7 @@
     dest: /etc/ssl/private/{{ item }}.key
     state: link
   with_items:
-    - "{{ fqdn|default(ansible_fqdn) }}"
+    - "{{ fqdn }}"
     - "{{ ansible_eth0.ipv4.address }}.nip.io"
 
 - name: Reload Nginx

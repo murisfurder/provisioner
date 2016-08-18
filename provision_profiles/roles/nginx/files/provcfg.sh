@@ -6,8 +6,10 @@ SSLCONF=/etc/nginx/conf.d/ssl-redirect.inc
 SUBDOMAINS=(
 docker-registry
 drupal joomla
+grafana
 nodebb
 owncloud
+prometheus
 redmine
 wordpress
 )

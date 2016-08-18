@@ -1,10 +1,10 @@
-- name: Provisions Redmine (running inside Docker)
+- name: Provisions Prometheus (running inside Docker)
   hosts: all
   sudo: yes
 
   vars:
-    - mysql_root_password:
-    - http_port: 3000
+    - http_port: 9090
+    - nginx_auth: true
     - fqdn: false
 
   roles:
@@ -12,5 +12,4 @@
     - docker.ubuntu
     - docker_network
     - nginx
-    - mysql
-    - redmine
+    - prometheus

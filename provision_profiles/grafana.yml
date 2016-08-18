@@ -1,13 +1,15 @@
-- name: Install Let's Encrypt
+- name: Provisions Grafana (running inside Docker)
   hosts: all
   sudo: yes
 
   vars:
+    - http_port: 3000
     - fqdn: false
-    - email: false
 
   roles:
     - unattended-upgrades
     - docker.ubuntu
+    - docker_network
     - nginx
-    - letsencrypt
+    - mysql
+    - grafana

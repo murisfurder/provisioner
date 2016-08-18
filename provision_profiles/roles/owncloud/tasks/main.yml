@@ -1,6 +1,8 @@
 ---
 - name: Create database user
   command: /usr/local/sbin/mysql_create_db.sh {{ mysql_owncloud_user }} {{ mysql_owncloud_password }}
+  args:
+    creates: "/root/.created-mysql-database-{{ mysql_owncloud_user }}"
 
 - name: Owncloud
   docker:

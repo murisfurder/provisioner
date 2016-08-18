@@ -1,6 +1,8 @@
 ---
 - name: Create database user
   command: /usr/local/sbin/mysql_create_db.sh {{ mysql_wordpress_user }} {{ mysql_wordpress_password }}
+  args:
+    creates: "/root/.created-mysql-database-{{ mysql_wordpress_user }}"
 
 - name: WordPress
   docker:

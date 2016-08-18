@@ -4,12 +4,11 @@
 
   vars:
     - http_port: 5000
-    - fqdn:
+    - fqdn: false
 
   roles:
     - unattended-upgrades
     - docker.ubuntu
     - docker_network
     - nginx
-    - letsencrypt
     - docker_registry

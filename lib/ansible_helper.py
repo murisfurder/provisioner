@@ -94,12 +94,13 @@ def provision(
     playbook_uri = 'provision_profiles/{}.yml'.format(role)
 
     if role in [
+        'drupal',
+        'grafana',
         'joomla',
         'mysql',
         'owncloud',
         'redmine',
         'wordpress',
-        'drupal',
     ]:
         extra_vars['mysql_root_password'] = generate_password()
 
@@ -115,6 +116,12 @@ def provision(
         if not role == 'postgres':
             extra_vars['postgres_{}_user'.format(role)] = role
             extra_vars['postgres_{}_password'.format(role)] = generate_password()
+
+    if role in [
+        'grafana',
+        'prometheus',
+    ]:
+        extra_vars['{}_password'.format(role)] = generate_password()
 
     if remote_user and remote_pass and inventory:
         return run_playbook(
