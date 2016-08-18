@@ -18,6 +18,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'nginx',
     'owncloud',
     'postgres',
+    'prometheus',
     'redis',
     'redmine',
     'wordpress',

@@ -1,0 +1,14 @@
+- name: Provisions Prometheus (running inside Docker)
+  hosts: all
+  sudo: yes
+
+  vars:
+    - http_port: 9090
+    - fqdn:
+
+  roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - docker_network
+    - nginx
+    - prometheus

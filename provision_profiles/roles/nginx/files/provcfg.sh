@@ -8,6 +8,7 @@ docker-registry
 drupal joomla
 nodebb
 owncloud
+prometheus
 redmine
 wordpress
 )
