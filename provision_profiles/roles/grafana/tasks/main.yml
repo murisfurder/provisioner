@@ -1,0 +1,34 @@
+---
+- name: Create database user
+  command: /usr/local/sbin/mysql_create_db.sh {{ mysql_grafana_user }} {{ mysql_grafana_password }}
+  args:
+    creates: "/root/.created-mysql-database-{{ mysql_grafana_user }}"
+
+- name: Copies in Grafana config
+  template:
+    src: "grafana.ini.j2"
+    dest: "/usr/local/etc/grafana.ini"
+    mode: 0644
+
+- name: Grafana
+  docker:
+    name: grafana
+    image: grafana/grafana
+    state: started
+    hostname: "{{ role }}.{{ fqdn }}"
+    net: provisioner
+    restart_policy: always
+    volumes:
+      - "/usr/local/etc/grafana.ini:/etc/grafana/grafana.ini"
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx
