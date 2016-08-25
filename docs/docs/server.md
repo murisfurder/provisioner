@@ -21,6 +21,10 @@ The way this works is by utilizing the environment variable `SSH_PRIVATE_KEYS`. 
 
 By default, the username used for authenticating with remote servers is 'root'. Depending on your setup, this may or not suite you. Hence, you can simply export the environment variable `REMOTE_USER` to override this.
 
+## Hide Playbooks
+
+If you want to hide some playbooks from the listing, you can set the environment variable `HIDDEN_PLAYBOOKS`. The format of this should be a comma separated list, such as `role1,role2,role3`.
+
 ## Production
 
 While you can run Provisioner using the Docker Compose setup, it is recommended that you instead manually deploy Provisioner using your configuration management tool of choice and place it behind a reverse proxy with SSL termination.
