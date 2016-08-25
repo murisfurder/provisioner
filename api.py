@@ -49,6 +49,7 @@ def create_job():
     # Add public ip and role as extra var for easier read back.
     extra_vars['public_ip'] = ip
     extra_vars['role'] = role
+    extra_vars['use_ssl'] = settings.USE_SSL
 
     if role in ['weave', 'nodebb', 'ssh']:
         if len(extra_vars) < 2:

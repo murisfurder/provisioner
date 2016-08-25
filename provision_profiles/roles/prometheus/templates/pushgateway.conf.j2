@@ -4,16 +4,49 @@ server {
   listen 80;
   server_name prometheus-pushgateway.{{ fqdn }};
   server_tokens off;
+{% if use_ssl %}
   return 301 https://prometheus-pushgateway.{{ fqdn }}$request_uri;
+{% else %}
+  location / {
+    {% if nginx_auth|default(false) -%}
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/conf.d/{{ role }}-app.htpasswd;
+    {% endif -%}
+
+    proxy_set_header Host prometheus-pushgateway.{{ fqdn }};
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    proxy_pass http://prometheus-pushgateway/;
+  }
+{% endif %}
 }
 
 server {
   listen 80;
   server_name prometheus-pushgateway.{{ ansible_eth0.ipv4.address }}.nip.io;
   server_tokens off;
+{% if use_ssl %}
   return 301 https://prometheus-pushgateway.{{ ansible_eth0.ipv4.address }}$request_uri;
+{% else %}
+  location / {
+    {% if nginx_auth|default(false) -%}
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/conf.d/{{ role }}-app.htpasswd;
+    {% endif -%}
+
+    proxy_set_header Host prometheus-pushgateway.{{ fqdn }};
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    proxy_pass http://prometheus-pushgateway/;
+  }
+{% endif %}
 }
 
+{% if use_ssl %}
 server {
   listen 443 ssl;
   server_name prometheus-pushgateway.{{ fqdn }};
@@ -75,3 +108,4 @@ server {
     allow all;
   }
 }
+{% endif %}

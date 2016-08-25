@@ -37,7 +37,7 @@ PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS
 # Provide a comma separated list
 HIDDEN_PLAYBOOKS = os.getenv(
     'HIDDEN_PLAYBOOKS',
-    'dns,letsencrypt,nginx'
+    'dns,nginx'
 ).split(',')
 
 MODULES = [
@@ -48,3 +48,6 @@ MODULES = [
 
 REMOTE_USER = os.getenv('REMOTE_USER', 'root')
 SSH_PRIVATE_KEYS = os.getenv('SSH_PRIVATE_KEYS', '')
+
+# Redirect all webapps to HTTPS instead of HTTP
+USE_SSL = bool(os.getenv('USE_SSL', True))
