@@ -25,6 +25,9 @@
 <loc>https://provisioner.vpetersson.com/docs/getting-started</loc>
 </url>
 <url>
+<loc>https://provisioner.vpetersson.com/docs/roles/gitlab</loc>
+</url>
+<url>
 <loc>https://provisioner.vpetersson.com/docs/roles/grafana</loc>
 </url>
 <url>

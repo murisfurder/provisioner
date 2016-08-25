@@ -5,8 +5,10 @@ SSLCONF=/etc/nginx/conf.d/ssl-redirect.inc
 
 SUBDOMAINS=(
 docker-registry
-drupal joomla
+drupal
+gitlab
 grafana
+joomla
 nodebb
 owncloud
 prometheus

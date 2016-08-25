@@ -16,7 +16,7 @@
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Provisioner" href="/feed.xml" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/pixyll.css?201608251054" type="text/css">
+    <link rel="stylesheet" href="/css/pixyll.css?201608251215" type="text/css">
 
     <!-- Fonts -->
     
@@ -87,6 +87,8 @@
       <a href="https://provisioner.vpetersson.com" class="site-title">Provisioner</a>
       <nav class="site-nav">
         
+    
+
     
 
     
@@ -200,6 +202,10 @@
 <h3 id="default-username">Default Username</h3>
 
 <p>By default, the username used for authenticating with remote servers is ‘root’. Depending on your setup, this may or not suite you. Hence, you can simply export the environment variable <code class="highlighter-rouge">REMOTE_USER</code> to override this.</p>
+
+<h2 id="hide-playbooks">Hide Playbooks</h2>
+
+<p>If you want to hide some playbooks from the listing, you can set the environment variable <code class="highlighter-rouge">HIDDEN_PLAYBOOKS</code>. The format of this should be a comma separated list, such as <code class="highlighter-rouge">role1,role2,role3</code>.</p>
 
 <h2 id="production">Production</h2>
 
