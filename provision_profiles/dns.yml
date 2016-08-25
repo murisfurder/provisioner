@@ -1,6 +1,0 @@
-- name: Verify DNS record
-  hosts: all
-  sudo: yes
-
-  roles:
-    - dns

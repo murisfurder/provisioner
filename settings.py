@@ -7,7 +7,6 @@ REDIS_DB = os.getenv('REDIS_DB', 0)
 REDIS_LIST = 'prov'
 
 SINGLE_HOST_PLAYBOOKS = [
-    'dns',
     'docker',
     'docker_registry',
     'drupal',
@@ -37,7 +36,7 @@ PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS
 # Provide a comma separated list
 HIDDEN_PLAYBOOKS = os.getenv(
     'HIDDEN_PLAYBOOKS',
-    'dns,nginx'
+    'nginx'
 ).split(',')
 
 MODULES = [
