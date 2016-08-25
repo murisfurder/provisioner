@@ -16,7 +16,7 @@
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Provisioner" href="/feed.xml" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/pixyll.css?201608251215" type="text/css">
+    <link rel="stylesheet" href="/css/pixyll.css?201608251617" type="text/css">
 
     <!-- Fonts -->
     
@@ -206,6 +206,10 @@
 <h2 id="hide-playbooks">Hide Playbooks</h2>
 
 <p>If you want to hide some playbooks from the listing, you can set the environment variable <code class="highlighter-rouge">HIDDEN_PLAYBOOKS</code>. The format of this should be a comma separated list, such as <code class="highlighter-rouge">role1,role2,role3</code>.</p>
+
+<h2 id="use-ssl">Use SSL</h2>
+
+<p>By default all HTTP traffic is being forwarded to HTTPS for improved security. There might be situations where this isn’t desirable. If you don’t want this behavior, you can set the environment variable <code class="highlighter-rouge">USE_SSL</code> to <code class="highlighter-rouge">false</code>.</p>
 
 <h2 id="production">Production</h2>
 
