@@ -16,7 +16,7 @@
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Provisioner" href="/feed.xml" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/pixyll.css?201608251617" type="text/css">
+    <link rel="stylesheet" href="/css/pixyll.css?201608251619" type="text/css">
 
     <!-- Fonts -->
     
@@ -203,15 +203,15 @@
 
 <p>By default, the username used for authenticating with remote servers is ‘root’. Depending on your setup, this may or not suite you. Hence, you can simply export the environment variable <code class="highlighter-rouge">REMOTE_USER</code> to override this.</p>
 
-<h2 id="hide-playbooks">Hide Playbooks</h2>
+<h3 id="hide-playbooks">Hide Playbooks</h3>
 
 <p>If you want to hide some playbooks from the listing, you can set the environment variable <code class="highlighter-rouge">HIDDEN_PLAYBOOKS</code>. The format of this should be a comma separated list, such as <code class="highlighter-rouge">role1,role2,role3</code>.</p>
 
-<h2 id="use-ssl">Use SSL</h2>
+<h3 id="use-ssl-https">Use SSL (https)</h3>
 
 <p>By default all HTTP traffic is being forwarded to HTTPS for improved security. There might be situations where this isn’t desirable. If you don’t want this behavior, you can set the environment variable <code class="highlighter-rouge">USE_SSL</code> to <code class="highlighter-rouge">false</code>.</p>
 
-<h2 id="production">Production</h2>
+<h3 id="production">Production</h3>
 
 <p>While you can run Provisioner using the Docker Compose setup, it is recommended that you instead manually deploy Provisioner using your configuration management tool of choice and place it behind a reverse proxy with SSL termination.</p>
 
