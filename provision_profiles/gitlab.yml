@@ -1,0 +1,14 @@
+- name: Provisions GitLab CE (running inside Docker)
+  hosts: all
+  sudo: yes
+
+  vars:
+    - http_port: 80
+    - fqdn: false
+
+  roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - docker_network
+    - nginx
+    - gitlab

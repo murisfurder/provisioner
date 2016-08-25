@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Redis &#8211; Provisioner</title>
+    <title>GitLab Community Edition (CE) &#8211; Provisioner</title>
     <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com">
     <link rel="dns-prefetch" href="//cdn.mathjax.org">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
@@ -12,7 +12,7 @@
     <meta name="robots" content="all">
     <meta name="author" content="Viktor Petersson">
     
-    <link rel="canonical" href="https://provisioner.vpetersson.com/docs/roles/redis">
+    <link rel="canonical" href="https://provisioner.vpetersson.com/docs/roles/gitlab">
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Provisioner" href="/feed.xml" />
 
     <!-- Custom CSS -->
@@ -36,17 +36,17 @@
     <!-- From: https://github.com/mmistakes/hpstr-jekyll-theme/blob/master/_includes/head.html -->
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Redis">
+    <meta property="og:title" content="GitLab Community Edition (CE)">
     <meta property="og:description" content="Poor man&#39;s Ansible Tower a.k.a. A RESTful API for Ansible.">
-    <meta property="og:url" content="https://provisioner.vpetersson.com/docs/roles/redis">
+    <meta property="og:url" content="https://provisioner.vpetersson.com/docs/roles/gitlab">
     <meta property="og:site_name" content="Provisioner">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary" />
     
-    <meta name="twitter:title" content="Redis" />
+    <meta name="twitter:title" content="GitLab Community Edition (CE)" />
     <meta name="twitter:description" content="Poor man's Ansible Tower a.k.a. A RESTful API for Ansible." />
-    <meta name="twitter:url" content="https://provisioner.vpetersson.com/docs/roles/redis" />
+    <meta name="twitter:url" content="https://provisioner.vpetersson.com/docs/roles/gitlab" />
 
     <!-- Icons -->
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
@@ -184,17 +184,45 @@
       <div class="measure">
         <div class="post">
   <header class="post-header">
-    <h1 class="h2">Redis</h1>
+    <h1 class="h2">GitLab Community Edition (CE)</h1>
   </header>
   <article class="post-content">
   <ul>
-  <li><em>Name</em>: redis</li>
-  <li><em>Requirement</em>: Ubuntu 12.04 or later</li>
-  <li><em>Exposes ports:</em> 127.0.0.1:6379</li>
-  <li><em>Installation notes</em>: No</li>
+  <li><strong>Name</strong>: gitlab</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/gitlab_install_notes.tpl">Yes</a></li>
+  <li><strong>Subdomain:</strong> gitlab</li>
+  <li><strong>Container link:</strong> GitLab’s <a href="https://hub.docker.com/r/gitlab/gitlab-ce/">official container</a></li>
 </ul>
 
-<p>Installs the <a href="https://hub.docker.com/_/redis/">official Redis Docker container</a>.</p>
+<h2 id="what-is-gitlab">What is GitLab?</h2>
+
+<p>“Provides Git repository management, code reviews, issue tracking, activity feeds and wikis. GitLab itself is also free software.”</p>
+
+<h2 id="installation-notes">Installation Notes</h2>
+
+<ul>
+  <li>Point your browser to gitlab.yourdomain.com</li>
+  <li>Follow the instructions to configure your GitLab instance and create your administration account</li>
+</ul>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<p>The GitLab container is running a number of services, such as Redis and PostgreSQL. Hence, it’s operating more like a Virtual Machine (VM) than a regular Docker container. Because of this, we’re unable to utilize other shared components.</p>
+
+<p>Here are the relevant storage paths on the host system:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">/usr/local/etc/gitlab</code>: GitLab’s configuration files.</li>
+  <li><code class="highlighter-rouge">/var/log/gitlab</code>: GitLab’s logs.</li>
+  <li><code class="highlighter-rouge">/usr/local/gitlab</code>: GitLab’s persistent data storage.</li>
+</ul>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+</ul>
 
   </article>
 </div>

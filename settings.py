@@ -11,6 +11,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'docker',
     'docker_registry',
     'drupal',
+    'gitlab',
     'grafana',
     'joomla',
     'letsencrypt',
@@ -33,11 +34,11 @@ CLUSTER_PLAYBOOKS = [
 
 PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS
 
-HIDDEN_PLAYBOOKS = [
-    'dns',
-    'letsencrypt,'
-    'nginx',
-]
+# Provide a comma separated list
+HIDDEN_PLAYBOOKS = os.getenv(
+    'HIDDEN_PLAYBOOKS',
+    'dns,letsencrypt,nginx'
+).split(',')
 
 MODULES = [
     'ping',

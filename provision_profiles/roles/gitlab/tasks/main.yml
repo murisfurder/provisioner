@@ -1,0 +1,28 @@
+---
+- name: Gitlab
+  docker:
+    name: gitlab
+    image: gitlab/gitlab-ce
+    hostname: "{{ role }}.{{ ansible_fqdn }}"
+    state: started
+    restart_policy: always
+    net: provisioner
+    env:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url "http://{{ role  }}.{{ ansible_fqdn  }}"
+    volumes:
+      - '/srv/gitlab/config:/usr/local/etc/gitlab'
+      - '/srv/gitlab/logs:/var/log/gitlab'
+      - '/srv/gitlab/data:/usr/local/gitlab'
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx
