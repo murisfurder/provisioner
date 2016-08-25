@@ -1,6 +1,10 @@
 # Django-style settings file
 import os
 
+
+def str2bool(s):
+    return s.lower() in ['true', '1', 'yes']
+
 REDIS_SERVER = os.getenv('REDIS_PORT_6379_TCP_ADDR', 'redis')
 REDIS_PORT = os.getenv('REDIS_PORT_6379_TCP_PORT', 6379)
 REDIS_DB = os.getenv('REDIS_DB', 0)
@@ -49,4 +53,4 @@ REMOTE_USER = os.getenv('REMOTE_USER', 'root')
 SSH_PRIVATE_KEYS = os.getenv('SSH_PRIVATE_KEYS', '')
 
 # Redirect all webapps to HTTPS instead of HTTP
-USE_SSL = bool(os.getenv('USE_SSL', True))
+USE_SSL = str2bool(os.getenv('USE_SSL', 'True'))
