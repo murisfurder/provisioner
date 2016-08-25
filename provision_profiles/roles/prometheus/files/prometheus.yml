@@ -36,5 +36,5 @@ scrape_configs:
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
 
-    target_groups:
+    static_configs:
       - targets: ['prometheus-pushgateway:9091']
