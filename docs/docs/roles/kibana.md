@@ -15,10 +15,9 @@ tags: docker,mysql,kibana,role
 "Kibana is an open source data visualization platform that allows you to interact with your data through stunning, powerful graphics. From histograms to geomaps, Kibana brings your data to life with visuals that can be combined into custom dashboards that help you share insights from your data far and wide."
 
 ## Installation Notes
-TODO
+No particular installation required. Simply point your browser to http://kibana.yourdomain.com and login with the supplied credentials.
 
-## Technical Details
-TODO
+If used with [Fluentd](/docs/roles/fluentd), the data will automatically be populated.
 
 ## Related Roles
 

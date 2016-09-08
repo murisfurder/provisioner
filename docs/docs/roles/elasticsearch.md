@@ -16,7 +16,9 @@ tags: docker,elasticsearch,role
 
 ## Technical Details
 
-TODO
+There are no publicly exposed ports for Elasticsearch. The role is designed to be used with another Docker container on the 'provisioner' network.
+
+The data is stored on disk under `/usr/local/elasticsearch/data`
 
 ## Related Roles
 

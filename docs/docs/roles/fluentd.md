@@ -44,6 +44,7 @@ echo '{"message":"Testing Provisioner"}' | fluent-cat --json secure.test
 
 ## Technical Details
 
+Fluentd holds no persistent data. All data is being relayed to the [Elasticsearch](/docs/role/elasticsearch) container.
 
 ## Related Roles
 
