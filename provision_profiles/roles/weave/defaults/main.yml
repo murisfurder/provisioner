@@ -1,0 +1,6 @@
+is_master: false
+is_slave: false
+master_ip:
+passphrase:
+weave_bin: "/usr/local/bin/weave"
+weave_url: "https://github.com/weaveworks/weave/releases/download/latest_release/weave"

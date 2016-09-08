@@ -28,7 +28,7 @@
     name: redmine
     image: redmine
     state: started
-    hostname: "{{ role }}.{{ ansible_fqdn }}"
+    hostname: "{{ role_name }}.{{ fqdn }}"
     restart_policy: on-failure
     restart_policy_retry: 10
     env:
@@ -44,7 +44,7 @@
 - name: Copies in Nginx config
   template:
     src: "../../nginx/templates/{{ item }}.j2"
-    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    dest: "/etc/nginx/conf.d/{{ role_name }}-{{ item }}"
     mode: 0644
   with_items:
   - app.conf

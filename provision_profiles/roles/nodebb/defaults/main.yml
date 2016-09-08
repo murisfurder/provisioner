@@ -1,0 +1,4 @@
+init_db: false
+rs_name: rs0
+rs_servers: 'node0,node1,node2'
+secret:

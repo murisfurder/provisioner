@@ -1,0 +1,3 @@
+role_name: 'grafana'
+fqdn: false
+http_port: 3000

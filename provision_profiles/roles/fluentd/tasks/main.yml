@@ -1,0 +1,27 @@
+---
+- name: Create etc folder
+  file:
+    path: /usr/local/etc
+    state: directory
+
+- name: Configure Fluentd config file
+  template:
+    src: fluent.conf.j2
+    dest: /usr/local/etc/fluent.conf
+    mode: 0644
+    force: no
+
+- name: Fluentd
+  docker:
+    name: fluentd
+    image: vpetersson/fluentd-elasticsearch
+    state: started
+    hostname: "{{ role_name }}.{{ fqdn }}"
+    net: provisioner
+    restart_policy: always
+    volumes:
+    - "/usr/local/etc/fluent.conf:/fluentd/etc/fluent.conf:ro"
+    - "/etc/ssl/private:/etc/ssl/private:ro"
+    - "/etc/letsencrypt:/etc/letsencrypt:ro"
+    ports:
+    - 24284:24284

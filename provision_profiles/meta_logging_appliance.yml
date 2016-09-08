@@ -1,0 +1,12 @@
+- name: Provisions a logging server (running inside Docker)
+  hosts: all
+  become: yes
+
+  roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - docker_network
+    - nginx
+    - elasticsearch
+    - kibana
+    - fluentd

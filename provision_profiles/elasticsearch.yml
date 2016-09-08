@@ -1,0 +1,9 @@
+- name: Provisions Elasticsearch (running inside Docker)
+  hosts: all
+  become: yes
+
+  roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - docker_network
+    - elasticsearch

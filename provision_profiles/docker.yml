@@ -1,6 +1,6 @@
 - name: Provision Docker (on Ubuntu 12.04+)
   hosts: all
-  sudo: yes
+  become: yes
 
   roles:
     - unattended-upgrades

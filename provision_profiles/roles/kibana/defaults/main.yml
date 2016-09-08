@@ -1,0 +1,5 @@
+fqdn: false
+http_port: '5601'
+kibana_password: false
+nginx_auth: true
+role_name: 'kibana'

@@ -1,11 +1,6 @@
 - name: Provisions Redmine (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - mysql_root_password:
-    - http_port: 3000
-    - fqdn: false
+  become: yes
 
   roles:
     - unattended-upgrades

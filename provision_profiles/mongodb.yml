@@ -1,14 +1,7 @@
 ---
 - name: Provisions MongoDB (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-   - is_rs: false
-   - is_rs_master: false
-   - is_rs_slave: false
-   - rs_node_name:
-   - rs_init: false
+  become: yes
 
   roles:
     - unattended-upgrades

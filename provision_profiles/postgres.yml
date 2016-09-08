@@ -1,9 +1,6 @@
 - name: Provisions PostgreSQL (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - postgres_postgres_password:
+  become: yes
 
   roles:
     - unattended-upgrades

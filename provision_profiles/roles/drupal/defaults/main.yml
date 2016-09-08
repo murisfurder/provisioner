@@ -1,0 +1,5 @@
+fqdn: false
+http_port: 80
+mysql_drupal_password:
+mysql_drupal_password:
+role_name: 'drupal'

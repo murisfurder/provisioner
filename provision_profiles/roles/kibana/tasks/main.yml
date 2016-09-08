@@ -1,0 +1,28 @@
+---
+- name: Create htaccess file
+  command: htpasswd -bc "/etc/nginx/conf.d/{{ role_name }}-app.htpasswd" "{{ role_name }}" "{{ kibana_password }}"
+  args:
+    creates: "/etc/nginx/conf.d/{{ role_name }}-app.htpasswd"
+
+- name: Kibana
+  docker:
+    name: kibana
+    image: kibana
+    state: started
+    hostname: "{{ role_name }}.{{ fqdn }}"
+    net: provisioner
+    restart_policy: always
+    env:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role_name }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx

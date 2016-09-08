@@ -2,46 +2,46 @@
 
 server {
   listen 80;
-  server_name {{ role | regex_replace('_', '-') }}.{{ fqdn }};
+  server_name {{ role_name | regex_replace('_', '-') }}.{{ fqdn }};
   server_tokens off;
 {% if use_ssl %}
-  return 301 https://{{ role | regex_replace('_', '-') }}.{{ fqdn }}$request_uri;
+  return 301 https://{{ role_name | regex_replace('_', '-') }}.{{ fqdn }}$request_uri;
 {% else %}
   location / {
     {% if nginx_auth|default(false) -%}
     auth_basic "Restricted";
-    auth_basic_user_file /etc/nginx/conf.d/{{ role }}-app.htpasswd;
+    auth_basic_user_file /etc/nginx/conf.d/{{ role_name }}-app.htpasswd;
     {% endif -%}
 
-    proxy_set_header Host {{ role | regex_replace('_', '-') }}.{{ fqdn }};
+    proxy_set_header Host {{ role_name | regex_replace('_', '-') }}.{{ fqdn }};
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
 
-    proxy_pass http://{{ role | regex_replace('_', '-') }}/;
+    proxy_pass http://{{ role_name | regex_replace('_', '-') }}/;
   }
 {% endif %}
 }
 
 server {
   listen 80;
-  server_name {{ role | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
+  server_name {{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
   server_tokens off;
 {% if use_ssl %}
-  return 301 https://{{ role | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}$request_uri;
+  return 301 https://{{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}$request_uri;
 {% else %}
   location / {
     {% if nginx_auth|default(false) -%}
     auth_basic "Restricted";
-    auth_basic_user_file /etc/nginx/conf.d/{{ role }}-app.htpasswd;
+    auth_basic_user_file /etc/nginx/conf.d/{{ role_name }}-app.htpasswd;
     {% endif -%}
 
-    proxy_set_header Host {{ role | regex_replace('_', '-') }}.{{ fqdn }};
+    proxy_set_header Host {{ role_name | regex_replace('_', '-') }}.{{ fqdn }};
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
 
-    proxy_pass http://{{ role | regex_replace('_', '-') }}/;
+    proxy_pass http://{{ role_name | regex_replace('_', '-') }}/;
   }
 {% endif %}
 }
@@ -49,7 +49,7 @@ server {
 {% if use_ssl %}
 server {
   listen 443 ssl;
-  server_name {{ role | regex_replace('_', '-') }}.{{ fqdn }};
+  server_name {{ role_name | regex_replace('_', '-') }}.{{ fqdn }};
   server_tokens off;
 
   ssl_certificate /etc/ssl/private/{{ fqdn }}.crt;
@@ -60,15 +60,15 @@ server {
   location / {
     {% if nginx_auth|default(false) -%}
     auth_basic "Restricted";
-    auth_basic_user_file /etc/nginx/conf.d/{{ role }}-app.htpasswd;
+    auth_basic_user_file /etc/nginx/conf.d/{{ role_name }}-app.htpasswd;
     {% endif -%}
 
-    proxy_set_header Host {{ role | regex_replace('_', '-') }}.{{ fqdn }};
+    proxy_set_header Host {{ role_name | regex_replace('_', '-') }}.{{ fqdn }};
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
 
-    proxy_pass http://{{ role | regex_replace('_', '-') }}/;
+    proxy_pass http://{{ role_name | regex_replace('_', '-') }}/;
   }
 
   location ~ /.well-known {
@@ -80,7 +80,7 @@ server {
 
 server {
   listen 443 ssl;
-  server_name {{ role | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
+  server_name {{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
   server_tokens off;
 
   ssl_certificate /etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.crt;
@@ -91,15 +91,15 @@ server {
   location / {
     {% if nginx_auth|default(false) -%}
     auth_basic "Restricted";
-    auth_basic_user_file /etc/nginx/conf.d/{{ role }}-app.htpasswd;
+    auth_basic_user_file /etc/nginx/conf.d/{{ role_name }}-app.htpasswd;
     {% endif -%}
 
-    proxy_set_header Host {{ role | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
+    proxy_set_header Host {{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
 
-    proxy_pass http://{{ role | regex_replace('_', '-') }}/;
+    proxy_pass http://{{ role_name | regex_replace('_', '-') }}/;
   }
 
   location ~ /.well-known {

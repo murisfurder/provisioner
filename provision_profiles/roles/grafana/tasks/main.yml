@@ -15,7 +15,7 @@
     name: grafana
     image: grafana/grafana
     state: started
-    hostname: "{{ role }}.{{ fqdn }}"
+    hostname: "{{ role_name }}.{{ fqdn }}"
     net: provisioner
     restart_policy: always
     volumes:
@@ -24,7 +24,7 @@
 - name: Copies in Nginx config
   template:
     src: "../../nginx/templates/{{ item }}.j2"
-    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    dest: "/etc/nginx/conf.d/{{ role_name }}-{{ item }}"
     mode: 0644
   with_items:
   - app.conf

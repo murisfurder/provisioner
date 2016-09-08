@@ -1,12 +1,6 @@
 - name: Provisions NodeBB (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - secret:
-    - rs_servers: 'node0,node1,node2'
-    - rs_name: rs0
-    - init_db: false
+  become: yes
 
   roles:
     - nodebb

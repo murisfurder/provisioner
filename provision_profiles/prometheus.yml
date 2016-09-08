@@ -1,11 +1,6 @@
 - name: Provisions Prometheus (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - http_port: 9090
-    - nginx_auth: true
-    - fqdn: false
+  become: yes
 
   roles:
     - unattended-upgrades

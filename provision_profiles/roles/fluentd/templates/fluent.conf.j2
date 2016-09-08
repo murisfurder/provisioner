@@ -1,0 +1,24 @@
+# Listen to incoming data over SSL
+<source>
+  @type secure_forward
+  shared_key {{ fluentd_password }}
+  secure true
+  self_hostname {{ role_name }}.{{ fqdn }}
+  cert_path /etc/ssl/private/{{ fqdn }}.crt
+  private_key_path /etc/ssl/private/{{ fqdn }}.key
+  private_key_passphrase
+</source>
+
+# Store Data in Elasticsearch
+<match *.**>
+  type copy
+  <store>
+    type elasticsearch
+    host elasticsearch
+    port 9200
+    include_tag_key true
+    tag_key @log_name
+    logstash_format true
+    flush_interval 10s
+  </store>
+</match>
