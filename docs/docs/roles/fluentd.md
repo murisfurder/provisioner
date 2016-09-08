@@ -1,6 +1,6 @@
 ---
 layout: page
-title: fluentd
+title: Fluentd
 permalink: /docs/roles/fluentd
 tags: docker,fluentd,elasticsearch,logging,role
 ---
