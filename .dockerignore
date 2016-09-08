@@ -9,5 +9,5 @@ Vagrantfile
 Dockerfile.*
 docker-compose*
 .vagrant
-doc/*
+docs/*
 example/*
