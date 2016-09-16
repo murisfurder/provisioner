@@ -6,16 +6,16 @@
     mode: 0644
 
 - name: Create htaccess file
-  command: htpasswd -bc "/etc/nginx/conf.d/{{ role }}-app.htpasswd" prometheus "{{ prometheus_password }}"
+  command: htpasswd -bc "/etc/nginx/conf.d/{{ role_name }}-app.htpasswd" prometheus "{{ prometheus_password }}"
   args:
-    creates: "/etc/nginx/conf.d/{{ role }}-app.htpasswd"
+    creates: "/etc/nginx/conf.d/{{ role_name }}-app.htpasswd"
 
 - name: Prometheus Push Gateway
   docker:
     name: prometheus-pushgateway
     image: prom/pushgateway
     state: started
-    hostname: "{{ role }}-pushgateway.{{ ansible_fqdn }}"
+    hostname: "{{ role_name }}-pushgateway.{{ fqdn }}"
     net: provisioner
     restart_policy: always
 
@@ -24,7 +24,7 @@
     name: prometheus
     image: prom/prometheus
     state: started
-    hostname: "{{ role }}.{{ ansible_fqdn }}"
+    hostname: "{{ role_name }}.{{ fqdn }}"
     volumes:
     - "/usr/local/etc/prometheus.yml:/etc/prometheus/prometheus.yml"
     net: provisioner
@@ -33,7 +33,7 @@
 - name: Copies in Nginx config
   template:
     src: "../../nginx/templates/{{ item }}.j2"
-    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    dest: "/etc/nginx/conf.d/{{ role_name }}-{{ item }}"
     mode: 0644
   with_items:
   - app.conf
@@ -42,7 +42,7 @@
 - name: Copies in Nginx config for push gateway
   template:
     src: "{{ item }}.j2"
-    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    dest: "/etc/nginx/conf.d/{{ role_name }}-{{ item }}"
     mode: 0644
   with_items:
   - pushgateway.conf

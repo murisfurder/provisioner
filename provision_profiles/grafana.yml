@@ -1,10 +1,6 @@
 - name: Provisions Grafana (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - http_port: 3000
-    - fqdn: false
+  become: yes
 
   roles:
     - unattended-upgrades

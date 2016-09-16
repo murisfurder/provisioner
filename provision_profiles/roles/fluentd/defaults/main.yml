@@ -1,0 +1,3 @@
+fluantd_password: false
+fqdn: false
+role_name: 'fluentd'

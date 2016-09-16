@@ -1,0 +1,5 @@
+fqdn: false
+http_port: 80
+mysql_owncloud_password:
+mysql_owncloud_user:
+role_name: 'owncloud'

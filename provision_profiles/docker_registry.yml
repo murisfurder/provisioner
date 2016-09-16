@@ -1,10 +1,6 @@
 - name: Provisions Docker Registry (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - http_port: 5000
-    - fqdn: false
+  become: yes
 
   roles:
     - unattended-upgrades

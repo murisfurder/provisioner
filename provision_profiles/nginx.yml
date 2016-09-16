@@ -1,11 +1,9 @@
 - name: Provisions Nginx (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - fqdn: false
+  become: yes
 
   roles:
     - unattended-upgrades
     - docker.ubuntu
+    - docker_network
     - nginx

@@ -1,12 +1,6 @@
 - name: Provisions Drupal (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - mysql_drupal_password:
-    - mysql_drupal_password:
-    - http_port: 80
-    - fqdn: false
+  become: yes
 
   roles:
     - unattended-upgrades

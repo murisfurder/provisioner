@@ -1,13 +1,10 @@
 - name: Install Let's Encrypt
   hosts: all
-  sudo: yes
-
-  vars:
-    - fqdn: false
-    - email: false
+  become: yes
 
   roles:
     - unattended-upgrades
     - docker.ubuntu
+    - docker_network
     - nginx
     - letsencrypt

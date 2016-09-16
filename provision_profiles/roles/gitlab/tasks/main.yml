@@ -3,13 +3,13 @@
   docker:
     name: gitlab
     image: gitlab/gitlab-ce
-    hostname: "{{ role }}.{{ ansible_fqdn }}"
+    hostname: "{{ role_name }}.{{ ansible_fqdn }}"
     state: started
     restart_policy: always
     net: provisioner
     env:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url "http://{{ role  }}.{{ ansible_fqdn  }}"
+        external_url "http://{{ role_name  }}.{{ ansible_fqdn  }}"
     volumes:
       - '/srv/gitlab/config:/usr/local/etc/gitlab'
       - '/srv/gitlab/logs:/var/log/gitlab'
@@ -18,7 +18,7 @@
 - name: Copies in Nginx config
   template:
     src: "../../nginx/templates/{{ item }}.j2"
-    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    dest: "/etc/nginx/conf.d/{{ role_name }}-{{ item }}"
     mode: 0644
   with_items:
   - app.conf

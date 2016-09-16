@@ -93,7 +93,12 @@ def provision(
 
     playbook_uri = 'provision_profiles/{}.yml'.format(role)
 
-    if role in [
+    # Database passwords
+    extra_vars['mysql_root_password'] = generate_password()
+    extra_vars['postgres_postgres_password'] = generate_password()
+
+    # MySQL passwords
+    for role in [
         'drupal',
         'grafana',
         'joomla',
@@ -102,24 +107,16 @@ def provision(
         'redmine',
         'wordpress',
     ]:
-        extra_vars['mysql_root_password'] = generate_password()
 
-        if not role == 'mysql':
-            extra_vars['mysql_{}_user'.format(role)] = role
-            extra_vars['mysql_{}_password'.format(role)] = generate_password()
+        extra_vars['mysql_{}_user'.format(role)] = role
+        extra_vars['mysql_{}_password'.format(role)] = generate_password()
 
-    if role in [
-        'postgres',
-    ]:
-        extra_vars['postgres_postgres_password'] = generate_password()
-
-        if not role == 'postgres':
-            extra_vars['postgres_{}_user'.format(role)] = role
-            extra_vars['postgres_{}_password'.format(role)] = generate_password()
-
-    if role in [
+    # Application passwords
+    for role in [
+        'fluentd',
         'grafana',
         'prometheus',
+        'kibana',
     ]:
         extra_vars['{}_password'.format(role)] = generate_password()
 

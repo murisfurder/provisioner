@@ -1,13 +1,6 @@
 - name: Provisions Joomla (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - mysql_joomla_password:
-    - mysql_joomla_user:
-    - mysql_root_password:
-    - http_port: 80
-    - fqdn: false
+  become: yes
 
   roles:
     - unattended-upgrades

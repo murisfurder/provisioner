@@ -1,9 +1,6 @@
 - name: Provisions MySQL (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - mysql_root_password:
+  become: yes
 
   roles:
     - unattended-upgrades

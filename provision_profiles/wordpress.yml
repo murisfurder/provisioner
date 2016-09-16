@@ -1,13 +1,6 @@
 - name: Provisions WordPress (running inside Docker)
   hosts: all
-  sudo: yes
-
-  vars:
-    - mysql_root_password:
-    - mysql_wordpress_password:
-    - mysql_wordpress_user: wordpress
-    - http_port: 80
-    - fqdn: false
+  become: yes
 
   roles:
     - unattended-upgrades

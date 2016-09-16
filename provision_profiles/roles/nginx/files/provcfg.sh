@@ -6,15 +6,18 @@ SSLCONF=/etc/nginx/conf.d/ssl-redirect.inc
 SUBDOMAINS=(
 docker-registry
 drupal
+fluentd
 gitlab
 grafana
 joomla
+kibana
 nodebb
 owncloud
 prometheus
 prometheus-pushgateway
 redmine
 wordpress
+www
 )
 
 function generate_cert {

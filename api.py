@@ -160,7 +160,7 @@ def abort_job(uuid=None):
 @app.route('/roles')
 def get_roles():
     response.content_type = 'application/json'
-    ROLES = copy.deepcopy(settings.SINGLE_HOST_PLAYBOOKS)
+    ROLES = copy.deepcopy(settings.PLAYBOOKS)
     for r in ROLES:
         if r in settings.HIDDEN_PLAYBOOKS:
             ROLES.remove(r)

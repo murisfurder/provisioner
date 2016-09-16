@@ -23,6 +23,7 @@
     - "{{ fqdn }}"
 
 - name: Symlink certificate
+  ignore_errors: True
   file:
     src: /etc/letsencrypt/live/{{ item }}/fullchain.pem
     dest: /etc/ssl/private/{{ item }}.crt
@@ -32,6 +33,7 @@
     - "{{ ansible_eth0.ipv4.address }}.nip.io"
 
 - name: Symlink certificate key
+  ignore_errors: True
   file:
     src: /etc/letsencrypt/live/{{ item }}/privkey.pem
     dest: /etc/ssl/private/{{ item }}.key
@@ -53,4 +55,3 @@
     weekday: 0
     user: root
     job: /usr/local/sbin/certbot-auto renew --quiet --no-self-upgrade
-

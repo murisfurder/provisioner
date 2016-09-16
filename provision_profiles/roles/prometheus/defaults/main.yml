@@ -1,0 +1,4 @@
+fqdn: false
+http_port: 9090
+nginx_auth: true
+role_name: 'prometheus'

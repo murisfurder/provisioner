@@ -1,0 +1,16 @@
+---
+- file:
+    path: /usr/local/elasticsearch/data
+    state: directory
+    recurse: yes
+
+- name: Elasticsearch
+  docker:
+    name: elasticsearch
+    image: elasticsearch
+    state: started
+    hostname: "{{ role_name }}.{{ fqdn }}"
+    net: provisioner
+    restart_policy: always
+    volumes:
+      - "/usr/local/elasticsearch/data:/usr/share/elasticsearch/data"

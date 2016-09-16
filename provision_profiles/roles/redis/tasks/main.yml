@@ -4,6 +4,8 @@
     name: redis
     image: redis
     state: started
+    hostname: "{{ role_name }}.{{ fqdn  }}"
+    net: provisioner
     restart_policy: always
     ports:
       - "127.0.0.1:6379:6379"

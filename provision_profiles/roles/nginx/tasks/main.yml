@@ -6,6 +6,12 @@
 - debug:
     msg: "Using {{ fqdn }} as the fqdn."
 
+- stat:
+    path: /etc/letsencrypt/live
+  register: le
+
+- set_fact: use_ssl="{{le.stat.exists}}"
+
 - debug:
     msg: "Configuring apps to use SSL."
   when: use_ssl
@@ -59,36 +65,52 @@
   when: use_ssl
 
 - stat:
-    path: /etc/ssl/private/{{ fqdn }}.crt
-  register: sslcrt
-  when: use_ssl
-
-- name: Creates symlinks to certificates
-  file:
-    src: "/etc/ssl/private/{{ fqdn }}-snakeoil.crt"
-    dest: "/etc/ssl/private/{{ item }}.crt"
-    state: link
-  with_items:
-    - "{{ fqdn }}"
-    - "{{ ansible_eth0.ipv4.address }}.nip.io"
-  when: not sslcrt.stat.exists
+    path: "/etc/letsencrypt/live/{{ fqdn }}/fullchain.pem"
+  register: le_ssl_fqdn_crt
   when: use_ssl
 
 - stat:
-    path: /etc/ssl/private/{{ fqdn }}.key
-  register: sslkey
+    path: "/etc/letsencrypt/live/{{ ansible_eth0.ipv4.address }}.nip.io/fullchain.pem"
+  register: le_ssl_ip_crt
   when: use_ssl
 
-- name: Creates symlinks to certificates
+- name: Creates symlinks to certificates (FQDN)
+  file:
+    src: "/etc/ssl/private/{{ fqdn }}-snakeoil.crt"
+    dest: "/etc/ssl/private/{{ fqdn }}.crt"
+    state: link
+  when: le_ssl_fqdn_crt.stat.exists == False
+
+- name: Creates symlinks to certificates (IP)
+  file:
+    src: "/etc/ssl/private/{{ fqdn }}-snakeoil.crt"
+    dest: "/etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.crt"
+    state: link
+  when: le_ssl_ip_crt.stat.exists == False
+
+- stat:
+    path: "/etc/letsencrypt/live/{{ fqdn }}/privkey.pem"
+  register: le_ssl_fqdn_key
+  when: use_ssl
+
+- stat:
+    path: "/etc/letsencrypt/live/{{ ansible_eth0.ipv4.address }}.nip.io/privkey.pem"
+  register: le_ssl_ip_key
+  when: use_ssl
+
+- name: Creates symlinks to certificates (FQDN)
   file:
     src: "/etc/ssl/private/{{ fqdn }}-snakeoil.key"
-    dest: "/etc/ssl/private/{{ item }}.key"
+    dest: "/etc/ssl/private/{{ fqdn }}.key"
     state: link
-  with_items:
-    - "{{ fqdn }}"
-    - "{{ ansible_eth0.ipv4.address }}.nip.io"
-  when: not sslkey.stat.exists
-  when: use_ssl
+  when: le_ssl_fqdn_key.stat.exists == False
+
+- name: Creates symlinks to certificates (IP)
+  file:
+    src: "/etc/ssl/private/{{ fqdn }}-snakeoil.key"
+    dest: "/etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.key"
+    state: link
+  when: le_ssl_ip_key.stat.exists == False
 
 - name: Nginx
   docker:
