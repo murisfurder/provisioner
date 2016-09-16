@@ -42,7 +42,7 @@ META_PACKAGES = [
     'meta_logging_appliance',
 ]
 
-PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + META_PACKAGES
+PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS + META_PACKAGES
 
 # Provide a comma separated list
 HIDDEN_PLAYBOOKS = os.getenv(
