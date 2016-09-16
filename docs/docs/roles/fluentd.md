@@ -42,6 +42,9 @@ After you've configured your client and verified that there were no errors in td
 echo '{"message":"Testing Provisioner"}' | fluent-cat --json secure.test
 ```
 
+Alternatively, you can use the Fluentd endpoint directly with our [docker helper container](https://github.com/vpetersson/fluentd-secure_forward).
+
+
 ## Technical Details
 
 Fluentd holds no persistent data. All data is being relayed to the [Elasticsearch](/docs/role/elasticsearch) container.
