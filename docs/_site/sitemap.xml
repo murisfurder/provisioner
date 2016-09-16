@@ -16,7 +16,13 @@
 <loc>https://provisioner.vpetersson.com/docs/roles/drupal</loc>
 </url>
 <url>
+<loc>https://provisioner.vpetersson.com/docs/roles/elasticsearch</loc>
+</url>
+<url>
 <loc>https://provisioner.vpetersson.com/docs/examples</loc>
+</url>
+<url>
+<loc>https://provisioner.vpetersson.com/docs/roles/fluentd</loc>
 </url>
 <url>
 <loc>https://provisioner.vpetersson.com/docs/file-and-folder-structure</loc>
@@ -43,7 +49,13 @@
 <loc>https://provisioner.vpetersson.com/docs/roles/joomla</loc>
 </url>
 <url>
+<loc>https://provisioner.vpetersson.com/docs/roles/kibana</loc>
+</url>
+<url>
 <loc>https://provisioner.vpetersson.com/docs/roles/letsencrypt</loc>
+</url>
+<url>
+<loc>https://provisioner.vpetersson.com/docs/roles/logging-appliance</loc>
 </url>
 <url>
 <loc>https://provisioner.vpetersson.com/docs/roles/mongodb</loc>

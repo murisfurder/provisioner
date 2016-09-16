@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Use Cases &#8211; Provisioner</title>
+    <title>Fluentd &#8211; Provisioner</title>
     <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com">
     <link rel="dns-prefetch" href="//cdn.mathjax.org">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
@@ -12,7 +12,7 @@
     <meta name="robots" content="all">
     <meta name="author" content="Viktor Petersson">
     
-    <link rel="canonical" href="https://provisioner.vpetersson.com/use-cases">
+    <link rel="canonical" href="https://provisioner.vpetersson.com/docs/roles/fluentd">
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Provisioner" href="/feed.xml" />
 
     <!-- Custom CSS -->
@@ -36,17 +36,17 @@
     <!-- From: https://github.com/mmistakes/hpstr-jekyll-theme/blob/master/_includes/head.html -->
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Use Cases">
+    <meta property="og:title" content="Fluentd">
     <meta property="og:description" content="Poor man&#39;s Ansible Tower a.k.a. A RESTful API for Ansible.">
-    <meta property="og:url" content="https://provisioner.vpetersson.com/use-cases">
+    <meta property="og:url" content="https://provisioner.vpetersson.com/docs/roles/fluentd">
     <meta property="og:site_name" content="Provisioner">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary" />
     
-    <meta name="twitter:title" content="Use Cases" />
+    <meta name="twitter:title" content="Fluentd" />
     <meta name="twitter:description" content="Poor man's Ansible Tower a.k.a. A RESTful API for Ansible." />
-    <meta name="twitter:url" content="https://provisioner.vpetersson.com/use-cases" />
+    <meta name="twitter:url" content="https://provisioner.vpetersson.com/docs/roles/fluentd" />
 
     <!-- Icons -->
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
@@ -192,18 +192,62 @@
       <div class="measure">
         <div class="post">
   <header class="post-header">
-    <h1 class="h2">Use Cases</h1>
+    <h1 class="h2">Fluentd</h1>
   </header>
   <article class="post-content">
-  <h2 id="cloud-service-providers-csp">Cloud Service Providers (CSP)</h2>
+  <ul>
+  <li><strong>Name</strong>: Fluentd</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/fluentd_install_notes.tpl">Yes</a></li>
+  <li><strong>Container link:</strong> <a href="https://hub.docker.com/r/vpetersson/fluentd-elasticsearch/">Container</a></li>
+</ul>
 
-<p>This was the initial use case for Provisioner. <a href="https://www.cloud.net/">Cloud.net</a> needed a way to configure Virtual Machines (VMs). The problem was that common tools, such as cloud-init were not available. The only method to communicate with the server was over SSH. We could also not make any assumption about the underlaying VM. Since Cloud.net is a federation of many CSPs, the state of these VMs differ and the only thing we could assume was that the VM would be running Ubuntu 12.04 or later.</p>
+<h2 id="what-is-fluentd">What is Fluentd?</h2>
+<p>“Fluentd is an open source data collector, which lets you unify the data collection and consumption for a better use and understanding of data.”</p>
 
-<p>With this assumption in mind, Provisioner was developed to install common ‘apps’ (such as WordPress) onto these VMs.</p>
+<h2 id="configure-a-client">Configure a Client</h2>
 
-<h2 id="continuous-integration-ci--continuous-delivery-cd">Continuous Integration (CI) / Continuous Delivery (CD)</h2>
+<p>To log to the central Fluentd server, you need <a href="http://www.fluentd.org/download">td-agent</a>. You will also need the <a href="https://github.com/tagomoris/fluent-plugin-secure-forward">fluent-plugin-secure-forward</a> plugin installed in order to communicate over HTTPS.</p>
 
-<p>Another use case for Provisioner is as part of a CI/CD workflow. Since SSH Keys can be installed inside Provisioner, you do not need to provide your CI server with these keys. Instead, you could simply issue an API call to Provisioner and tell it to execute an Ansible Playbook against either your staging or production environment.</p>
+<p>Depending on what you’re looking to log, the configuration will vary. You will however need the following stanza in order to ship logs to your Fluentd server:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;source&gt;
+  @type forward
+&lt;/source&gt;
+&lt;match secure.**&gt;
+    @type secure_forward
+    shared_key YourSecret
+    self_hostname my-fancy-server.local
+    enable_strict_verification yes
+    secure true
+    &lt;server&gt;
+      host fluentd.yourdomain.com
+      port 24284
+    &lt;/server&gt;
+&lt;/match&gt;
+</code></pre>
+</div>
+
+<p>After you’ve configured your client and verified that there were no errors in td-agent’s logs, you can trigger a message to be sent by running:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo '{"message":"Testing Provisioner"}' | fluent-cat --json secure.test
+</code></pre>
+</div>
+
+<p>Alternatively, you can use the Fluentd endpoint directly with our <a href="https://github.com/vpetersson/fluentd-secure_forward">docker helper container</a>.</p>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<p>Fluentd holds no persistent data. All data is being relayed to the <a href="/docs/role/elasticsearch">Elasticsearch</a> container.</p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/mysql">MySQL</a></li>
+  <li>[Kibana]/docs/roles/kibana)</li>
+  <li><a href="/docs/roles/elasticsearch">Elasticsearch</a></li>
+</ul>
 
   </article>
 </div>

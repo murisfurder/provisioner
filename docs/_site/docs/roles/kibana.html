@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Use Cases &#8211; Provisioner</title>
+    <title>Kibana &#8211; Provisioner</title>
     <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com">
     <link rel="dns-prefetch" href="//cdn.mathjax.org">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
@@ -12,7 +12,7 @@
     <meta name="robots" content="all">
     <meta name="author" content="Viktor Petersson">
     
-    <link rel="canonical" href="https://provisioner.vpetersson.com/use-cases">
+    <link rel="canonical" href="https://provisioner.vpetersson.com/docs/roles/kibana">
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Provisioner" href="/feed.xml" />
 
     <!-- Custom CSS -->
@@ -36,17 +36,17 @@
     <!-- From: https://github.com/mmistakes/hpstr-jekyll-theme/blob/master/_includes/head.html -->
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Use Cases">
+    <meta property="og:title" content="Kibana">
     <meta property="og:description" content="Poor man&#39;s Ansible Tower a.k.a. A RESTful API for Ansible.">
-    <meta property="og:url" content="https://provisioner.vpetersson.com/use-cases">
+    <meta property="og:url" content="https://provisioner.vpetersson.com/docs/roles/kibana">
     <meta property="og:site_name" content="Provisioner">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary" />
     
-    <meta name="twitter:title" content="Use Cases" />
+    <meta name="twitter:title" content="Kibana" />
     <meta name="twitter:description" content="Poor man's Ansible Tower a.k.a. A RESTful API for Ansible." />
-    <meta name="twitter:url" content="https://provisioner.vpetersson.com/use-cases" />
+    <meta name="twitter:url" content="https://provisioner.vpetersson.com/docs/roles/kibana" />
 
     <!-- Icons -->
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
@@ -192,18 +192,32 @@
       <div class="measure">
         <div class="post">
   <header class="post-header">
-    <h1 class="h2">Use Cases</h1>
+    <h1 class="h2">Kibana</h1>
   </header>
   <article class="post-content">
-  <h2 id="cloud-service-providers-csp">Cloud Service Providers (CSP)</h2>
+  <ul>
+  <li><strong>Name</strong>: Kibana</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/kibana_install_notes.tpl">Yes</a></li>
+  <li><strong>Container link:</strong> Docker’s <a href="https://hub.docker.com/_/kibana/">official Kibana container</a></li>
+</ul>
 
-<p>This was the initial use case for Provisioner. <a href="https://www.cloud.net/">Cloud.net</a> needed a way to configure Virtual Machines (VMs). The problem was that common tools, such as cloud-init were not available. The only method to communicate with the server was over SSH. We could also not make any assumption about the underlaying VM. Since Cloud.net is a federation of many CSPs, the state of these VMs differ and the only thing we could assume was that the VM would be running Ubuntu 12.04 or later.</p>
+<h2 id="what-is-kibana">What is Kibana?</h2>
+<p>“Kibana is an open source data visualization platform that allows you to interact with your data through stunning, powerful graphics. From histograms to geomaps, Kibana brings your data to life with visuals that can be combined into custom dashboards that help you share insights from your data far and wide.”</p>
 
-<p>With this assumption in mind, Provisioner was developed to install common ‘apps’ (such as WordPress) onto these VMs.</p>
+<h2 id="installation-notes">Installation Notes</h2>
+<p>No particular installation required. Simply point your browser to http://kibana.yourdomain.com and login with the supplied credentials.</p>
 
-<h2 id="continuous-integration-ci--continuous-delivery-cd">Continuous Integration (CI) / Continuous Delivery (CD)</h2>
+<p>If used with <a href="/docs/roles/fluentd">Fluentd</a>, the data will automatically be populated.</p>
 
-<p>Another use case for Provisioner is as part of a CI/CD workflow. Since SSH Keys can be installed inside Provisioner, you do not need to provide your CI server with these keys. Instead, you could simply issue an API call to Provisioner and tell it to execute an Ansible Playbook against either your staging or production environment.</p>
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/mysql">MySQL</a></li>
+  <li><a href="/docs/roles/elasticsearch">Elasticsearch</a></li>
+  <li><a href="/docs/roles/fluentd">Fluentd</a></li>
+</ul>
 
   </article>
 </div>
