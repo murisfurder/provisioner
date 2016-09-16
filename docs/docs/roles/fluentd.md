@@ -53,5 +53,5 @@ Fluentd holds no persistent data. All data is being relayed to the [Elasticsearc
 
 * [Docker](/docs/roles/docker)
 * [MySQL](/docs/roles/mysql)
-* [Kibana]/docs/roles/kibana)
+* [Kibana](/docs/roles/kibana)
 * [Elasticsearch](/docs/roles/elasticsearch)
