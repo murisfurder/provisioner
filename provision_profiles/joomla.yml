@@ -7,5 +7,6 @@
     - docker.ubuntu
     - docker_network
     - mysql
+    - dns
     - nginx
     - joomla

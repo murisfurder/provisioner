@@ -4,6 +4,7 @@
 
   roles:
     - unattended-upgrades
+    - dns
     - docker.ubuntu
     - docker_network
     - nginx

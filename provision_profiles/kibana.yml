@@ -6,6 +6,7 @@
     - unattended-upgrades
     - docker.ubuntu
     - docker_network
+    - dns
     - nginx
     - elasticsearch
     - kibana

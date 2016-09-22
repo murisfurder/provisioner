@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+import json
+import netifaces
+import sh
+import socket
+
+
+def resolve_hostname():
+    fqdn = socket.getfqdn()
+    query = sh.dig('+short', fqdn)
+
+    if query and query.exit_code == 0:
+        return query.strip()
+    else:
+        return False
+
+
+def get_local_ip():
+    addrs = netifaces.ifaddresses('eth0')
+    return addrs[netifaces.AF_INET][0]['addr']
+
+
+def main():
+    payload={}
+    hostname_lookup = resolve_hostname()
+    local_ip = get_local_ip()
+
+    payload['fqdn']=socket.getfqdn()
+
+    if hostname_lookup and hostname_lookup == local_ip:
+        payload['resolves']=True
+    else:
+        payload['resolves']=False
+
+    print json.dumps(payload)
+
+
+if __name__ == "__main__":
+    main()

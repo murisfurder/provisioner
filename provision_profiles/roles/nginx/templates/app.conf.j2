@@ -1,12 +1,13 @@
 # vim: tabstop=2 shiftwidth=2 softtabstop=2
 
+{% if fqdn_resolves %}
 server {
   listen 80;
   server_name {{ role_name | regex_replace('_', '-') }}.{{ fqdn }};
   server_tokens off;
-{% if use_ssl %}
+  {% if use_ssl %}
   return 301 https://{{ role_name | regex_replace('_', '-') }}.{{ fqdn }}$request_uri;
-{% else %}
+  {% else %}
   location / {
     {% if nginx_auth|default(false) -%}
     auth_basic "Restricted";
@@ -20,16 +21,16 @@ server {
 
     proxy_pass http://{{ role_name | regex_replace('_', '-') }}/;
   }
-{% endif %}
+  {% endif %}
 }
-
+{% else %}
 server {
   listen 80;
   server_name {{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
   server_tokens off;
-{% if use_ssl %}
+  {% if use_ssl %}
   return 301 https://{{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}$request_uri;
-{% else %}
+  {% else %}
   location / {
     {% if nginx_auth|default(false) -%}
     auth_basic "Restricted";
@@ -43,10 +44,11 @@ server {
 
     proxy_pass http://{{ role_name | regex_replace('_', '-') }}/;
   }
-{% endif %}
+  {% endif %}
 }
+{% endif %}
 
-{% if use_ssl %}
+{% if use_ssl and fqdn_resolves %}
 server {
   listen 443 ssl;
   server_name {{ role_name | regex_replace('_', '-') }}.{{ fqdn }};
@@ -77,7 +79,9 @@ server {
     allow all;
   }
 }
+{% endif %}
 
+{% if use_ssl and not fqdn_resolves %}
 server {
   listen 443 ssl;
   server_name {{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
