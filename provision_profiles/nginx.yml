@@ -4,6 +4,8 @@
 
   roles:
     - unattended-upgrades
+    - dns
     - docker.ubuntu
     - docker_network
     - nginx
+    - { role: letsencrypt, when: use_ssl }

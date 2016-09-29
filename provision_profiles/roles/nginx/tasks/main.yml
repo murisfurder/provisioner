@@ -1,11 +1,4 @@
 ---
-- set_fact:
-    fqdn: "{{ ansible_fqdn }}"
-  when: not fqdn
-
-- debug:
-    msg: "Using {{ fqdn }} as the fqdn."
-
 - stat:
     path: /etc/letsencrypt/live
   register: le
@@ -14,7 +7,8 @@
 
 - debug:
     msg: "Configuring apps to use SSL."
-  when: use_ssl
+  when:
+  - use_ssl == True
 
 - name: Install package required for htaccess
   apt:
@@ -58,59 +52,78 @@
 
 - name: Generate DH file
   command: openssl dhparam -out /etc/ssl/private/dhparam.pem 2048 creates=/etc/ssl/private/dhparam.pem
-  when: use_ssl
+  when:
+  - use_ssl == True
 
 - name: Generate self-signed certificate as a placeholder
-  command: openssl req -new -nodes -x509 -subj "/C=GB/ST=London/L=London/O=IT/CN={{ fqdn }}" -days 3650 -keyout "/etc/ssl/private/{{ fqdn }}-snakeoil.key" -out "/etc/ssl/private/{{ fqdn }}-snakeoil.crt" -extensions v3_ca creates="/etc/ssl/private/{{ fqdn }}-snakeoil.crt"
-  when: use_ssl
+  command: openssl req -new -nodes -x509 -subj "/C=GB/ST=London/L=London/O=IT/CN={{ ansible_fqdn }}" -days 3650 -keyout "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.key" -out "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.crt" -extensions v3_ca creates="/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.crt"
+  when:
+  - use_ssl == True
 
 - stat:
     path: "/etc/letsencrypt/live/{{ fqdn }}/fullchain.pem"
   register: le_ssl_fqdn_crt
-  when: use_ssl
+  when:
+  - use_ssl == True
 
 - stat:
     path: "/etc/letsencrypt/live/{{ ansible_eth0.ipv4.address }}.nip.io/fullchain.pem"
   register: le_ssl_ip_crt
-  when: use_ssl
+  when:
+  - use_ssl == True
 
+# For some strange reason, fqdn_resolves will not convert into a proper boolean,
+# which is why it needs to be quoted.
 - name: Creates symlinks to certificates (FQDN)
   file:
     src: "/etc/ssl/private/{{ fqdn }}-snakeoil.crt"
     dest: "/etc/ssl/private/{{ fqdn }}.crt"
     state: link
-  when: le_ssl_fqdn_crt.stat.exists == False
+  when:
+  - le_ssl_fqdn_crt is defined
+  - le_ssl_fqdn_crt.stat.exists == False
+  - fqdn_resolves == "True"
 
 - name: Creates symlinks to certificates (IP)
   file:
-    src: "/etc/ssl/private/{{ fqdn }}-snakeoil.crt"
+    src: "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.crt"
     dest: "/etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.crt"
     state: link
-  when: le_ssl_ip_crt.stat.exists == False
+  when:
+  - fqdn_resolves == "False"
+  - le_ssl_ip_crt.stat.exists == False
 
 - stat:
     path: "/etc/letsencrypt/live/{{ fqdn }}/privkey.pem"
   register: le_ssl_fqdn_key
-  when: use_ssl
+  when:
+  - use_ssl == True
 
 - stat:
     path: "/etc/letsencrypt/live/{{ ansible_eth0.ipv4.address }}.nip.io/privkey.pem"
   register: le_ssl_ip_key
-  when: use_ssl
+  when:
+  - use_ssl == True
 
 - name: Creates symlinks to certificates (FQDN)
   file:
-    src: "/etc/ssl/private/{{ fqdn }}-snakeoil.key"
+    src: "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.key"
     dest: "/etc/ssl/private/{{ fqdn }}.key"
     state: link
-  when: le_ssl_fqdn_key.stat.exists == False
+  when:
+  - le_ssl_fqdn_key is defined
+  - le_ssl_fqdn_key.stat.exists == False
+  - fqdn_resolves == "True"
 
 - name: Creates symlinks to certificates (IP)
   file:
-    src: "/etc/ssl/private/{{ fqdn }}-snakeoil.key"
+    src: "/etc/ssl/private/{{ ansible_fqdn }}-snakeoil.key"
     dest: "/etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.key"
     state: link
-  when: le_ssl_ip_key.stat.exists == False
+  when:
+  - le_ssl_ip_key is defined
+  - le_ssl_ip_key.stat.exists == False
+  - fqdn_resolves == "False"
 
 - name: Nginx
   docker:

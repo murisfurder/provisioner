@@ -29,7 +29,7 @@ function generate_sql {
 STRING=""
 while [[ -z "$STRING" ]]; do
   STRING=$(docker logs mysql 2>&1 | grep "ready for connections")
-  sleep 5
+  sleep 10
 done
 
 # Create SQL file

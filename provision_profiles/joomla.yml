@@ -7,5 +7,7 @@
     - docker.ubuntu
     - docker_network
     - mysql
+    - dns
     - nginx
+    - { role: letsencrypt, when: use_ssl }
     - joomla

@@ -6,7 +6,9 @@
     - unattended-upgrades
     - docker.ubuntu
     - docker_network
+    - dns
     - nginx
+    - { role: letsencrypt, when: use_ssl }
     - mysql
     - drupal
 

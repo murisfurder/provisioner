@@ -1,0 +1,37 @@
+---
+- name: Install Python dependencies
+  pip:
+    name: "{{ item }}"
+  with_items:
+  - sh
+  - netifaces
+
+- name: Ensure custom facts directory exists
+  file:
+    path: /etc/ansible/facts.d
+    recurse: yes
+    state: directory
+
+- name: Copies in fqdn fact file
+  copy:
+    src: "fqdn.fact"
+    dest: "/etc/ansible/facts.d/fqdn.fact"
+    mode: 0755
+
+- name: reload ansible_local
+  setup: filter=ansible_local
+
+- set_fact:
+    fqdn: "{{ ansible_local.fqdn.fqdn }}"
+
+- set_fact:
+    fqdn_resolves: "{{ ansible_local.fqdn.resolves }}"
+
+- debug:
+    msg: "Using FQDN ({{ fqdn  }}) is valid."
+  when: fqdn_resolves == "True"
+
+- debug:
+    msg: "FQDN ({{ fqdn  }}) does not resolve."
+  when: fqdn_resolves == "False"
+

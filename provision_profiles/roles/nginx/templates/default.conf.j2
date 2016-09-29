@@ -2,36 +2,40 @@
 
 include conf.d/*.upstream;
 
+# fqdn_resolves: {{ fqdn_resolves }}
+
+{% if fqdn_resolves == "True" %}
 server {
   listen 80 default_server;
   server_tokens off;
-  server_name {{ fqdn|default(ansible_fqdn) }};
-{% if use_ssl %}
-  return 301 https://{{ fqdn|default(ansible_fqdn) }}$request_uri;
-{% else %}
+  server_name {{ fqdn }};
+  {% if use_ssl %}
+  return 301 https://{{ fqdn }}$request_uri;
+  {% else %}
   include conf.d/default.inc;
-{% endif %}
+  {% endif %}
 }
-
+{% else %}
 server {
-  listen 80;
+  listen 80 default_server;
   server_tokens off;
   server_name {{ ansible_eth0.ipv4.address }}.nip.io;
-{% if use_ssl %}
+  {% if use_ssl %}
   return 301 https://{{ ansible_eth0.ipv4.address }}.nip.io$request_uri;
-{% else %}
+  {% else %}
   include conf.d/default.inc;
-{% endif %}
+  {% endif %}
 }
+{% endif %}
 
-{% if use_ssl %}
+{% if use_ssl and fqdn_resolves == "True" %}
 server {
   listen 443 ssl;
-  server_name {{ fqdn|default(ansible_fqdn) }};
+  server_name {{ fqdn }};
   server_tokens off;
 
-  ssl_certificate /etc/ssl/private/{{ fqdn|default(ansible_fqdn) }}.crt;
-  ssl_certificate_key /etc/ssl/private/{{ fqdn|default(ansible_fqdn) }}.key;
+  ssl_certificate /etc/ssl/private/{{ fqdn }}.crt;
+  ssl_certificate_key /etc/ssl/private/{{ fqdn }}.key;
 
   include conf.d/ssl.inc;
   include conf.d/default.inc;
@@ -42,7 +46,9 @@ server {
     allow all;
   }
 }
+{% endif %}
 
+{% if use_ssl and fqdn_resolves == "False" %}
 server {
   listen 443 ssl;
   server_name {{ ansible_eth0.ipv4.address }}.nip.io;
