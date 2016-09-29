@@ -8,4 +8,5 @@
     - docker_network
     - dns
     - nginx
+    - { role: letsencrypt, when: use_ssl }
     - prometheus
