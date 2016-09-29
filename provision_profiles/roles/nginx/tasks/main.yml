@@ -80,6 +80,7 @@
     dest: "/etc/ssl/private/{{ fqdn }}.crt"
     state: link
   when:
+  - use_ssl == True
   - le_ssl_fqdn_crt is defined
   - le_ssl_fqdn_crt.stat.exists == False
   - fqdn_resolves == "True"
@@ -90,6 +91,7 @@
     dest: "/etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.crt"
     state: link
   when:
+  - use_ssl == True
   - fqdn_resolves == "False"
   - le_ssl_ip_crt.stat.exists == False
 
@@ -111,6 +113,7 @@
     dest: "/etc/ssl/private/{{ fqdn }}.key"
     state: link
   when:
+  - use_ssl == True
   - le_ssl_fqdn_key is defined
   - le_ssl_fqdn_key.stat.exists == False
   - fqdn_resolves == "True"
@@ -121,6 +124,7 @@
     dest: "/etc/ssl/private/{{ ansible_eth0.ipv4.address }}.nip.io.key"
     state: link
   when:
+  - use_ssl == True
   - le_ssl_ip_key is defined
   - le_ssl_ip_key.stat.exists == False
   - fqdn_resolves == "False"
