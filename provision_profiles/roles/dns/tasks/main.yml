@@ -29,9 +29,9 @@
 
 - debug:
     msg: "Using FQDN ({{ fqdn  }}) is valid."
-  when: fqdn_resolves == True
+  when: fqdn_resolves == "True"
 
 - debug:
     msg: "FQDN ({{ fqdn  }}) does not resolve."
-  when: not fqdn_resolves == False
+  when: fqdn_resolves == "False"
 

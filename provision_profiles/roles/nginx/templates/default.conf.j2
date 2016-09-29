@@ -2,7 +2,9 @@
 
 include conf.d/*.upstream;
 
-{% if fqdn_resolves %}
+# fqdn_resolves: {{ fqdn_resolves }}
+
+{% if fqdn_resolves == "True" %}
 server {
   listen 80 default_server;
   server_tokens off;
@@ -26,7 +28,7 @@ server {
 }
 {% endif %}
 
-{% if use_ssl and fqdn_resolves %}
+{% if use_ssl and fqdn_resolves == "True" %}
 server {
   listen 443 ssl;
   server_name {{ fqdn }};
@@ -46,7 +48,7 @@ server {
 }
 {% endif %}
 
-{% if use_ssl and not fqdn_resolves %}
+{% if use_ssl and fqdn_resolves == "False" %}
 server {
   listen 443 ssl;
   server_name {{ ansible_eth0.ipv4.address }}.nip.io;

@@ -7,7 +7,7 @@ import socket
 
 def resolve_hostname():
     fqdn = socket.getfqdn()
-    query = sh.dig('+short', fqdn)
+    query = sh.dig('+short', fqdn, '@8.8.8.8')
 
     if query and query.exit_code == 0:
         return query.strip()

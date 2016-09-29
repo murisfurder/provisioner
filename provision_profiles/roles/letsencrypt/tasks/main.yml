@@ -14,13 +14,23 @@
     path: /var/www
     state: directory
 
-- name: Try to get certificate
+- name: Try to get certificate (IP)
   ignore_errors: True
   command:
     "/usr/local/sbin/provcfg generate-cert {{ item }} {{ email }}"
   with_items:
     - "{{ ansible_eth0.ipv4.address }}.nip.io"
+  when:
+    - fqdn_resolves == "False"
+
+- name: Try to get certificate (FQDN)
+  ignore_errors: True
+  command:
+    "/usr/local/sbin/provcfg generate-cert {{ item }} {{ email }}"
+  with_items:
     - "{{ fqdn }}"
+  when:
+    - fqdn_resolves == "True"
 
 - name: Symlink certificate
   ignore_errors: True

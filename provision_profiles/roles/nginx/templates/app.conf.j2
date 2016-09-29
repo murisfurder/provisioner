@@ -1,6 +1,6 @@
 # vim: tabstop=2 shiftwidth=2 softtabstop=2
 
-{% if fqdn_resolves %}
+{% if fqdn_resolves == "True" %}
 server {
   listen 80;
   server_name {{ role_name | regex_replace('_', '-') }}.{{ fqdn }};
@@ -23,13 +23,20 @@ server {
   }
   {% endif %}
 }
+
+server {
+  listen 80;
+  server_name {{ role_name | regex_replace('_', '-')  }}.{{ ansible_eth0.ipv4.address }}.nip.io;
+  server_tokens off;
+  return 301 http://{{ role_name | regex_replace('_', '-') }}.{{ fqdn }}$request_uri;
+}
 {% else %}
 server {
   listen 80;
   server_name {{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
   server_tokens off;
   {% if use_ssl %}
-  return 301 https://{{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}$request_uri;
+  return 301 https://{{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io$request_uri;
   {% else %}
   location / {
     {% if nginx_auth|default(false) -%}
@@ -48,7 +55,7 @@ server {
 }
 {% endif %}
 
-{% if use_ssl and fqdn_resolves %}
+{% if use_ssl and fqdn_resolves == "True" %}
 server {
   listen 443 ssl;
   server_name {{ role_name | regex_replace('_', '-') }}.{{ fqdn }};
@@ -81,7 +88,7 @@ server {
 }
 {% endif %}
 
-{% if use_ssl and not fqdn_resolves %}
+{% if use_ssl and fqdn_resolves == "False" %}
 server {
   listen 443 ssl;
   server_name {{ role_name | regex_replace('_', '-') }}.{{ ansible_eth0.ipv4.address }}.nip.io;
