@@ -8,7 +8,6 @@
   docker:
     name: wordpress
     image: wordpress
-    hostname: "{{ role }}.{{ ansible_fqdn }}"
     state: started
     restart_policy: always
     net: provisioner
