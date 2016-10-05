@@ -30,7 +30,7 @@ function generate_sql {
 CONTAINER=$(docker ps | grep "$MYSQL_CONTAINER")
 while [[ -z "$CONTAINER" ]]; do
   echo 'Waiting for MySQL container to start'
-  sleep 5
+  sleep 2
   CONTAINER=$(docker ps | grep "$MYSQL_CONTAINER")
 done
 
@@ -68,6 +68,7 @@ while [ "$RETRIES" -lt 5 ]; do
     break
   else
     echo 'Failed to create database. Retrying...'
+    sleep 2
     let RETRIES=RETRIES+1
   fi
 done
