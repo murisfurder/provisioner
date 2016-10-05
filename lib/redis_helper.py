@@ -64,7 +64,8 @@ def create_status(uuid, role, ip):
         'role': role,
         'status': 'New',
         'ip': ip,
-        'timestamp': timestamp,
+        'created_at': timestamp,
+        'last_update_at': timestamp,
         'attempts': 0,
         'msg': [],
         'install_notes': ''
@@ -86,7 +87,7 @@ def update_status(
     r = connect()
     job_status = get_status(uuid)
 
-    job_status['timestamp'] = str(time.mktime(time.gmtime()))
+    job_status['last_update_at'] = str(time.mktime(time.gmtime()))
     job_status['attempts'] = attempts if attempts else job_status['attempts']
     job_status['status'] = status if status else job_status['status']
     job_status['install_notes'] = install_notes if install_notes else job_status['install_notes']
