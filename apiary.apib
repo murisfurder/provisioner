@@ -312,7 +312,8 @@ Create a new job with the description outlined below. All successful jobs will r
     + status (string) - The status of the job. Possible values are: New, Queued, Provisioning, Aborted, Done, Error, Queued..
     + attempts (number) - The number of attempts that have been performed.
     + role (string) - The role that was applied.
-    + timestamp (string) - The timestamp of the last activity in Epoch time.
+    + created_at (string) - The timestamp of the creation time in Epoch time.
+    + last_update_at (string) - The timestamp of the last activity in Epoch time.
     + install_notes (string) - Markdown formatted installation notes for the role.
 
 + Response 200 (application/json)
@@ -322,7 +323,8 @@ Create a new job with the description outlined below. All successful jobs will r
           "ip": "192.168.33.10",
           "attempts": 1,
           "role": "ping",
-          "timestamp": "1449166675.0"
+          "created_at": "1449166675.0"
+          "last_update_at" "1449166675.0"
           "install_notes": "Installation notes in Markdown format (if available)."
          }
 ## Abort a Job [DELETE]

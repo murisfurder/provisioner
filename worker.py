@@ -1,6 +1,7 @@
 from lib import ansible_helper
-from lib import redis_helper
 from lib import doc_parser
+from lib import redis_helper
+import json
 import os
 import settings
 import time
@@ -70,24 +71,35 @@ def task_router(task):
 
     # Give it maximum three attempts
     if attempts > 3:
-        print 'Too many attempts for {}@{} (uuid: {})'.format(
-            username,
-            target_ip,
-            uuid
-        )
+        status_report = {
+            'state': 'Failed',
+            'msg': 'Too many attempts.',
+            'username': username,
+            'role': role,
+            'target_ip': target_ip,
+            'uuid': uuid,
+            'attempts': attempts,
+            'created_at': status['created_at'],
+            'processing_time': time.mktime(time.gmtime()) - float(status['created_at'])
+        }
+        print json.dumps(status_report)
+
         redis_helper.update_status(
             uuid=uuid,
             status='Failed'
         )
         return False
 
-    print 'Got task \'{}\' for {}@{} (attempt: {}, uuid: {})'.format(
-        role,
-        username,
-        target_ip,
-        attempts,
-        uuid,
-    )
+    status_report = {
+        'state': 'Started',
+        'role': role,
+        'username': username,
+        'target_ip': target_ip,
+        'uuid': uuid,
+        'attempts': attempts,
+        'created_at': status['created_at']
+    }
+    print json.dumps(status_report)
 
     redis_helper.update_status(
         uuid=uuid,
@@ -129,12 +141,17 @@ def task_router(task):
                 msg=error_msg,
             )
             redis_helper.add_to_queue(task)
-            print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
-                role,
-                username,
-                target_ip,
-                uuid,
-            )
+            status_report = {
+                'state': 'Failed',
+                'msg': 'Failed attempt. New attempt scheduled.',
+                'username': username,
+                'role': role,
+                'target_ip': target_ip,
+                'uuid': uuid,
+                'attempts': attempts,
+                'created_at': status['created_at'],
+            }
+            print json.dumps(status_report)
             return
 
     elif role in settings.PLAYBOOKS:
@@ -153,12 +170,18 @@ def task_router(task):
         ):
             task['last_update'] = str(time.mktime(time.gmtime()))
             redis_helper.add_to_queue(task)
-            print 'Failed provisioning {} for {}@{} (uuid: {})'.format(
-                role,
-                username,
-                target_ip,
-                uuid,
-            )
+
+            status_report = {
+                'state': 'Failed',
+                'msg': 'Failed attempt. New attempt scheduled.',
+                'username': username,
+                'role': role,
+                'target_ip': target_ip,
+                'uuid': uuid,
+                'attempts': attempts,
+                'created_at': status['created_at'],
+            }
+            print json.dumps(status_report)
             return
     else:
         print 'Unknown role/playbook: {}'.format(role)
@@ -178,13 +201,16 @@ def task_router(task):
         )
     )
 
-    print 'Done provisioning {} for {}@{} (uuid: {})'.format(
-        role,
-        username,
-        target_ip,
-        uuid,
-    )
-
+    status_report = {
+        'state': 'Finished',
+        'role': role,
+        'username': username,
+        'target_ip': target_ip,
+        'uuid': uuid,
+        'created_at': status['created_at'],
+        'processing_time': time.mktime(time.gmtime()) - float(status['created_at'])
+    }
+    print json.dumps(status_report)
 
 def main():
     while True:
