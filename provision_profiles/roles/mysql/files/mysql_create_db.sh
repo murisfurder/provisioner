@@ -17,6 +17,7 @@ MYSQL_USER="$1"
 MYSQL_DATABASE="$1"
 MYSQL_PASSWORD="$2"
 MYSQL_CONTAINER="mysql"
+SOCKET=""/var/run/mysqld/mysqld.sock""
 
 function generate_sql {
   echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
@@ -25,12 +26,28 @@ function generate_sql {
   echo 'FLUSH PRIVILEGES;'
 }
 
-# Wait for the MySQL container to come online
-STRING=""
-while [[ -z "$STRING" ]]; do
-  STRING=$(docker logs mysql 2>&1 | grep "ready for connections")
-  sleep 10
+# Wait for the container to start
+CONTAINER=$(docker ps | grep "$MYSQL_CONTAINER")
+while [[ -z "$CONTAINER" ]]; do
+  echo 'Waiting for MySQL container to start'
+  sleep 2
+  CONTAINER=$(docker ps | grep "$MYSQL_CONTAINER")
 done
+
+# Wait for the MySQL container to come online
+RETRIES=0
+set +e
+while [ "$RETRIES" -lt 5 ]; do
+  docker exec "$MYSQL_CONTAINER" test -S "$SOCKET"
+  if [ "$?" == 0 ]; then
+    echo "MySQL is running."
+    break
+  else
+    echo "Waiting for MySQL to start..."
+    sleep 2
+  fi
+done
+set -e
 
 # Create SQL file
 generate_sql > "/tmp/$MYSQL_USER.sql"
@@ -39,9 +56,23 @@ generate_sql > "/tmp/$MYSQL_USER.sql"
 docker cp "/tmp/$MYSQL_USER.sql" $MYSQL_CONTAINER:/root/createdb.sql
 
 # Execute the SQL file
-docker exec $MYSQL_CONTAINER sh -c '\
-  exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD"\
-  -e "source /root/createdb.sql;"'
+RETRIES=0
+set +e
+while [ "$RETRIES" -lt 5 ]; do
+  docker exec $MYSQL_CONTAINER sh -c '\
+    exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" \
+    -e "source /root/createdb.sql;"'
+
+  if [ "$?" == 0 ]; then
+    echo 'Successfully created database...'
+    break
+  else
+    echo 'Failed to create database. Retrying...'
+    sleep 2
+    let RETRIES=RETRIES+1
+  fi
+done
+set -e
 
 # Clean up
 docker exec $MYSQL_CONTAINER rm /root/createdb.sql
