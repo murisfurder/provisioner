@@ -212,6 +212,7 @@ def task_router(task):
     }
     print json.dumps(status_report)
 
+
 def main():
     while True:
         prepare_ssh()
