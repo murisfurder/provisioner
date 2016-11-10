@@ -1,0 +1,3 @@
+fqdn: false
+http_port: 8080
+role_name: 'jenkins'

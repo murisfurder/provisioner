@@ -18,6 +18,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'fluentd',
     'gitlab',
     'grafana',
+    'jenkins',
     'joomla',
     'kibana',
     'letsencrypt',

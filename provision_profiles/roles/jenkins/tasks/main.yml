@@ -1,0 +1,30 @@
+---
+- name: Create Jenkins data folder
+  file:
+    path: /usr/local/provisioner-data/jenkins
+    recurse: yes
+    state: directory
+    owner: 1000
+    group: 1000
+
+- name: Jenkins
+  docker:
+    name: jenkins
+    image: jenkins
+    state: started
+    restart_policy: always
+    net: provisioner
+    volumes:
+    - /usr/local/provisioner-data/jenkins:/var/jenkins_home
+
+- name: Copies in Nginx config
+  template:
+    src: "../../nginx/templates/{{ item }}.j2"
+    dest: "/etc/nginx/conf.d/{{ role }}-{{ item }}"
+    mode: 0644
+  with_items:
+  - app.conf
+  - app.upstream
+
+- name: Reload Nginx
+  command: docker exec nginx pkill -HUP -f nginx
