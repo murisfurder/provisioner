@@ -1,0 +1,30 @@
+<ul>
+  <li><strong>Name</strong>: wordpress</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/wordpress_install_notes.tpl">Yes</a></li>
+  <li><strong>Subdomain:</strong> wordpress</li>
+  <li><strong>Container link:</strong> Docker’s <a href="https://hub.docker.com/_/wordpress/">official container</a></li>
+</ul>
+
+<h2 id="what-is-wordpress">What is WordPress?</h2>
+
+<p>“WordPress is web software you can use to create a beautiful website, blog, or app. We like to say that WordPress is both free and priceless at the same time.”</p>
+
+<h2 id="installation-notes">Installation Notes</h2>
+
+<ul>
+  <li>Point your browser to wordpress.yourdomain.com</li>
+  <li>Follow the instructions to configure your WordPress site and create your administration account</li>
+</ul>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<p>All data resides inside the Docker container. As such, you may want to use something like <a href="https://wordpress.org/plugins/backupwordpress/">BackUpWordPress</a>, <a href="https://jetpack.com/support/vaultpress/">VaultPress</a> or the built-in export tool to make periodic backups of your WordPress installation.</p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/mysql">MySQL</a></li>
+  <li><a href="/docs/roles/nginx">Nginx</a></li>
+</ul>

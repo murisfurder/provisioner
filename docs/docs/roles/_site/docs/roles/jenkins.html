@@ -1,0 +1,30 @@
+<ul>
+  <li><strong>Name</strong>: jenkins</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/jenkins_install_notes.tpl">Yes</a></li>
+  <li><strong>Subdomain:</strong> jenkins</li>
+  <li><strong>Container link:</strong> Docker’s <a href="https://hub.docker.com/_/jenkins/">official container</a></li>
+</ul>
+
+<h2 id="what-is-jenkins">What is Jenkins?</h2>
+
+<p>“The leading open source automation server, Jenkins provides hundreds of plugins to support building, deploying and automating any project.”</p>
+
+<h2 id="installation-notes">Installation Notes</h2>
+
+<ul>
+  <li>Point your browser to jenkins.yourdomain.com</li>
+  <li>Get the password by running <code class="highlighter-rouge">cat /usr/local/provisioner-data/jenkins/secrets/initialAdminPassword</code> in your server.</li>
+  <li>Follow the instructions to configure your Jenkins installation and create your administration account</li>
+</ul>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<p>The data for Jenkins resides in <code class="highlighter-rouge">/usr/local/provisioner-data/jenkins</code></p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/nginx">Nginx</a></li>
+</ul>

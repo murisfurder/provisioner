@@ -1,0 +1,53 @@
+<ul>
+  <li><strong>Name</strong>: Fluentd</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/fluentd_install_notes.tpl">Yes</a></li>
+  <li><strong>Container link:</strong> <a href="https://hub.docker.com/r/vpetersson/fluentd-elasticsearch/">Container</a></li>
+</ul>
+
+<h2 id="what-is-fluentd">What is Fluentd?</h2>
+<p>“Fluentd is an open source data collector, which lets you unify the data collection and consumption for a better use and understanding of data.”</p>
+
+<h2 id="configure-a-client">Configure a Client</h2>
+
+<p>To log to the central Fluentd server, you need <a href="http://www.fluentd.org/download">td-agent</a>. You will also need the <a href="https://github.com/tagomoris/fluent-plugin-secure-forward">fluent-plugin-secure-forward</a> plugin installed in order to communicate over HTTPS.</p>
+
+<p>Depending on what you’re looking to log, the configuration will vary. You will however need the following stanza in order to ship logs to your Fluentd server:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;source&gt;
+  @type forward
+&lt;/source&gt;
+&lt;match secure.**&gt;
+    @type secure_forward
+    shared_key YourSecret
+    self_hostname my-fancy-server.local
+    enable_strict_verification yes
+    secure true
+    &lt;server&gt;
+      host fluentd.yourdomain.com
+      port 24284
+    &lt;/server&gt;
+&lt;/match&gt;
+</code></pre>
+</div>
+
+<p>After you’ve configured your client and verified that there were no errors in td-agent’s logs, you can trigger a message to be sent by running:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo '{"message":"Testing Provisioner"}' | fluent-cat --json secure.test
+</code></pre>
+</div>
+
+<p>Alternatively, you can use the Fluentd endpoint directly with our <a href="https://github.com/vpetersson/fluentd-secure_forward">docker helper container</a>.</p>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<p>Fluentd holds no persistent data. All data is being relayed to the <a href="/docs/role/elasticsearch">Elasticsearch</a> container.</p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/mysql">MySQL</a></li>
+  <li><a href="/docs/roles/kibana">Kibana</a></li>
+  <li><a href="/docs/roles/elasticsearch">Elasticsearch</a></li>
+</ul>

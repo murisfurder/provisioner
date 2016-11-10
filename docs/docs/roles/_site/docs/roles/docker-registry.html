@@ -1,0 +1,27 @@
+<ul>
+  <li><strong>Name</strong>: docker_registry</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/docker_registry_install_notes.tpl">Yes</a></li>
+  <li><strong>Subdomain:</strong> docker-registry</li>
+  <li><strong>Container link:</strong> Dockers’s <a href="https://hub.docker.com/_/registry/">official container</a></li>
+</ul>
+
+<h2 id="what-is-docker-registry">What is Docker Registry?</h2>
+
+<p>“The Registry is a stateless, highly scalable server side application that stores and lets you distribute Docker images. The Registry is open-source, under the permissive Apache license.”</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>Your Docker Registry is accessible a docker-registry.yourdomain.com. If you do not have a properly configured DNS name, you can use docker-registry.[your-public-ip].nip.io.</p>
+
+<p>You can read more about how to manage your own Docker Registry <a href="https://docs.docker.com/registry/deploying/">here</a>.</p>
+
+<h2 id="configuration">Configuration</h2>
+
+<p>The persistent data is stored under <code class="highlighter-rouge">/usr/local/registry</code> on the host VM.</p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+</ul>

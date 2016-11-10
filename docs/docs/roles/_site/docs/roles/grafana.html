@@ -1,0 +1,40 @@
+<ul>
+  <li><strong>Name:</strong> Grafana</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/grafana_install_notes.tpl">Yes</a></li>
+  <li><strong>Subdomain:</strong> grafana</li>
+  <li><strong>Container link:</strong> Grafana’s <a href="https://hub.docker.com/r/grafana/grafana/">official container</a></li>
+</ul>
+
+<h2 id="what-is-grafana">What is Grafana?</h2>
+
+<p>“Grafana provides a powerful and elegant way to create, explore, and share dashboards and data with your team and the world.”</p>
+
+<h2 id="grafana-and-prometheus">Grafana and Prometheus</h2>
+
+<p>If you want to use Grafana to graph data from <a href="/docs/roles/grafan">Prometheus</a>, here are the steps to add Prometheus as a data source:</p>
+
+<ul>
+  <li>Click on the Grafana logo to open the sidebar menu.</li>
+  <li>Click on “Data Sources” in the sidebar.</li>
+  <li>Click on “Add New”.</li>
+  <li>Select “Prometheus” as the type.</li>
+  <li>Set the Prometheus server URL to <code class="highlighter-rouge">http://prometheus:9090</code></li>
+  <li>Adjust other data source settings as desired (for example, turning the proxy access off).</li>
+  <li>Click “Add” to save the new data source.</li>
+</ul>
+
+<p>For more information, please see the <a href="https://prometheus.io/docs/visualization/grafana/">official documentation</a></p>
+
+<h2 id="configuration">Configuration</h2>
+
+<p>If you want to make changes to your Grafana configuration, simply update <code class="highlighter-rouge">/usr/local/etc/grafana.ini</code> on your host server and restart your grafana container (<code class="highlighter-rouge">docker restart grafana</code>)</p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/mysql">MySQL</a></li>
+  <li><a href="/docs/roles/nginx">Nginx</a></li>
+  <li><a href="/docs/roles/prometheus">Prometheus</a></li>
+</ul>

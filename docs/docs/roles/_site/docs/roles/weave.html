@@ -1,0 +1,18 @@
+<ul>
+  <li><em>Name</em>: weave</li>
+  <li><em>Requirement</em>: Ubuntu 12.04 or later</li>
+  <li><em>Installation notes</em>: No</li>
+</ul>
+
+<p>Installs the <a href="https://www.weave.works/products/weave-net/">Weave Net</a> with encrypted communication.</p>
+
+<p>Additional required keys:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">extra_vars['is_master']</code>: Set to True to initiate the server as the master node.</li>
+  <li><code class="highlighter-rouge">extra_vars['is_slave']</code>: Set to True to initiate the server as a slave nodes.</li>
+  <li><code class="highlighter-rouge">extra_vars['passphrase']</code>: Must be the same on master and slave nodes.</li>
+  <li><code class="highlighter-rouge">extra_vars['master_ip']</code>: Required if is_slave. Specify the public IP of the master node.</li>
+</ul>
+
+<p>For a complete example, check out the <a href="/docs/examples">Examples page</a>.</p>

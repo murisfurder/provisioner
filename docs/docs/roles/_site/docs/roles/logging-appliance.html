@@ -1,0 +1,31 @@
+<ul>
+  <li><strong>Name</strong>: Logging Appliance</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/meta_logging_appliance_install_notes.tpl">Yes</a></li>
+</ul>
+
+<h2 id="what-is-logging-appliance">What is Logging Appliance?</h2>
+<p>Logging Appliance is a meta package that includes the following three other roles:</p>
+
+<ul>
+  <li><a href="/docs/roles/elasticsearch">Elasticsearch</a></li>
+  <li><a href="/docs/roles/fluentd">Fluentd</a></li>
+  <li><a href="/docs/roles/kibana">Kibana</a></li>
+</ul>
+
+<p>It does however do slightly more than this, as it also configures them to work together.</p>
+
+<p>This enables you to ship logs directly into Fluentd, which relays the logs to Elasticsearch. You can then use Kibana to browse and query your logs.</p>
+
+<h2 id="installation-notes">Installation Notes</h2>
+<p>See the individual roles.</p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/mysql">MySQL</a></li>
+  <li><a href="/docs/roles/elasticsearch">Elasticsearch</a></li>
+  <li><a href="/docs/roles/fluentd">Fluentd</a></li>
+  <li><a href="/docs/roles/kibana">Kibana</a></li>
+</ul>

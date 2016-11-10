@@ -1,0 +1,24 @@
+<ul>
+  <li><strong>Name</strong>: Elasticsearch</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/elasticsearch_install_notes.tpl">Yes</a></li>
+  <li><strong>Container link:</strong> Docker’s <a href="https://hub.docker.com/_/elasticsearch/">official Drupal container</a></li>
+</ul>
+
+<h2 id="what-is-elasticsearch">What is Elasticsearch?</h2>
+<p>“Elasticsearch is a distributed, open source search and analytics engine, designed for horizontal scalability, reliability, and easy management. It combines the speed of search with the power of analytics via a sophisticated, developer-friendly query language covering structured, unstructured, and time-series data.”</p>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<p>There are no publicly exposed ports for Elasticsearch. The role is designed to be used with another Docker container on the ‘provisioner’ network.</p>
+
+<p>The data is stored on disk under <code class="highlighter-rouge">/usr/local/elasticsearch/data</code></p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/mysql">MySQL</a></li>
+  <li><a href="/docs/roles/kibana">Kibana</a></li>
+  <li><a href="/docs/roles/fluentd">Fluentd</a></li>
+</ul>

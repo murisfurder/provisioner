@@ -1,0 +1,20 @@
+<ul>
+  <li><em>Name</em>: nodebb</li>
+  <li><em>Requirement</em>: Ubuntu 12.04 or later</li>
+  <li><em>Exposes ports:</em> 0.0.0.0:4567</li>
+  <li><em>Requires roles:</em>
+    <ul>
+      <li>Weave</li>
+      <li>MongoDB Cluster</li>
+    </ul>
+  </li>
+  <li><em>Installation notes</em>: No</li>
+</ul>
+
+<h2 id="extra-vars">Extra Vars:</h2>
+
+<ul>
+  <li>secret: Shared secret for cookies</li>
+  <li>rs_servers: Comma separated list of MongoDB servers</li>
+  <li>init_db: If set to True, a sample database will be created. The credentials are admin/password. You should <strong>not</strong> use this for anything other than testing.</li>
+</ul>

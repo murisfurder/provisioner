@@ -1,0 +1,36 @@
+<ul>
+  <li><strong>Name</strong>: Drupal</li>
+  <li><strong>Requirement:</strong> Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/drupal_install_notes.tpl">Yes</a></li>
+  <li><strong>Container link:</strong> Docker’s <a href="https://hub.docker.com/_/drupal/">official Drupal container</a></li>
+</ul>
+
+<h2 id="what-is-drupal">What is Drupal?</h2>
+<p>“Drupal is content management software. It’s used to make many of the websites and applications you use every day. Drupal has great standard features, like easy content authoring, reliable performance, and excellent security. But what sets it apart is its flexibility; modularity is one of its core principles. Its tools help you build the versatile, structured content that dynamic web experiences need.”</p>
+
+<h2 id="installation-notes">Installation Notes</h2>
+
+<ul>
+  <li>Point your browser to http(s)://drupal.yourdomain.com</li>
+  <li>Select your language</li>
+  <li>Select Standard</li>
+  <li>Select MySQL</li>
+  <li>Enter ‘drupal’ as the database and username</li>
+  <li>Enter your database password (provided in the installation notes)</li>
+  <li>Select Advanced</li>
+  <li>Enter ‘mysql’ under host</li>
+  <li>Follow the remaining steps</li>
+</ul>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<p>Your Drupal server is running inside Docker and the name of the container is ‘drupal’. The container connects to a MySQL/MariaDB server that is also running inside Docker.</p>
+
+<p>Please note that the Drupal data resides inside the Docker container. As such, you likely want to use something like <a href="https://www.drupal.org/project/backup_migrate">Backup and Migrate</a> to make backups of your Drupal installation.</p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/mysql">MySQL</a></li>
+</ul>

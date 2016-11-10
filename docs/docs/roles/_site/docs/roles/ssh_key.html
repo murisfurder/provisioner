@@ -1,0 +1,15 @@
+<ul>
+  <li><em>Name</em>: ssh</li>
+  <li><em>Requirement</em>: Any modern Linux/UNIX operating system.</li>
+  <li><em>Installation notes</em>: No</li>
+</ul>
+
+<p>This using the built-in <a href="https://docs.ansible.com/ansible/authorized_key_module.html">authorized_key</a> module in Ansible. The module is used to install one or many SSH keys.</p>
+
+<p>Additional required keys:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">extra_vars['ssh_user']</code>: The user on the remote system where the key(s) are to be installed.</li>
+  <li><code class="highlighter-rouge">extra_vars['ssh_keys']</code>: A list of one or many SSH keys. Must be provided as a list even if there is only one key.</li>
+</ul>
+

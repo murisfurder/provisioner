@@ -1,0 +1,16 @@
+<ul>
+  <li><em>Name</em>: nginx</li>
+  <li><em>Requirement</em>: Ubuntu 12.04 or later</li>
+  <li><em>Installation notes</em>: No</li>
+</ul>
+
+<p>Additional keys:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">extra_vars['fqdn']</code>: Optional. By default the server’s hostname is used as the FQDN. You can override this using this key.</li>
+  <li><code class="highlighter-rouge">extra_vars['email']</code>: Required. Provide an email address to be assigned to the SSL certificate</li>
+</ul>
+
+<p>This role will automatically issue an SSL certificate for the hostname. This requires that the FQDN points to the IP of the server.</p>
+
+<p>The role will depends on Nginx, and will automatically update Nginx to use the newly issued certificate.</p>
