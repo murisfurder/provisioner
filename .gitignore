@@ -5,3 +5,4 @@ example/site_settings.py
 venv
 provision_profiles/all.yml
 lab_box.py
+docs/_site
