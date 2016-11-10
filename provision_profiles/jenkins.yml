@@ -1,0 +1,12 @@
+- name: Provisions Jenkins (running inside Docker)
+  hosts: all
+  become: yes
+
+  roles:
+    - unattended-upgrades
+    - docker.ubuntu
+    - docker_network
+    - dns
+    - nginx
+    - { role: letsencrypt, when: use_ssl }
+    - jenkins

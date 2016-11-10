@@ -1,0 +1,35 @@
+<h2 id="stand-alone">Stand-alone</h2>
+
+<ul>
+  <li><em>Name</em>: mongodb</li>
+  <li><em>Requirement</em>: Ubuntu 12.04 or later</li>
+  <li><em>Exposes ports:</em> 127.0.0.1:27017</li>
+  <li><em>Installation notes</em>: No</li>
+</ul>
+
+<p>Installs the <a href="https://hub.docker.com/_/mongo/">official MongoDB Docker container</a>. MongoDB’s persistent data is stored under <code class="highlighter-rouge">/var/lib/mongodb</code> in the VM.</p>
+
+<h2 id="cluster">Cluster</h2>
+
+<ul>
+  <li><em>Name</em>: mongodb</li>
+  <li><em>Requirement</em>:
+    <ul>
+      <li>Ubuntu 12.04 or later</li>
+      <li>Three VMs</li>
+      <li>Weave module already deployed</li>
+    </ul>
+  </li>
+  <li><em>Exposes ports:</em> 127.0.0.1:27017</li>
+</ul>
+
+<p>Additional required keys:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">extra_vars['is_rs']</code>: Set to True to initiate replica set configuration of MongoDB.</li>
+  <li><code class="highlighter-rouge">extra_vars['is_rs_master']</code>: Set to True to initiate the server as a the master (primary) node.</li>
+  <li><code class="highlighter-rouge">extra_vars['is_rs_slave']</code>: Set to True for all slaves (secondaries).</li>
+  <li><code class="highlighter-rouge">extra_vars['rs_init']</code>: Set to True to initialize the cluster (must be after the cluster has been fully initiated).</li>
+</ul>
+
+<p>MongoDB can also be deployed in a cluster setup over a Weave network. See <a href="/docs/examples">Examples</a> for a detailed example of this setup.</p>

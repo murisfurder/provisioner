@@ -1,0 +1,16 @@
+<ul>
+  <li><em>Name</em>: postgres</li>
+  <li><em>Requirement</em>: Ubuntu 12.04 or later</li>
+  <li><em>Exposes ports:</em> 127.0.0.1:5432</li>
+  <li><em>Installation notes</em>: No</li>
+</ul>
+
+<p>Installs the <a href="https://hub.docker.com/_postgres/">official PostgreSQL container</a>.</p>
+
+<p>The persistent data is stored under <code class="highlighter-rouge">/var/lib/postgresql/data</code> in the VM.</p>
+
+<p>The password for the user ‘postgres’ can be extracted by running:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo docker inspect postgres | grep POSTGRES_PASSWORD
+</code></pre>
+</div>

@@ -9,6 +9,7 @@ drupal
 fluentd
 gitlab
 grafana
+jenkins
 joomla
 kibana
 nodebb

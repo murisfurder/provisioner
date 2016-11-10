@@ -1,0 +1,37 @@
+<ul>
+  <li><strong>Name</strong>: Owncloud</li>
+  <li><strong>Requirement</strong>: Ubuntu 12.04 or later</li>
+  <li><strong>Installation notes:</strong> <a href="https://github.com/OnApp/provisioner/blob/master/provision_profiles/owncloud_install_notes.tpl">Yes</a></li>
+  <li><strong>Container link:</strong> Docker’s <a href="https://hub.docker.com/_/owncloud/">official Owncloud container</a></li>
+</ul>
+
+<h2 id="about-owncloud">About Owncloud</h2>
+
+<p>“ownCloud is an open source, self-hosted file sync and share app platform. Access &amp; sync your files, contacts, calendars &amp; bookmarks across your devices.”</p>
+
+<h2 id="installation-notes">Installation Notes</h2>
+
+<ul>
+  <li>Point your browser to http(s)://owncloud.yourdomain.com</li>
+  <li>Enter a username and password to create your administrator account</li>
+  <li>Click ‘Storage &amp; Database’</li>
+  <li>Select ‘MySQL/MariaDB’</li>
+  <li>Populate the username, password and database with the information from your post-installation notes.</li>
+  <li>Enter ‘mysql’ as the Database host</li>
+  <li>Click  Finish Setup</li>
+</ul>
+
+<h2 id="technical-details">Technical Details</h2>
+
+<p>Your Owncloud server is running inside Docker and the name of the container is ‘owncloud’. The container connects to
+a MySQL server (or MariaDB to be precise) that is also running inside Docker.</p>
+
+<p>Please note that your data resides outside of Docker in the folder <code class="highlighter-rouge">/usr/local/owncloud</code>.</p>
+
+<h2 id="related-roles">Related Roles</h2>
+
+<ul>
+  <li><a href="/docs/roles/docker">Docker</a></li>
+  <li><a href="/docs/roles/mysql">MySQL</a></li>
+  <li><a href="/docs/roles/nginx">Nginx</a></li>
+</ul>

@@ -1,0 +1,16 @@
+<ul>
+  <li><em>Name</em>: mysql</li>
+  <li><em>Requirement</em>: Ubuntu 12.04 or later</li>
+  <li><em>Exposes ports:</em> 127.0.0.1:3306</li>
+  <li><em>Installation notes</em>: No</li>
+</ul>
+
+<p>Installs the <a href="https://hub.docker.com/_/mariadb/">official MariaDB docker container</a>. MariaDB is a community-developed fork of MySQL intended to remain free under the GNU GPL.</p>
+
+<p>The persistent data is stored under <code class="highlighter-rouge">/var/lib/mysql</code> in the VM.</p>
+
+<p>The MySQL/MariaDB root password is generated upon creation and can be obtained by running:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo docker inspect mysql | grep MYSQL_ROOT_PASSWORD
+</code></pre>
+</div>
