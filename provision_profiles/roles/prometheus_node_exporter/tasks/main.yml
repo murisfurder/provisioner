@@ -2,7 +2,7 @@
 - name: Allow connections from the following host(s)
   command: iptables -A INPUT -p tcp --dport 9100 -s {{ item }} -j ACCEPT
   with_items:
-    - 185.3.49.16
+    - "{{ allow_connections_from }}"
 
 - name: Configures firewall to block access
   command: iptables -A INPUT -p tcp --dport 9100 -j DROP
