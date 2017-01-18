@@ -1,0 +1,21 @@
+---
+- get_url:
+    url: "{{ node_exporter_url }}"
+    dest: /tmp/node_exporter.tgz
+
+- command: tar xfz /tmp/node_exporter.tgz  -C /tmp
+
+- command: mv /tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter /usr/local/bin
+
+- file:
+    path: /usr/local/bin/node_exporter
+    owner: root
+    group: root
+    mode: 0755
+
+- file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /tmp/node_exporter.tgz
+    - "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64"
