@@ -9,7 +9,11 @@ def get_roles():
     roles = []
     for folder in os.listdir(ROLES_DIR):
         if os.path.isdir('{}/{}'.format(ROLES_DIR, folder)):
-            roles.append(folder)
+
+            # Need to disable this role as 'includes' do not
+            # work with syntax checks.
+            if not folder == 'prometheus_node_exporter':
+                roles.append(folder)
     return roles
 
 
@@ -25,6 +29,7 @@ def main():
     playbook = build_file(roles)
     with open('{}/all.yml'.format(PLAYBOOK_DIR), 'w') as f:
         f.write(playbook)
+
 
 if __name__ == "__main__":
     main()
