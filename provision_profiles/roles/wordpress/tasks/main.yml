@@ -3,6 +3,10 @@
   command: /usr/local/sbin/mysql_create_db.sh {{ mysql_wordpress_user }} {{ mysql_wordpress_password }}
   args:
     creates: "/root/.created-mysql-database-{{ mysql_wordpress_user }}"
+  register: mysql_wordpress
+
+- name: Debug MySQL database creation
+  debug: var=mysql_wordpress
 
 - name: WordPress
   docker:

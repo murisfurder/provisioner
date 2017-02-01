@@ -1,6 +1,10 @@
 ---
 - name: Create database user
   command: /usr/local/sbin/mysql_create_db.sh {{ mysql_drupal_user }} {{ mysql_drupal_password }}
+  register: mysql_drupal
+
+- name: Debug MySQL database creation
+  debug: var=mysql_drupal
 
 - name: Drupal
   docker:

@@ -3,6 +3,10 @@
   command: /usr/local/sbin/mysql_create_db.sh {{ mysql_joomla_user }} {{ mysql_joomla_password }}
   args:
     creates: "/root/.created-mysql-database-{{ mysql_joomla_user }}"
+  register: mysql_joomla
+
+- name: Debug MySQL database creation
+  debug: var=mysql_joomla
 
 - name: Joomla
   docker:

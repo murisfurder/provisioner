@@ -3,6 +3,10 @@
   command: /usr/local/sbin/mysql_create_db.sh {{ mysql_owncloud_user }} {{ mysql_owncloud_password }}
   args:
     creates: "/root/.created-mysql-database-{{ mysql_owncloud_user }}"
+  register: mysql_owncloud
+
+- name: Debug MySQL database creation
+  debug: var=mysql_owncloud
 
 - name: Owncloud
   docker:

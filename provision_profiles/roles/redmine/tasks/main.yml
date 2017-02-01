@@ -3,6 +3,10 @@
   command: /usr/local/sbin/mysql_create_db.sh {{ mysql_redmine_user }} {{ mysql_redmine_password }}
   args:
     creates: "/root/.created-mysql-database-{{ mysql_redmine_user }}"
+  register: mysql_redmine
+
+- name: Debug MySQL database creation
+  debug: var=mysql_redmine
 
 - name: Create required folders
   file:

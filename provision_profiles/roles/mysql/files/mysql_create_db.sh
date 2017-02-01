@@ -17,7 +17,7 @@ MYSQL_USER="$1"
 MYSQL_DATABASE="$1"
 MYSQL_PASSWORD="$2"
 MYSQL_CONTAINER="mysql"
-SOCKET=""/var/run/mysqld/mysqld.sock""
+SOCKET="/var/run/mysqld/mysqld.sock"
 
 function generate_sql {
   echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
