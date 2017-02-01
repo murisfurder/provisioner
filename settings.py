@@ -28,6 +28,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'owncloud',
     'postgres',
     'prometheus',
+    'prometheus_node_exporter,'
     'redis',
     'redmine',
     'wordpress',
@@ -48,7 +49,7 @@ PLAYBOOKS = SINGLE_HOST_PLAYBOOKS + CLUSTER_PLAYBOOKS + META_PACKAGES
 # Provide a comma separated list
 HIDDEN_PLAYBOOKS = os.getenv(
     'HIDDEN_PLAYBOOKS',
-    'nginx'
+    'nginx,prometheus_node_exporter'
 ).split(',')
 
 MODULES = [

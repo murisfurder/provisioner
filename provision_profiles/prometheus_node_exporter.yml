@@ -1,0 +1,6 @@
+- name: Provisions Prometheus Node Exporter
+  hosts: all
+  become: yes
+
+  roles:
+    - prometheus_node_exporter
