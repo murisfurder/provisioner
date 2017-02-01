@@ -1,0 +1,59 @@
+---
+- name: Allow connections from the following host(s)
+  command: iptables -A INPUT -p tcp --dport 9100 -s {{ item }} -j ACCEPT
+  with_items:
+    - "{{ allow_connections_from }}"
+
+- name: Configures firewall to block access
+  command: iptables -A INPUT -p tcp --dport 9100 -j DROP
+
+# Fetch the client on Ubuntu 14.04 and Debian 7/8
+- include: tasks/download.yml
+  when: (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04') or (ansible_distribution == 'Debian' and ansible_distribution_major_version|int >= 7)
+
+# Ubuntu 14.04
+- copy:
+    src: upstart
+    dest: /etc/init/node_exporter.conf
+    mode: 0644
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+
+- command: init-checkconf /etc/init/node_exporter.conf
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+
+- service:
+    name: node_exporter
+    state: started
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+
+# Ubuntu 16.04
+- apt:
+    name: prometheus-node-exporter
+    state: present
+    cache_valid_time: 3600
+    update_cache: yes
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
+
+# Debian 7
+- copy:
+    src: init.d
+    dest: /etc/init.d/node_exporter
+    mode: 0755
+  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
+
+- service:
+    name: node_exporter
+    state: started
+  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '7'
+
+# Debian 8
+- copy:
+    src: systemd
+    dest: /etc/systemd/system/node_exporter.service
+  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '8'
+
+- service:
+    name: node_exporter
+    enabled: yes
+    state: started
+  when: ansible_distribution == 'Debian' and ansible_distribution_major_version == '8'
