@@ -28,7 +28,7 @@ SINGLE_HOST_PLAYBOOKS = [
     'owncloud',
     'postgres',
     'prometheus',
-    'prometheus_node_exporter,'
+    'prometheus_node_exporter'
     'redis',
     'redmine',
     'wordpress',
