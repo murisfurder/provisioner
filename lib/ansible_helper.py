@@ -120,6 +120,12 @@ def provision(
     ]:
         extra_vars['{}_password'.format(role)] = generate_password()
 
+    if role == 'prometheus_node_exporter':
+        extra_vars['node_exporter_allow_connections_from'] = os.getenv(
+            'NODE_EXPORTER_ALLOW_CONNECTIONS_FROM'.split(','),
+            []
+        )
+
     if remote_user and remote_pass and inventory:
         return run_playbook(
             remote_user=remote_user,

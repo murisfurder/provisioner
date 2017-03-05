@@ -1,4 +1,4 @@
 ---
 node_exporter_version: 0.13.0
 node_exporter_url: https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
-allow_connections_from: [ '185.3.49.16' ]
+node_exporter_allow_connections_from: []
